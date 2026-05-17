@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: oklch(98.5% 0.004 250);
+  --color-foreground: oklch(18% 0.03 260);
+  --color-ink: oklch(16% 0.04 262);
+  --color-ink-soft: oklch(32% 0.03 260);
+  --color-muted: oklch(55% 0.02 260);
+  --color-accent: oklch(78% 0.06 285);
+  --color-accent-fg: oklch(35% 0.06 280);
+  --color-card: oklch(99% 0.003 250);
+  --color-hairline: oklch(20% 0.04 260 / 0.08);
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Fraunces", ui-serif, Georgia, serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -10%, oklch(90% 0.06 285 / 0.4), transparent 60%),
+    radial-gradient(ellipse 60% 40% at 90% 20%, oklch(90% 0.05 230 / 0.35), transparent 60%),
+    radial-gradient(ellipse 70% 50% at 10% 80%, oklch(92% 0.04 270 / 0.3), transparent 60%),
+    var(--color-background);
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+@utility glass {
+  background: oklch(100% 0 0 / 0.55);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  backdrop-filter: blur(20px) saturate(140%);
+  border: 1px solid oklch(100% 0 0 / 0.6);
+  box-shadow:
+    0 1px 0 oklch(100% 0 0 / 0.6) inset,
+    0 30px 60px -30px oklch(20% 0.06 270 / 0.18);
+}
+
+@utility hairline {
+  border: 1px solid var(--color-hairline);
+}
+
+@utility shadow-soft {
+  box-shadow:
+    0 1px 2px oklch(20% 0.04 260 / 0.04),
+    0 8px 32px oklch(20% 0.04 260 / 0.06);
+}
