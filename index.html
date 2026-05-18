@@ -16,6 +16,23 @@
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="pt_BR" />
     <meta name="twitter:card" content="summary" />
+    <script>
+      // Redireciona "Começar a jornada" / "Comece a jornada" para /jornada/
+      document.addEventListener(
+        'click',
+        function (e) {
+          var t = e.target && e.target.closest && e.target.closest('a, button');
+          if (!t) return;
+          var text = (t.textContent || '').trim();
+          if (/come[çc]ar? a jornada/i.test(text)) {
+            e.preventDefault();
+            e.stopPropagation();
+            window.location.assign('/jornada/');
+          }
+        },
+        true,
+      );
+    </script>
     <script type="module" crossorigin src="/assets/index-ddgeai3h.js"></script>
     <link rel="stylesheet" crossorigin href="/assets/index-bwhrzmvu.css" />
   </head>

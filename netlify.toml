@@ -1,6 +1,24 @@
 [build]
-  publish = "."
+  base = "."
+  command = """
+    rm -rf dist && \
+    mkdir -p dist && \
+    cp index.html dist/ && \
+    cp -r assets dist/ && \
+    cd app && npm install && npm run build
+  """
+  publish = "dist"
 
+[build.environment]
+  NODE_VERSION = "22"
+
+# SPA fallback do app /jornada (React Router)
+[[redirects]]
+  from = "/jornada/*"
+  to = "/jornada/index.html"
+  status = 200
+
+# SPA fallback do legacy (todas as outras rotas)
 [[redirects]]
   from = "/*"
   to = "/index.html"

@@ -1,0 +1,52 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isShortString(v) {
+      return v is string && v.size() > 0 && v.size() <= 200;
+    }
+
+    function validNivel(n) {
+      return n in ['nunca_usei', 'perguntas_simples', 'produzo_conteudo', 'ja_criei'];
+    }
+
+    function validNewParticipant(data) {
+      return data.keys().hasAll(['nome', 'orgao', 'email', 'nivel', 'quer_grupo_whatsapp', 'criado_em', 'consentimento_lgpd'])
+          && data.keys().hasOnly(['nome', 'orgao', 'email', 'whatsapp', 'nivel', 'quer_grupo_whatsapp', 'criado_em', 'consentimento_lgpd'])
+          && isShortString(data.nome)
+          && isShortString(data.orgao)
+          && data.email is string && data.email.size() > 5 && data.email.size() <= 254
+          && (!('whatsapp' in data) || data.whatsapp == null || (data.whatsapp is string && data.whatsapp.size() <= 30))
+          && data.quer_grupo_whatsapp is bool
+          && validNivel(data.nivel)
+          && data.criado_em == request.time
+          && data.consentimento_lgpd.aceito == true
+          && data.consentimento_lgpd.versao is string
+          && data.consentimento_lgpd.em == request.time;
+    }
+
+    function validStatsIncrement(newData, oldData) {
+      return newData.total == oldData.total + 1
+          && newData.diff(oldData).affectedKeys().hasOnly(['nunca_usei', 'perguntas_simples', 'produzo_conteudo', 'ja_criei', 'total', 'atualizado_em']);
+    }
+
+    match /participantes/{id} {
+      allow create: if validNewParticipant(request.resource.data);
+      allow read, update, delete: if false;
+    }
+
+    match /stats/distribuicao {
+      allow read: if true;
+      allow create: if
+          request.resource.data.keys().hasOnly(['nunca_usei', 'perguntas_simples', 'produzo_conteudo', 'ja_criei', 'total', 'atualizado_em'])
+          && request.resource.data.total == 1
+          && request.resource.data.nunca_usei >= 0
+          && request.resource.data.perguntas_simples >= 0
+          && request.resource.data.produzo_conteudo >= 0
+          && request.resource.data.ja_criei >= 0
+          && (request.resource.data.nunca_usei + request.resource.data.perguntas_simples + request.resource.data.produzo_conteudo + request.resource.data.ja_criei) == 1;
+      allow update: if validStatsIncrement(request.resource.data, resource.data);
+      allow delete: if false;
+    }
+  }
+}
