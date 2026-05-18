@@ -1,9 +1,9 @@
 import { useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
 import FormField from '../components/FormField'
 import LevelCard from '../components/LevelCard'
 import PillToggle from '../components/PillToggle'
 import ChartBars from '../components/ChartBars'
+import ModulosGrid from '../features/modulos/ModulosGrid'
 import {
   submeterParticipante,
   getDistribuicao,
@@ -100,7 +100,8 @@ export default function Jornada() {
 
   return (
     <main className="px-5 py-16 md:py-24">
-      <div className="mx-auto max-w-3xl">
+      {/* Pesquisa */}
+      <section className="mx-auto max-w-3xl">
         <p className="text-xs tracking-[0.25em] uppercase text-accent-fg font-semibold text-center">
           Ponto de partida
         </p>
@@ -211,7 +212,7 @@ export default function Jornada() {
         </form>
 
         {enviado && (
-          <section
+          <div
             ref={resultadoRef}
             className="mt-20 pt-12 border-t border-line"
             aria-live="polite"
@@ -249,16 +250,39 @@ export default function Jornada() {
             </div>
 
             <div className="mt-10 flex flex-col items-center gap-3">
-              <Link
-                to="/modulos"
+              <a
+                href="#modulos"
                 className="rounded-full bg-ink text-page px-7 py-3 text-sm font-medium hover:opacity-90 transition"
               >
-                Começar pelos módulos →
-              </Link>
+                Começar pelos módulos ↓
+              </a>
             </div>
-          </section>
+          </div>
         )}
-      </div>
+      </section>
+
+      {/* Modulos */}
+      <section
+        id="modulos"
+        className="mx-auto max-w-5xl mt-28 pt-16 border-t border-line scroll-mt-8"
+      >
+        <p className="text-xs tracking-[0.25em] uppercase text-accent-fg font-semibold text-center">
+          Trilha de aprendizado
+        </p>
+
+        <h2 className="mt-6 font-display font-semibold text-4xl md:text-5xl text-ink text-center leading-[1.05]">
+          Módulos
+        </h2>
+
+        <p className="mt-6 max-w-2xl mx-auto text-center text-ink-soft text-base md:text-lg leading-relaxed">
+          Conteúdo prático de IA generativa para gestoras públicas. Cada módulo
+          é independente — comece pelo que fizer mais sentido para você.
+        </p>
+
+        <div className="mt-14">
+          <ModulosGrid />
+        </div>
+      </section>
     </main>
   )
 }

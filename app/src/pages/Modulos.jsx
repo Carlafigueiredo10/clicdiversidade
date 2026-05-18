@@ -1,17 +1,5 @@
 import { Link } from 'react-router-dom'
-import ModuloCard from '../features/modulos/ModuloCard'
-
-const MODULOS = [
-  {
-    numero: '01',
-    titulo: 'Engenharia de Prompt',
-    descricao:
-      'Do comando à maestria: aprenda o método PTCF, técnicas avançadas e construa sua biblioteca de assistentes para o serviço público.',
-    duracao: '15 slides · ~20 min',
-    to: '/modulos/engenharia-prompt',
-    disponivel: true,
-  },
-]
+import ModulosGrid from '../features/modulos/ModulosGrid'
 
 export default function Modulos() {
   return (
@@ -30,10 +18,8 @@ export default function Modulos() {
           é independente — comece pelo que fizer mais sentido para você.
         </p>
 
-        <div className="mt-14 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {MODULOS.map((m) => (
-            <ModuloCard key={m.numero} {...m} />
-          ))}
+        <div className="mt-14">
+          <ModulosGrid />
         </div>
 
         <div className="mt-16 flex justify-center">
