@@ -1,9 +1,13 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import FormField from '../components/FormField'
 import LevelCard from '../components/LevelCard'
 import PillToggle from '../components/PillToggle'
-import { submeterParticipante } from '../services/participantes'
+import ChartBars from '../components/ChartBars'
+import {
+  submeterParticipante,
+  getDistribuicao,
+} from '../services/participantes'
 
 const NIVEIS = [
   {
@@ -33,7 +37,6 @@ const NIVEIS = [
 ]
 
 export default function Jornada() {
-  const navigate = useNavigate()
   const [form, setForm] = useState({
     nome: '',
     orgao: '',
@@ -44,6 +47,11 @@ export default function Jornada() {
   })
   const [enviando, setEnviando] = useState(false)
   const [erro, setErro] = useState(null)
+  const [enviado, setEnviado] = useState(false)
+  const [nivelEnviado, setNivelEnviado] = useState(null)
+  const [dist, setDist] = useState(null)
+  const [distErro, setDistErro] = useState(null)
+  const resultadoRef = useRef(null)
 
   const dadosOk =
     form.nome.trim() && form.orgao.trim() && form.email.trim()
@@ -65,7 +73,22 @@ export default function Jornada() {
     setErro(null)
     try {
       await submeterParticipante(form)
-      navigate(`/obrigado?nivel=${form.nivel}`)
+      setNivelEnviado(form.nivel)
+      setEnviado(true)
+      setEnviando(false)
+      try {
+        const d = await getDistribuicao()
+        setDist(d)
+      } catch (e) {
+        console.error(e)
+        setDistErro('Não foi possível carregar a distribuição agora.')
+      }
+      requestAnimationFrame(() => {
+        resultadoRef.current?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        })
+      })
     } catch (err) {
       console.error(err)
       setErro(
@@ -94,64 +117,69 @@ export default function Jornada() {
         </p>
 
         <form onSubmit={handleSubmit} className="mt-12 space-y-8">
-          <div className="grid gap-3 md:grid-cols-2">
-            <FormField
-              id="nome"
-              label="Seu nome"
-              value={form.nome}
-              onChange={set('nome')}
-              required
-            />
-            <FormField
-              id="orgao"
-              label="Órgão / Instituição"
-              value={form.orgao}
-              onChange={set('orgao')}
-              required
-            />
-            <FormField
-              id="email"
-              label="E-mail"
-              type="email"
-              value={form.email}
-              onChange={set('email')}
-              required
-            />
-            <FormField
-              id="whatsapp"
-              label="WhatsApp (opcional)"
-              type="tel"
-              value={form.whatsapp}
-              onChange={set('whatsapp')}
-            />
-          </div>
-
-          <div className="flex flex-wrap items-center justify-between gap-4 px-2">
-            <span className="text-accent-fg text-sm">
-              Quer entrar no grupo de WhatsApp do programa?
-            </span>
-            <PillToggle
-              value={form.quer_grupo_whatsapp}
-              onChange={set('quer_grupo_whatsapp')}
-            />
-          </div>
-
-          <p className="text-center text-muted text-sm">
-            Preencha acima e selecione seu nível abaixo.
-          </p>
-
-          <div className="grid gap-4 md:grid-cols-2">
-            {NIVEIS.map((n) => (
-              <LevelCard
-                key={n.id}
-                id={n.id}
-                title={n.title}
-                description={n.description}
-                selected={form.nivel === n.id}
-                onSelect={set('nivel')}
+          <fieldset
+            disabled={enviado}
+            className="space-y-8 disabled:opacity-70 transition-opacity"
+          >
+            <div className="grid gap-3 md:grid-cols-2">
+              <FormField
+                id="nome"
+                label="Seu nome"
+                value={form.nome}
+                onChange={set('nome')}
+                required
               />
-            ))}
-          </div>
+              <FormField
+                id="orgao"
+                label="Órgão / Instituição"
+                value={form.orgao}
+                onChange={set('orgao')}
+                required
+              />
+              <FormField
+                id="email"
+                label="E-mail"
+                type="email"
+                value={form.email}
+                onChange={set('email')}
+                required
+              />
+              <FormField
+                id="whatsapp"
+                label="WhatsApp (opcional)"
+                type="tel"
+                value={form.whatsapp}
+                onChange={set('whatsapp')}
+              />
+            </div>
+
+            <div className="flex flex-wrap items-center justify-between gap-4 px-2">
+              <span className="text-accent-fg text-sm">
+                Quer entrar no grupo de WhatsApp do programa?
+              </span>
+              <PillToggle
+                value={form.quer_grupo_whatsapp}
+                onChange={set('quer_grupo_whatsapp')}
+              />
+            </div>
+
+            <p className="text-center text-muted text-sm">
+              Preencha acima e selecione seu nível abaixo.
+            </p>
+
+            <div className="grid gap-4 md:grid-cols-2">
+              {NIVEIS.map((n) => (
+                <LevelCard
+                  key={n.id}
+                  id={n.id}
+                  title={n.title}
+                  description={n.description}
+                  selected={form.nivel === n.id}
+                  onSelect={set('nivel')}
+                />
+              ))}
+            </div>
+          </fieldset>
 
           {erro && (
             <p className="text-center text-red-700 bg-red-50 border border-red-200 rounded-xl py-3 px-4">
@@ -159,20 +187,77 @@ export default function Jornada() {
             </p>
           )}
 
-          <div className="flex flex-col items-center gap-3 pt-4">
-            <button
-              type="submit"
-              disabled={!podeSubmeter}
-              className="rounded-full bg-ink text-page px-8 py-3.5 font-medium hover:opacity-90 transition disabled:opacity-40 disabled:cursor-not-allowed"
-            >
-              {enviando ? 'Enviando…' : 'Entrar na jornada'}
-            </button>
-            <p className="text-xs text-muted max-w-md text-center leading-relaxed">
-              Ao enviar, você autoriza o uso dos seus dados para contato sobre
-              o programa CLIC_diversidade. Não compartilhamos com terceiros.
-            </p>
-          </div>
+          {!enviado ? (
+            <div className="flex flex-col items-center gap-3 pt-4">
+              <button
+                type="submit"
+                disabled={!podeSubmeter}
+                className="rounded-full bg-ink text-page px-8 py-3.5 font-medium hover:opacity-90 transition disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                {enviando ? 'Enviando…' : 'Entrar na jornada'}
+              </button>
+              <p className="text-xs text-muted max-w-md text-center leading-relaxed">
+                Ao enviar, você autoriza o uso dos seus dados para contato sobre
+                o programa CLIC_diversidade. Não compartilhamos com terceiros.
+              </p>
+            </div>
+          ) : (
+            <div className="flex justify-center pt-4">
+              <span className="inline-flex items-center gap-2 rounded-full border border-success bg-success/10 text-success-fg px-5 py-2 text-sm font-medium">
+                <span aria-hidden>✓</span> Registrado
+              </span>
+            </div>
+          )}
         </form>
+
+        {enviado && (
+          <section
+            ref={resultadoRef}
+            className="mt-20 pt-12 border-t border-line"
+            aria-live="polite"
+          >
+            <p className="text-xs tracking-[0.25em] uppercase text-accent-fg font-semibold text-center">
+              Bem-vinda à jornada
+            </p>
+
+            <h2 className="mt-6 font-display font-semibold text-3xl md:text-5xl text-ink text-center leading-[1.05]">
+              Seu ponto de partida foi registrado.
+            </h2>
+
+            <p className="mt-6 max-w-xl mx-auto text-center text-ink-soft text-base md:text-lg leading-relaxed">
+              Você é parte de uma comunidade plural construindo IA com
+              responsabilidade. Veja onde estão os outros participantes.
+            </p>
+
+            <div className="mt-12 bg-card rounded-2xl border border-line p-6 md:p-10">
+              <h3 className="font-display font-semibold text-xl text-ink mb-6">
+                Distribuição dos participantes
+              </h3>
+              {dist ? (
+                <ChartBars distribuicao={dist} nivelDoUsuario={nivelEnviado} />
+              ) : distErro ? (
+                <p className="text-ink-soft text-sm">{distErro}</p>
+              ) : (
+                <p className="text-ink-soft text-sm">Carregando…</p>
+              )}
+              {dist && (
+                <p className="mt-6 text-xs text-muted text-center">
+                  Total: {dist.total}{' '}
+                  {dist.total === 1 ? 'participante' : 'participantes'}
+                </p>
+              )}
+            </div>
+
+            <div className="mt-10 flex flex-col items-center gap-3">
+              <Link
+                to="/modulos"
+                className="rounded-full bg-ink text-page px-7 py-3 text-sm font-medium hover:opacity-90 transition"
+              >
+                Começar pelos módulos →
+              </Link>
+            </div>
+          </section>
+        )}
       </div>
     </main>
   )
