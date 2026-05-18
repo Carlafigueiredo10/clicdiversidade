@@ -72,11 +72,17 @@ const MODULOS = [
   },
   {
     numero: '06',
-    icon: '\u{1F6A7}',
-    titulo: 'Em construção',
+    icon: '\u{2696}\u{FE0F}',
+    titulo: 'Governança de IA',
     descricao:
-      'Novo módulo em desenvolvimento. Tema será definido em breve com base nas necessidades da comunidade.',
-    disponivel: false,
+      'Agente de mediação de risco, autoavaliação de impacto ético (AIE) e base teórica unificada para IA responsável no setor público.',
+    stats: [
+      { value: '3', label: 'Frentes' },
+      { value: '24+', label: 'Refs' },
+    ],
+    ctaText: 'Acessar governança',
+    to: '/modulos/governanca',
+    disponivel: true,
   },
 ]
 
