@@ -11,6 +11,11 @@
 
 [build.environment]
   NODE_VERSION = "22"
+  # Firebase Web SDK config (apiKey, appId, etc) sao publicos por design —
+  # seguranca vem das Firestore Security Rules, nao do segredo da chave.
+  # Doc: https://firebase.google.com/docs/projects/api-keys
+  SECRETS_SCAN_ENABLED = "false"
+  SECRETS_SCAN_SMART_DETECTION_ENABLED = "false"
 
 # SPA fallback do app /jornada (React Router)
 [[redirects]]
