@@ -21,7 +21,7 @@ export default function EngenhariaPrompt() {
     <main className="px-5 py-12 md:py-16">
       <div className="mx-auto max-w-5xl">
         <Link
-          to="/modulos"
+          to="/#modulos"
           className="inline-flex items-center gap-2 text-sm text-ink-soft hover:text-ink transition"
         >
           ← Voltar aos módulos

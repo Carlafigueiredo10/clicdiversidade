@@ -1,6 +1,7 @@
 [build]
   base = "."
   command = """
+    npm install && \
     rm -rf dist && \
     mkdir -p dist && \
     cp index.html dist/ && \
@@ -16,6 +17,24 @@
   # Doc: https://firebase.google.com/docs/projects/api-keys
   SECRETS_SCAN_ENABLED = "false"
   SECRETS_SCAN_SMART_DETECTION_ENABLED = "false"
+
+# Netlify Functions — backend serverless. ANTHROPIC_API_KEY mora aqui
+# (configurar em Site settings > Environment variables no painel Netlify).
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+# Rota da function da Lelia (path tambem declarado no proprio lelia.js).
+[[redirects]]
+  from = "/api/lelia"
+  to = "/.netlify/functions/lelia"
+  status = 200
+
+# Pagina de homenagem a Lelia Gonzalez (arquivo: /lelia/index.html).
+[[redirects]]
+  from = "/lelia"
+  to = "/lelia/"
+  status = 301
 
 # SPA fallback do app /jornada (React Router)
 [[redirects]]

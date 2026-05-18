@@ -17,26 +17,64 @@
     <meta property="og:locale" content="pt_BR" />
     <meta name="twitter:card" content="summary" />
     <script>
-      // Redireciona qualquer CTA "Comecar jornada", "Comece a jornada", etc. para /jornada/
-      document.addEventListener(
-        'click',
-        function (e) {
-          var t = e.target && e.target.closest && e.target.closest('a, button');
-          if (!t) return;
-          var text = ((t.textContent || '') + '').trim();
-          if (/\bcome\w*\s+(a\s+)?jornada/i.test(text)) {
+      // Redireciona CTAs com "Comecar jornada" / "Comece a jornada" para /jornada/.
+      // Tres camadas de defesa contra o roteador TanStack do legacy:
+      // 1) reescrever o href dos <a> que casam (semanticamente correto)
+      // 2) attach click handler direto no elemento (capture, antes do react)
+      // 3) doc-level capture handler (belt and suspenders)
+      // MutationObserver cobre re-renders do SPA.
+      (function () {
+        var RE = /\bcome\w*\s+(a\s+)?jornada/i;
+
+        function matches(el) {
+          return el && RE.test(((el.textContent || '') + '').trim());
+        }
+
+        function go(e) {
+          if (e) {
             e.preventDefault();
             e.stopImmediatePropagation();
-            window.location.assign('/jornada/');
           }
-        },
-        true,
-      );
+          window.location.assign('/jornada/');
+        }
+
+        function rewire(root) {
+          (root || document).querySelectorAll('a, button').forEach(function (el) {
+            if (el.__jornadaWired || !matches(el)) return;
+            el.__jornadaWired = true;
+            if (el.tagName === 'A') {
+              try { el.setAttribute('href', '/jornada/'); } catch (e) {}
+            }
+            el.addEventListener('click', go, true);
+          });
+        }
+
+        document.addEventListener(
+          'click',
+          function (e) {
+            var t = e.target && e.target.closest && e.target.closest('a, button');
+            if (matches(t)) go(e);
+          },
+          true,
+        );
+
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () { rewire(); });
+        } else {
+          rewire();
+        }
+        new MutationObserver(function () { rewire(); }).observe(
+          document.documentElement,
+          { childList: true, subtree: true },
+        );
+      })();
     </script>
     <script type="module" crossorigin src="/assets/index-ddgeai3h.js"></script>
     <link rel="stylesheet" crossorigin href="/assets/index-bwhrzmvu.css" />
   </head>
   <body>
     <div id="root"></div>
+    <!-- Lelia widget — chat flutuante da agente. Carrega depois do bundle da landing. -->
+    <script src="/assets/lelia-widget.js" defer></script>
   </body>
 </html>

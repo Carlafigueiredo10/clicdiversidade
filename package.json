@@ -1,0 +1,10 @@
+{
+  "name": "clic-diversidade-functions",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Netlify Functions do CLIC Diversidade (agente Lelia + utilidades).",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.40.0"
+  }
+}

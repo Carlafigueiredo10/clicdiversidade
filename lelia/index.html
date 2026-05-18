@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lélia Gonzalez — a intelectual que inspirou nossa agente · CLIC_diversidade</title>
+    <meta
+      name="description"
+      content="A história de Lélia Gonzalez, intelectual e ativista negra brasileira que inspirou o nome da agente de IA do CLIC_diversidade."
+    />
+    <meta property="og:title" content="Lélia Gonzalez — a intelectual que inspirou nossa agente" />
+    <meta
+      property="og:description"
+      content="Filósofa, antropóloga e ativista que articulou raça, gênero e classe décadas antes de o termo interseccionalidade se popularizar."
+    />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="pt_BR" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..700,0..100&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #fffaf0;
+        --bg-soft: #fbf3e3;
+        --ink: #1a1715;
+        --ink-soft: #7a6f66;
+        --rule: rgba(26, 23, 21, 0.1);
+        --accent: #a3552d;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+      body {
+        background: var(--bg);
+        color: var(--ink);
+        font: 400 17px/1.7 'Inter', system-ui, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+      }
+      a { color: var(--accent); text-decoration: none; border-bottom: 1px solid currentColor; }
+      a:hover { color: var(--ink); }
+
+      .nav {
+        max-width: 880px;
+        margin: 0 auto;
+        padding: 1.5rem 1.5rem 0;
+      }
+      .nav__back {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.85rem;
+        color: var(--ink-soft);
+        border: 0;
+      }
+      .nav__back:hover { color: var(--ink); }
+
+      .container {
+        max-width: 680px;
+        margin: 0 auto;
+        padding: 3rem 1.5rem 6rem;
+      }
+
+      .eyebrow {
+        font: 500 0.72rem/1 'JetBrains Mono', ui-monospace, monospace;
+        text-transform: uppercase;
+        letter-spacing: 0.22em;
+        color: var(--accent);
+        text-align: center;
+        margin-bottom: 1.5rem;
+      }
+
+      h1 {
+        font: 400 clamp(3rem, 8vw, 5rem)/0.95 'Fraunces', Georgia, serif;
+        font-variation-settings: 'opsz' 144, 'SOFT' 50;
+        text-align: center;
+        margin: 0;
+        letter-spacing: -0.02em;
+      }
+
+      .subtitle {
+        font: 400 italic clamp(1.05rem, 2.2vw, 1.25rem)/1.4 'Fraunces', Georgia, serif;
+        text-align: center;
+        color: var(--ink-soft);
+        margin: 1rem 0 2rem;
+      }
+
+      .divider {
+        width: 80px;
+        height: 1px;
+        background: var(--rule);
+        margin: 2.5rem auto;
+        border: 0;
+      }
+
+      h2 {
+        font: 500 clamp(1.4rem, 3vw, 1.7rem)/1.2 'Fraunces', Georgia, serif;
+        margin: 3rem 0 1rem;
+        letter-spacing: -0.01em;
+      }
+
+      p { margin: 0 0 1.1rem; }
+
+      blockquote {
+        margin: 2rem 0;
+        padding: 1.25rem 1.5rem;
+        border-left: 3px solid var(--accent);
+        background: var(--bg-soft);
+        font: 400 italic 1.1rem/1.6 'Fraunces', Georgia, serif;
+        color: var(--ink);
+        border-radius: 0 8px 8px 0;
+      }
+      blockquote cite {
+        display: block;
+        margin-top: 0.6rem;
+        font: 500 0.78rem/1 'JetBrains Mono', ui-monospace, monospace;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        color: var(--ink-soft);
+        font-style: normal;
+      }
+
+      .facts {
+        list-style: none;
+        padding: 0;
+        margin: 1.5rem 0;
+        display: grid;
+        gap: 0.5rem;
+      }
+      .facts li {
+        padding: 0.6rem 0;
+        border-bottom: 1px solid var(--rule);
+        display: flex;
+        gap: 1rem;
+        align-items: baseline;
+      }
+      .facts li:last-child { border-bottom: 0; }
+      .facts__year {
+        font: 500 0.78rem/1 'JetBrains Mono', ui-monospace, monospace;
+        color: var(--accent);
+        flex-shrink: 0;
+        width: 70px;
+      }
+      .facts__fact { color: var(--ink); }
+
+      .why {
+        margin-top: 4rem;
+        padding: 2rem;
+        background: var(--bg-soft);
+        border-radius: 16px;
+      }
+      .why h2 { margin-top: 0; }
+      .why p:last-child { margin-bottom: 0; }
+
+      .cta {
+        margin-top: 3rem;
+        text-align: center;
+      }
+      .cta a {
+        display: inline-block;
+        padding: 0.85rem 1.5rem;
+        background: var(--ink);
+        color: var(--bg);
+        border-radius: 9999px;
+        border: 0;
+        font-weight: 600;
+      }
+      .cta a:hover { background: var(--accent); color: var(--bg); }
+
+      .footnote {
+        margin-top: 4rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--rule);
+        font-size: 0.85rem;
+        color: var(--ink-soft);
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="nav">
+      <a href="/" class="nav__back">← voltar para o CLIC</a>
+    </nav>
+
+    <main class="container">
+      <div class="eyebrow">a origem de um nome</div>
+      <h1>Lélia</h1>
+      <p class="subtitle">de quem veio o nome que carregamos</p>
+
+      <hr class="divider" />
+
+      <p>
+        Nossa agente de IA não recebeu um nome qualquer. Ela foi batizada em
+        homenagem a <strong>Lélia Gonzalez</strong> (1935–1994), uma das
+        pensadoras mais importantes do Brasil — filósofa, antropóloga, professora
+        e ativista que articulou raça, gênero e classe décadas antes de
+        "interseccionalidade" virar palavra de uso comum.
+      </p>
+
+      <p>
+        Lélia nasceu em Belo Horizonte, em uma família grande, e construiu sua
+        formação acadêmica em filosofia, história e antropologia social. Foi
+        professora universitária, cofundadora do Movimento Negro Unificado em
+        1978, integrou o Conselho Nacional dos Direitos da Mulher e disputou
+        eleições. Morreu em 1994, no Rio de Janeiro, deixando uma obra que só
+        nas últimas décadas começou a ser lida com a centralidade que merece.
+      </p>
+
+      <h2>Amefricanidade</h2>
+      <p>
+        Em 1988, em um ensaio que circulou internacionalmente, Lélia propôs a
+        categoria <em>amefricanidade</em> — um modo de pensar a experiência das
+        populações negras das Américas que recusa tanto o eurocentrismo quanto a
+        leitura puramente importada dos Estados Unidos. Pensar a partir da
+        amefricanidade é reconhecer que o Brasil é, antes de tudo, um país
+        atravessado pela diáspora africana e pelos povos originários — e que sua
+        história intelectual, política e cultural só faz sentido a partir daí.
+      </p>
+
+      <h2>Pretuguês</h2>
+      <p>
+        Lélia também cunhou a expressão <em>pretuguês</em> para nomear o
+        português brasileiro tal como ele é falado: marcado pela oralidade
+        afro-brasileira, pela ginga de palavras como "cafuné", "moleque",
+        "caçula", "samba". O que a norma culta tratava como "erro", ela tratava
+        como herança e potência.
+      </p>
+
+      <blockquote>
+        A linguagem é o terreno onde uma cultura se afirma ou se apaga. Falar
+        pretuguês é dizer: estamos aqui há séculos, e o que dizemos importa.
+        <cite>paráfrase a partir do pensamento de Lélia Gonzalez</cite>
+      </blockquote>
+
+      <h2>Pequena cronologia</h2>
+      <ul class="facts">
+        <li>
+          <span class="facts__year">1935</span>
+          <span class="facts__fact">Nasce em Belo Horizonte, décima oitava de dezoito filhos.</span>
+        </li>
+        <li>
+          <span class="facts__year">1978</span>
+          <span class="facts__fact">Cofunda o Movimento Negro Unificado.</span>
+        </li>
+        <li>
+          <span class="facts__year">1982</span>
+          <span class="facts__fact">Publica <em>Lugar de Negro</em>, com Carlos Hasenbalg.</span>
+        </li>
+        <li>
+          <span class="facts__year">1988</span>
+          <span class="facts__fact">Formula o conceito de amefricanidade.</span>
+        </li>
+        <li>
+          <span class="facts__year">1994</span>
+          <span class="facts__fact">Morre no Rio de Janeiro.</span>
+        </li>
+      </ul>
+
+      <div class="why">
+        <h2>Por que uma agente de IA com esse nome?</h2>
+        <p>
+          Porque toda tecnologia carrega política — e ferramentas de IA não são
+          neutras: refletem quem as treina, com que dados, sob quais valores. Dar
+          a uma agente de letramento em IA o nome de Lélia é uma afirmação de
+          que aprendemos IA <em>a partir daqui</em>: do português que falamos,
+          dos problemas concretos do serviço público brasileiro, da experiência
+          de quem foi historicamente excluída das salas em que se decidiu o que
+          conta como conhecimento.
+        </p>
+        <p>
+          A agente Lélia não é Lélia Gonzalez. É um software. Mas tenta levar
+          adiante o gesto pedagógico dela: devolver à pessoa o poder de pensar
+          por si, em vez de entregar respostas prontas.
+        </p>
+      </div>
+
+      <div class="cta">
+        <a href="/">voltar para o CLIC →</a>
+      </div>
+
+      <div class="footnote">
+        Esta página é uma homenagem introdutória, não uma biografia exaustiva.
+        Para conhecer mais sobre Lélia Gonzalez, busque por seus escritos
+        reunidos em livros como <em>Primavera para as Rosas Negras</em> (2018) e
+        <em>Por um Feminismo Afro-latino-americano</em> (2020).
+      </div>
+    </main>
+
+    <script src="/assets/lelia-widget.js" defer></script>
+  </body>
+</html>

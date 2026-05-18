@@ -6,13 +6,14 @@ const MODULOS = [
     icon: '\u{1F9F0}',
     titulo: 'Ferramentas de IA',
     descricao:
-      'Catálogo curado com 70+ ferramentas de IA separadas por categoria, nível de gratuidade e controle de dados.',
+      'Catálogo curado com 120+ ferramentas de IA separadas por categoria, nível de gratuidade e controle de dados.',
     stats: [
-      { value: '70+', label: 'Ferramentas' },
-      { value: '7', label: 'Categorias' },
+      { value: '120+', label: 'Ferramentas' },
+      { value: '10', label: 'Categorias' },
     ],
     ctaText: 'Explorar catálogo',
-    disponivel: false,
+    to: '/modulos/ferramentas',
+    disponivel: true,
   },
   {
     numero: '02',
