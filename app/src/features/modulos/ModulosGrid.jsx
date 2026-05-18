@@ -47,13 +47,14 @@ const MODULOS = [
     icon: '\u{1F3D7}\u{FE0F}',
     titulo: 'Construindo Tecnologia',
     descricao:
-      'O módulo prático da oficina — crie seu assistente de IA e um aplicativo funcional em menos de uma hora.',
+      'O módulo prático da oficina — crie seu primeiro app na Lovable em 20 minutos. Roteiro com prompts prontos do zero ao deploy.',
     stats: [
-      { value: '2', label: 'Entregas' },
-      { value: '45min', label: 'Duração' },
+      { value: '7', label: 'Etapas' },
+      { value: '15+', label: 'Prompts' },
     ],
     ctaText: 'Começar a construir',
-    disponivel: false,
+    to: '/modulos/construindo-tecnologia',
+    disponivel: true,
   },
   {
     numero: '05',
