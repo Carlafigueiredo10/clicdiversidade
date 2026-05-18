@@ -20,13 +20,14 @@ const MODULOS = [
     icon: '\u{1F9ED}',
     titulo: 'Trilhas de Aprendizagem',
     descricao:
-      '5 trilhas progressivas com diagnóstico inteligente que sugere seu caminho, de autonomia digital a programação com IA.',
+      '7 trilhas independentes com 5 módulos + projeto final cada uma. Do fundamento em dados à programação com IA e governança.',
     stats: [
-      { value: '5', label: 'Trilhas' },
-      { value: '6-30h', label: 'Duração' },
+      { value: '7', label: 'Trilhas' },
+      { value: '35', label: 'Módulos' },
     ],
     ctaText: 'Descobrir sua trilha',
-    disponivel: false,
+    to: '/modulos/trilhas',
+    disponivel: true,
   },
   {
     numero: '03',
