@@ -6,6 +6,7 @@ import FerramentasIA from '../pages/modulos/FerramentasIA'
 import ConstruindoTecnologia from '../pages/modulos/ConstruindoTecnologia'
 import Trilhas from '../pages/modulos/Trilhas'
 import TrilhaDetalhe from '../pages/modulos/TrilhaDetalhe'
+import Glossario from '../pages/Glossario'
 import LeliaTest from '../pages/LeliaTest'
 import Admin from '../pages/Admin'
 
@@ -23,6 +24,7 @@ export const router = createBrowserRouter(
         },
         { path: '/modulos/trilhas', element: <Trilhas /> },
         { path: '/modulos/trilhas/:slug', element: <TrilhaDetalhe /> },
+        { path: '/glossario', element: <Glossario /> },
         { path: '/lelia-test', element: <LeliaTest /> },
         { path: '/admin', element: <Admin /> },
       ],
