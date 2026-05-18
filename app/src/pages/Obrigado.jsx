@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import ChartBars from '../components/ChartBars'
 import { getDistribuicao } from '../services/participantes'
 
@@ -54,6 +54,12 @@ export default function Obrigado() {
         </div>
 
         <div className="mt-10 flex flex-col items-center gap-3">
+          <Link
+            to="/modulos"
+            className="rounded-full bg-ink text-page px-7 py-3 text-sm font-medium hover:opacity-90 transition"
+          >
+            Começar pelos módulos →
+          </Link>
           <a
             href="/"
             className="rounded-full border border-line px-6 py-3 text-sm text-ink-soft hover:bg-card transition"
