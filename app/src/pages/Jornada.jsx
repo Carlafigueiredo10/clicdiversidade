@@ -1,12 +1,13 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import FormField from '../components/FormField'
+import HeadlineCinematic from '../components/HeadlineCinematic'
 import LevelCard from '../components/LevelCard'
 import PillToggle from '../components/PillToggle'
-import ChartBars from '../components/ChartBars'
+import ChartLevelLine from '../components/ChartLevelLine'
 import ModulosGrid from '../features/modulos/ModulosGrid'
 import {
   submeterParticipante,
-  getDistribuicao,
+  onDistribuicao,
 } from '../services/participantes'
 
 const NIVEIS = [
@@ -51,7 +52,22 @@ export default function Jornada() {
   const [nivelEnviado, setNivelEnviado] = useState(null)
   const [dist, setDist] = useState(null)
   const [distErro, setDistErro] = useState(null)
-  const resultadoRef = useRef(null)
+  const chartRef = useRef(null)
+
+  // Listener real-time da distribuicao — atualiza enquanto a pagina esta aberta.
+  useEffect(() => {
+    const unsub = onDistribuicao(
+      (d) => {
+        setDist(d)
+        setDistErro(null)
+      },
+      (err) => {
+        console.error(err)
+        setDistErro('Não foi possível conectar ao termômetro agora.')
+      },
+    )
+    return unsub
+  }, [])
 
   const dadosOk =
     form.nome.trim() && form.orgao.trim() && form.email.trim()
@@ -76,17 +92,10 @@ export default function Jornada() {
       setNivelEnviado(form.nivel)
       setEnviado(true)
       setEnviando(false)
-      try {
-        const d = await getDistribuicao()
-        setDist(d)
-      } catch (e) {
-        console.error(e)
-        setDistErro('Não foi possível carregar a distribuição agora.')
-      }
       requestAnimationFrame(() => {
-        resultadoRef.current?.scrollIntoView({
+        chartRef.current?.scrollIntoView({
           behavior: 'smooth',
-          block: 'start',
+          block: 'center',
         })
       })
     } catch (err) {
@@ -98,19 +107,15 @@ export default function Jornada() {
     }
   }
 
+  const total = dist?.total ?? 0
+
   return (
     <main className="px-5 py-16 md:py-24">
-      {/* Pesquisa */}
       <section className="mx-auto max-w-3xl">
-        <p className="text-xs tracking-[0.25em] uppercase text-accent-fg font-semibold text-center">
-          Ponto de partida
-        </p>
-
-        <h1 className="mt-6 font-display font-semibold text-4xl md:text-6xl text-ink text-center leading-[1.05]">
-          Onde você está na
-          <br />
-          jornada digital?
-        </h1>
+        <HeadlineCinematic
+          eyebrow="Ponto de partida"
+          lines={['Onde você está na', 'jornada digital?']}
+        />
 
         <p className="mt-6 max-w-xl mx-auto text-center text-ink-soft text-base md:text-lg leading-relaxed">
           Informe seus dados abaixo e entre no grupo de WhatsApp para troca de
@@ -211,45 +216,55 @@ export default function Jornada() {
           )}
         </form>
 
+        {/* Termometro — aparece apos entrar na jornada, antes dos modulos.
+            Listener real-time mantem a barra atualizando enquanto outros votam. */}
         {enviado && (
           <div
-            ref={resultadoRef}
+            ref={chartRef}
             className="mt-20 pt-12 border-t border-line"
             aria-live="polite"
           >
             <p className="text-xs tracking-[0.25em] uppercase text-accent-fg font-semibold text-center">
               Bem-vinda à jornada
             </p>
-
             <h2 className="mt-6 font-display font-semibold text-3xl md:text-5xl text-ink text-center leading-[1.05]">
-              Seu ponto de partida foi registrado.
+              Onde você está nessa sala.
             </h2>
-
             <p className="mt-6 max-w-xl mx-auto text-center text-ink-soft text-base md:text-lg leading-relaxed">
-              Você é parte de uma comunidade plural construindo IA com
-              responsabilidade. Veja onde estão os outros participantes.
+              Você faz parte de uma comunidade plural. O termômetro abaixo
+              atualiza em tempo real conforme outras pessoas respondem.
             </p>
 
-            <div className="mt-12 bg-card rounded-2xl border border-line p-6 md:p-10">
-              <h3 className="font-display font-semibold text-xl text-ink mb-6">
-                Distribuição dos participantes
-              </h3>
-              {dist ? (
-                <ChartBars distribuicao={dist} nivelDoUsuario={nivelEnviado} />
-              ) : distErro ? (
+            <div className="mt-12 bg-card rounded-2xl border border-line p-6 md:p-8 shadow-sm">
+              <div className="flex items-baseline justify-between mb-5">
+                <div>
+                  <p className="text-xs tracking-[0.2em] uppercase text-accent-fg font-semibold">
+                    Termômetro da oficina
+                  </p>
+                  <h3 className="mt-1.5 font-display font-semibold text-lg text-ink">
+                    Distribuição em tempo real
+                  </h3>
+                </div>
+                <div className="text-right">
+                  <span className="font-display font-semibold text-3xl text-ink tabular-nums">
+                    {total}
+                  </span>
+                  <p className="text-[10px] uppercase tracking-wider text-muted">
+                    {total === 1 ? 'resposta' : 'respostas'}
+                  </p>
+                </div>
+              </div>
+              {distErro ? (
                 <p className="text-ink-soft text-sm">{distErro}</p>
               ) : (
-                <p className="text-ink-soft text-sm">Carregando…</p>
-              )}
-              {dist && (
-                <p className="mt-6 text-xs text-muted text-center">
-                  Total: {dist.total}{' '}
-                  {dist.total === 1 ? 'participante' : 'participantes'}
-                </p>
+                <ChartLevelLine
+                  distribuicao={dist || {}}
+                  nivelDoUsuario={nivelEnviado}
+                />
               )}
             </div>
 
-            <div className="mt-10 flex flex-col items-center gap-3">
+            <div className="mt-10 flex justify-center">
               <a
                 href="#modulos"
                 className="rounded-full bg-ink text-page px-7 py-3 text-sm font-medium hover:opacity-90 transition"
@@ -261,7 +276,6 @@ export default function Jornada() {
         )}
       </section>
 
-      {/* Modulos */}
       <section
         id="modulos"
         className="mx-auto max-w-5xl mt-28 pt-16 border-t border-line scroll-mt-8"

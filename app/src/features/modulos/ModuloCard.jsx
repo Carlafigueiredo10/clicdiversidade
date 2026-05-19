@@ -11,7 +11,7 @@ export default function ModuloCard({
   disponivel = true,
 }) {
   const inner = (
-    <>
+    <div className="relative z-10">
       <div className="flex items-start justify-between gap-4">
         <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center">
           <span className="text-2xl leading-none" aria-hidden>
@@ -54,11 +54,25 @@ export default function ModuloCard({
           Em breve
         </p>
       )}
-    </>
+    </div>
+  )
+
+  // Cortina violeta desce do topo cobrindo o card inteiro no hover.
+  // Tom da landing (--grad-cosmic, oklch 78-82% / 280-285 hue), opaco.
+  // pointer-events-none p/ nao bloquear o Link.
+  const curtain = (
+    <span
+      aria-hidden
+      className="absolute inset-0 -translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out pointer-events-none"
+      style={{
+        background:
+          'linear-gradient(180deg, oklch(78% 0.09 285) 0%, oklch(82% 0.07 280) 100%)',
+      }}
+    />
   )
 
   const baseClasses =
-    'block text-left bg-card rounded-2xl p-7 border border-line transition h-full'
+    'group relative overflow-hidden block text-left bg-card rounded-2xl p-7 border border-line transition h-full'
 
   if (!disponivel) {
     return <div className={baseClasses + ' opacity-70'}>{inner}</div>
@@ -72,6 +86,7 @@ export default function ModuloCard({
         ' hover:border-accent hover:shadow-md focus:outline-none focus:ring-2 focus:ring-accent/40'
       }
     >
+      {curtain}
       {inner}
     </Link>
   )

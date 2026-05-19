@@ -24,7 +24,9 @@
       // 3) doc-level capture handler (belt and suspenders)
       // MutationObserver cobre re-renders do SPA.
       (function () {
-        var RE = /\bcome\w*\s+(a\s+)?jornada/i;
+        // \S* (nao \w*) pra aceitar cedilha em "Comecar" — \w em JS nao
+        // inclui letras acentuadas, entao "Come" + "ç" + "ar" quebrava.
+        var RE = /\bcome\S*\s+(a\s+)?jornada/i;
 
         function matches(el) {
           return el && RE.test(((el.textContent || '') + '').trim());
@@ -69,6 +71,70 @@
         );
       })();
     </script>
+    <script>
+      // Patches no header/CTAs do legacy (bundle pre-built sem source neste repo):
+      // 1) injeta itens "Trilhas" e "Glossario" no <ul> do header
+      // 2) renomeia CTA "Explorar trilhas" para "Conhecer modulos" e leva pra /jornada/
+      //    (a grid de modulos vive na propria pagina /jornada/)
+      // MutationObserver cobre re-render do SPA.
+      (function () {
+        var TRILHAS_HREF = '/jornada/modulos/trilhas';
+        var GLOSSARIO_HREF = '/jornada/glossario';
+        var MODULOS_HREF = '/jornada/#modulos';
+        var MODULOS_LABEL = 'Conhecer módulos';
+
+        function injectNavItem(href, label, marker) {
+          var anchor = document.querySelector('a[href="#porque"]');
+          if (!anchor) return;
+          var li = anchor.closest('li');
+          if (!li || !li.parentNode) return;
+          var ul = li.parentNode;
+          if (ul.querySelector('a[' + marker + ']')) return;
+          var newLi = document.createElement('li');
+          var a = document.createElement('a');
+          a.setAttribute('href', href);
+          a.setAttribute(marker, '1');
+          a.className = anchor.className;
+          a.textContent = label;
+          newLi.appendChild(a);
+          ul.appendChild(newLi);
+        }
+
+        function rewireModulosCTA() {
+          document.querySelectorAll('a').forEach(function (el) {
+            if (el.__modulosWired) return;
+            var txt = (el.textContent || '').trim().toLowerCase();
+            // Casa o label original do bundle ou o ja renomeado (caso o no
+            // tenha sido reprocessado apos rerender).
+            if (txt !== 'explorar trilhas' && txt !== 'conhecer módulos') return;
+            el.__modulosWired = true;
+            try { el.setAttribute('href', MODULOS_HREF); } catch (e) {}
+            el.textContent = MODULOS_LABEL;
+            el.addEventListener('click', function (e) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              window.location.assign(MODULOS_HREF);
+            }, true);
+          });
+        }
+
+        function run() {
+          injectNavItem(TRILHAS_HREF, 'Trilhas', 'data-trilhas-link');
+          injectNavItem(GLOSSARIO_HREF, 'Glossário', 'data-glossario-link');
+          rewireModulosCTA();
+        }
+
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', run);
+        } else {
+          run();
+        }
+        new MutationObserver(run).observe(document.documentElement, {
+          childList: true,
+          subtree: true,
+        });
+      })();
+    </script>
     <script type="module" crossorigin src="/assets/index-ddgeai3h.js"></script>
     <link rel="stylesheet" crossorigin href="/assets/index-bwhrzmvu.css" />
   </head>
@@ -76,5 +142,9 @@
     <div id="root"></div>
     <!-- Lelia widget — chat flutuante da agente. Carrega depois do bundle da landing. -->
     <script src="/assets/lelia-widget.js" defer></script>
+    <!-- Contador de visitas (Firestore). Registra 1 hit por sessao. -->
+    <script type="module" src="/assets/visit-counter.js"></script>
+    <!-- Cometa percorrendo a coluna de etapas (auto-deteccao no runtime). -->
+    <script src="/assets/journey-pulse.js" defer></script>
   </body>
 </html>

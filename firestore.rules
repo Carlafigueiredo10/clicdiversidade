@@ -48,5 +48,95 @@ service cloud.firestore {
       allow update: if validStatsIncrement(request.resource.data, resource.data);
       allow delete: if false;
     }
+
+    // Contador de visitas por secao. Anyone pode incrementar (so total +1);
+    // leitura restrita ao admin autenticado (e-mail abaixo).
+    function isAdmin() {
+      return request.auth != null
+          && request.auth.token.email == 'carlacristinesoares@gmail.com';
+    }
+
+    function validVisitCreate(data) {
+      return data.keys().hasOnly(['total', 'updated_at'])
+          && data.total == 1
+          && data.updated_at == request.time;
+    }
+
+    function validVisitIncrement(newData, oldData) {
+      return newData.total == oldData.total + 1
+          && newData.updated_at == request.time
+          && newData.diff(oldData).affectedKeys().hasOnly(['total', 'updated_at']);
+    }
+
+    match /page_visits/{docId} {
+      allow read: if isAdmin();
+      allow create: if docId in ['home', 'jornada', 'lelia']
+                    && validVisitCreate(request.resource.data);
+      allow update: if docId in ['home', 'jornada', 'lelia']
+                    && validVisitIncrement(request.resource.data, resource.data);
+      allow delete: if false;
+    }
+
+    // Diagnostico das trilhas. Anonimo: nao guarda PII, so respostas + recomendacao.
+    function validTrilhaSlug(s) {
+      return s in [
+        'fundamental-dados',
+        'autonomia-digital',
+        'produtividade-automacao',
+        'dados-decisao',
+        'construcao',
+        'programacao',
+        'governanca'
+      ];
+    }
+
+    function validNewDiagnostico(data) {
+      return data.keys().hasOnly(['respostas', 'trilha_recomendada', 'aderencia', 'criado_em'])
+          && data.keys().hasAll(['respostas', 'trilha_recomendada', 'aderencia', 'criado_em'])
+          && data.respostas is map
+          && validTrilhaSlug(data.trilha_recomendada)
+          && data.aderencia is int
+          && data.aderencia >= 0 && data.aderencia <= 100
+          && data.criado_em == request.time;
+    }
+
+    function validDiagStatsIncrement(newData, oldData) {
+      return newData.total == oldData.total + 1
+          && newData.diff(oldData).affectedKeys().hasOnly([
+              'fundamental-dados',
+              'autonomia-digital',
+              'produtividade-automacao',
+              'dados-decisao',
+              'construcao',
+              'programacao',
+              'governanca',
+              'total',
+              'atualizado_em'
+          ]);
+    }
+
+    match /diagnosticos/{id} {
+      allow create: if validNewDiagnostico(request.resource.data);
+      allow read, update, delete: if false;
+    }
+
+    match /stats/diagnostico_distribuicao {
+      allow read: if true;
+      allow create: if
+          request.resource.data.keys().hasOnly([
+              'fundamental-dados',
+              'autonomia-digital',
+              'produtividade-automacao',
+              'dados-decisao',
+              'construcao',
+              'programacao',
+              'governanca',
+              'total',
+              'atualizado_em'
+          ])
+          && request.resource.data.total == 1;
+      allow update: if validDiagStatsIncrement(request.resource.data, resource.data);
+      allow delete: if false;
+    }
   }
 }

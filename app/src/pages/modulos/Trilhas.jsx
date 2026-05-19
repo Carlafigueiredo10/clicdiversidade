@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { TRILHAS } from '../../features/modulos/trilhas/data'
+import Diagnostico from '../../features/modulos/trilhas/Diagnostico'
 
 function tituloCurto(titulo) {
   // Cortar na primeira frase ou em ~50 chars
@@ -24,7 +25,20 @@ export default function Trilhas() {
           combina mais com seu momento.
         </p>
 
-        <div className="mt-14 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-14 max-w-3xl mx-auto">
+          <Diagnostico trilhas={TRILHAS} />
+        </div>
+
+        <div className="mt-20 pt-12 border-t border-line">
+          <h2 className="font-display font-semibold text-2xl md:text-3xl text-ink text-center">
+            Ou explore todas as trilhas
+          </h2>
+          <p className="mt-3 max-w-xl mx-auto text-center text-ink-soft text-sm">
+            O diagnóstico é só uma sugestão. Toda trilha é livre.
+          </p>
+        </div>
+
+        <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {TRILHAS.map((t) => (
             <Link
               key={t.slug}

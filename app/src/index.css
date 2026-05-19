@@ -1,19 +1,31 @@
 @import "tailwindcss";
 
+/* Tokens espelhados da landing legacy (cool palette + Fraunces/Inter/Mono). */
 @theme {
-  --color-page: #ede5d6;
-  --color-card: #f7f1e4;
-  --color-ink: #1a1814;
-  --color-ink-soft: #6e6358;
-  --color-muted: #a89989;
-  --color-line: #d4cbb8;
-  --color-accent: #8b7ee8;
-  --color-accent-fg: #5e51b8;
-  --color-success: #94c5a8;
-  --color-success-fg: #4f8a6c;
+  --color-page: oklch(98.5% 0.004 250);
+  --color-card: oklch(99% 0.003 250);
+  --color-surface: oklch(97.5% 0.006 255);
+  --color-ink: oklch(16% 0.04 262);
+  --color-ink-soft: oklch(32% 0.03 260);
+  --color-muted: oklch(50% 0.02 260);
+  --color-line: oklch(88% 0.01 258);
+  --color-accent: oklch(78% 0.06 285);
+  --color-accent-fg: oklch(28% 0.08 262);
+  --color-success: oklch(72% 0.12 155);
+  --color-success-fg: oklch(45% 0.12 155);
 
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
   --font-display: "Fraunces", Georgia, serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --radius-card: 0.75rem;
+
+  --shadow-soft:
+    0 1px 2px oklch(20% 0.04 260 / 0.04),
+    0 8px 32px oklch(20% 0.04 260 / 0.06);
+  --shadow-lift:
+    0 1px 0 oklch(100% 0 0 / 0.6) inset,
+    0 30px 60px -30px oklch(20% 0.06 270 / 0.18);
 }
 
 :root {
@@ -35,4 +47,121 @@ body {
 
 #root {
   min-height: 100vh;
+}
+
+/* ────────────────────────────────────────────────────────────────────
+   HeadlineCinematic — parallax, breathing, glow atmosferico e grain.
+   Toda a "vida" vive aqui. Variaveis --mx, --my (-1..1) injetadas pelo JS.
+   ──────────────────────────────────────────────────────────────────── */
+.headline-cinematic {
+  --mx: 0;
+  --my: 0;
+  position: relative;
+  perspective: 1400px;
+  isolation: isolate;
+}
+
+.headline-glow {
+  position: absolute;
+  inset: -25% -10% -10%;
+  pointer-events: none;
+  z-index: -1;
+  background: radial-gradient(
+    ellipse 60% 50%
+      at calc(50% + var(--mx) * 18%) calc(38% + var(--my) * 18%),
+    oklch(78% 0.12 285 / 0.28) 0%,
+    oklch(88% 0.06 280 / 0.10) 35%,
+    oklch(98.5% 0.004 250 / 0) 70%
+  );
+  filter: blur(28px);
+  transition: background 1.6s cubic-bezier(0.16, 0.84, 0.24, 1);
+  animation: headline-glow-breathe 11s ease-in-out infinite;
+}
+
+.headline-line {
+  display: inline-block;
+  /* depth diferente por linha: linha 0 fica "no fundo", linha N fica "na frente" */
+  --depth: calc((var(--i) - (var(--total) - 1) / 2) * 1);
+  transform: translate3d(
+    calc(var(--mx) * 8px * var(--depth)),
+    calc(var(--my) * 5px * var(--depth)),
+    calc(var(--depth) * 6px)
+  )
+    rotateX(calc(var(--my) * -1.2deg))
+    rotateY(calc(var(--mx) * 1.6deg));
+  transform-style: preserve-3d;
+  transition: transform 1.2s cubic-bezier(0.16, 0.84, 0.24, 1);
+  animation: headline-breathe calc(9s + var(--i) * 1.3s) ease-in-out infinite;
+  animation-delay: calc(var(--i) * -2.2s);
+  will-change: transform;
+}
+
+@keyframes headline-breathe {
+  0%,
+  100% {
+    text-shadow: 0 0 0 oklch(28% 0.08 262 / 0);
+    letter-spacing: 0;
+  }
+  50% {
+    text-shadow:
+      0 1px 0 oklch(28% 0.08 262 / 0.04),
+      0 18px 60px oklch(28% 0.08 262 / 0.08),
+      0 0 80px oklch(78% 0.10 285 / 0.06);
+    letter-spacing: 0.003em;
+  }
+}
+
+@keyframes headline-glow-breathe {
+  0%,
+  100% {
+    opacity: 0.85;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+}
+
+/* Grain fino, animado em opacidade pra nao parecer estatico. */
+.headline-grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.045;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  animation: headline-grain-shift 7s steps(4) infinite;
+}
+
+@keyframes headline-grain-shift {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(-4px, 2px);
+  }
+  50% {
+    transform: translate(3px, -3px);
+  }
+  75% {
+    transform: translate(-2px, 4px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .headline-line,
+  .headline-glow,
+  .headline-grain {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+  .headline-grain {
+    display: none;
+  }
 }

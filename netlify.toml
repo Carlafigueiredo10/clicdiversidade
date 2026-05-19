@@ -1,14 +1,19 @@
 [build]
   base = "."
-  command = """
-    npm install && \
-    rm -rf dist && \
-    mkdir -p dist && \
-    cp index.html dist/ && \
-    cp -r assets dist/ && \
-    cd app && npm install && npm run build
-  """
+  command = "npm install && node scripts/build.mjs"
   publish = "dist"
+
+# `netlify dev` espelha producao numa unica porta (8888).
+# - serve estaticos da raiz (index.html, assets/, lelia/) via publish = "."
+# - sobe o Vite em background (porta fixa 5173) e proxia /jornada/*
+# - aplica todos os [[redirects]] abaixo (SPA fallback, /lelia, /api/lelia)
+# - executa as Netlify Functions de netlify/functions
+[dev]
+  command = "npm --prefix app run dev -- --port 5173 --strictPort"
+  targetPort = 5173
+  port = 8888
+  framework = "#custom"
+  autoLaunch = false
 
 [build.environment]
   NODE_VERSION = "22"
@@ -30,20 +35,9 @@
   to = "/.netlify/functions/lelia"
   status = 200
 
-# Pagina de homenagem a Lelia Gonzalez (arquivo: /lelia/index.html).
-[[redirects]]
-  from = "/lelia"
-  to = "/lelia/"
-  status = 301
-
-# SPA fallback do app /jornada (React Router)
-[[redirects]]
-  from = "/jornada/*"
-  to = "/jornada/index.html"
-  status = 200
-
-# SPA fallback do legacy (todas as outras rotas)
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+# O SPA fallback do /jornada/* e gerado em build time como dist/_redirects
+# (ver scripts/build.mjs). Isso evita um bug do netlify-cli no Windows
+# que aplicava path.join() no rewrite e quebrava /jornada/ em dev.
+#
+# O legacy e multi-page estatico (index.html + lelia/index.html), nao
+# precisa de SPA fallback: rotas inexistentes devem 404 normalmente.

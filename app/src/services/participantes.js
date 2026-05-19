@@ -3,6 +3,7 @@ import {
   doc,
   getDoc,
   increment,
+  onSnapshot,
   runTransaction,
   serverTimestamp,
 } from 'firebase/firestore'
@@ -64,18 +65,16 @@ export async function submeterParticipante(input) {
   })
 }
 
-export async function getDistribuicao() {
-  const snap = await getDoc(doc(db, 'stats', 'distribuicao'))
-  if (!snap.exists()) {
-    return {
-      nunca_usei: 0,
-      perguntas_simples: 0,
-      produzo_conteudo: 0,
-      ja_criei: 0,
-      total: 0,
-    }
-  }
-  const data = snap.data()
+const EMPTY_DIST = {
+  nunca_usei: 0,
+  perguntas_simples: 0,
+  produzo_conteudo: 0,
+  ja_criei: 0,
+  total: 0,
+}
+
+function normalizeDist(data) {
+  if (!data) return EMPTY_DIST
   return {
     nunca_usei: data.nunca_usei ?? 0,
     perguntas_simples: data.perguntas_simples ?? 0,
@@ -83,4 +82,19 @@ export async function getDistribuicao() {
     ja_criei: data.ja_criei ?? 0,
     total: data.total ?? 0,
   }
+}
+
+export async function getDistribuicao() {
+  const snap = await getDoc(doc(db, 'stats', 'distribuicao'))
+  return normalizeDist(snap.exists() ? snap.data() : null)
+}
+
+// Listener real-time: chama onData(dist) sempre que o doc muda.
+// Retorna funcao de unsubscribe — chame no cleanup do useEffect.
+export function onDistribuicao(onData, onError) {
+  return onSnapshot(
+    doc(db, 'stats', 'distribuicao'),
+    (snap) => onData(normalizeDist(snap.exists() ? snap.data() : null)),
+    (err) => onError && onError(err),
+  )
 }
