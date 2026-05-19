@@ -344,10 +344,25 @@
   <div class="page-header">
     <div class="page-badge">✦ Certificado</div>
     <h1 class="page-titulo">Certificado de<br>Autoria de Tecnologia</h1>
-    <p class="page-sub">Confirme seu nome e baixe o certificado em PDF.</p>
+    <p class="page-sub" id="pageSub">Confirme seu nome e baixe o certificado em PDF.</p>
   </div>
 
-  <div class="form-card">
+  <!-- Gate: aparece quando a pessoa ainda nao fez o diagnostico de nivel de IA.
+       Pre-oficina: gate via localStorage (set no submit do /jornada). Pos-oficina:
+       trocar por gate via login. -->
+  <div id="gateBox" hidden style="background:#fff;border:1px solid rgba(88,56,108,0.18);border-radius:18px;padding:28px;margin-top:18px;text-align:center;">
+    <p style="font-size:14px;line-height:1.6;color:#3d3450;margin:0 0 6px;">
+      Pra liberar o certificado, primeiro responda o <strong>diagnóstico de nível de IA</strong> na /jornada.
+    </p>
+    <p style="font-size:12px;line-height:1.6;color:#6f6280;margin:0 0 18px;">
+      O certificado é seu reconhecimento como Servidora-Autora — emitido pra quem participou do percurso CLIC.
+    </p>
+    <a href="/jornada/" style="display:inline-block;background:#58386c;color:#fff;text-decoration:none;font-weight:600;font-size:14px;padding:12px 22px;border-radius:999px;letter-spacing:0.02em;">
+      Fazer o diagnóstico →
+    </a>
+  </div>
+
+  <div class="form-card" id="formCard">
     <label class="form-label" for="nomeInput">Seu nome completo</label>
     <input class="form-input" type="text" id="nomeInput" placeholder="Como deve aparecer no certificado">
     <p class="form-hint">Use seu nome completo — ele aparecerá em destaque no certificado.</p>
@@ -356,6 +371,28 @@
   <button class="btn-gerar" id="btnGerar" onclick="gerarCertificado()">
     Gerar certificado →
   </button>
+
+  <script>
+    // Gate do certificado — checa se a pessoa fez o diagnostico de nivel de IA.
+    // O flag 'clic_diagnostico' e setado em /jornada apos submit no Firestore.
+    (function () {
+      var raw = null;
+      try { raw = localStorage.getItem('clic_diagnostico'); } catch (e) {}
+      var diag = null;
+      try { diag = raw ? JSON.parse(raw) : null; } catch (e) {}
+
+      if (!diag || !diag.nome) {
+        document.getElementById('formCard').hidden = true;
+        document.getElementById('btnGerar').hidden = true;
+        var sub = document.getElementById('pageSub');
+        if (sub) sub.textContent = 'Reconhecimento de quem completou o percurso CLIC.';
+        document.getElementById('gateBox').hidden = false;
+      } else {
+        var input = document.getElementById('nomeInput');
+        if (input) input.value = diag.nome;
+      }
+    })();
+  </script>
 
   <div class="loading-msg" id="loadingMsg">⏳ Gerando seu certificado... aguarde alguns segundos.</div>
 
@@ -556,9 +593,10 @@
   <!-- Corpo texto -->
   <div class="cert-body">
     <p class="cert-certifica">
-      Certificamos que a pessoa participante desenvolveu uma solução digital<br>
-      utilizando <span class="ia">inteligência artificial</span> e <span class="auto">automação</span> durante a<br>
-      <span class="oficina">Oficina Humanos no Comando</span>.
+      Certificamos que a pessoa participante concluiu a<br>
+      <span class="oficina">Oficina Humanos no Comando</span>, desenvolvendo<br>
+      uma solução digital com aplicação de<br>
+      <span class="ia">inteligência artificial</span> e <span class="auto">automação</span>.
     </p>
     <span class="cert-nome" id="certNome">Nome</span>
   </div>

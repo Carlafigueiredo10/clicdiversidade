@@ -89,6 +89,22 @@ export default function Jornada() {
     setErro(null)
     try {
       await submeterParticipante(form)
+      // Marca diagnostico como concluido (gate do certificado).
+      // Pre-oficina: localStorage. Pos-oficina: trocar por gate via login.
+      try {
+        localStorage.setItem(
+          'clic_diagnostico',
+          JSON.stringify({
+            nome: form.nome.trim(),
+            email: form.email.trim().toLowerCase(),
+            nivel: form.nivel,
+            criado_em: new Date().toISOString(),
+          }),
+        )
+      } catch {
+        // localStorage indisponivel (modo privado) -- silenciar; pessoa
+        // refaz pra liberar cert.
+      }
       setNivelEnviado(form.nivel)
       setEnviado(true)
       setEnviando(false)
