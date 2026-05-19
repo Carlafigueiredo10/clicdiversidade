@@ -7,9 +7,14 @@ import ConstruindoTecnologia from '../pages/modulos/ConstruindoTecnologia'
 import Trilhas from '../pages/modulos/Trilhas'
 import TrilhaDetalhe from '../pages/modulos/TrilhaDetalhe'
 import Governanca from '../pages/modulos/Governanca'
+import GovernancaAgente from '../pages/modulos/GovernancaAgente'
+import GovernancaAIE from '../pages/modulos/GovernancaAIE'
+import MaterialOficina from '../pages/modulos/MaterialOficina'
 import Glossario from '../pages/Glossario'
+import BaseTeorica from '../pages/BaseTeorica'
 import LeliaTest from '../pages/LeliaTest'
 import Admin from '../pages/Admin'
+import Login from '../pages/Login'
 
 export const router = createBrowserRouter(
   [
@@ -26,9 +31,14 @@ export const router = createBrowserRouter(
         { path: '/modulos/trilhas', element: <Trilhas /> },
         { path: '/modulos/trilhas/:slug', element: <TrilhaDetalhe /> },
         { path: '/modulos/governanca', element: <Governanca /> },
+        { path: '/modulos/governanca/agente', element: <GovernancaAgente /> },
+        { path: '/modulos/governanca/aie', element: <GovernancaAIE /> },
+        { path: '/modulos/oficina', element: <MaterialOficina /> },
         { path: '/glossario', element: <Glossario /> },
+        { path: '/base-teorica', element: <BaseTeorica /> },
         { path: '/lelia-test', element: <LeliaTest /> },
         { path: '/admin', element: <Admin /> },
+        { path: '/login', element: <Login /> },
       ],
     },
   ],

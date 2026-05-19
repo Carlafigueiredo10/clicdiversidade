@@ -1,10 +1,12 @@
 import Tabs from '../../features/modulos/Tabs'
-import Roteiro from '../../features/modulos/construindo-tecnologia/Roteiro'
+import SlideNavigator from '../../features/modulos/construindo-tecnologia/SlideNavigator'
 import MeuAplicativo from '../../features/modulos/construindo-tecnologia/MeuAplicativo'
+import ConstruindoAplicativos from '../../features/modulos/construindo-tecnologia/ConstruindoAplicativos'
 
 const TABS = [
-  { id: 'roteiro', label: 'Roteiro', render: () => <Roteiro /> },
+  { id: 'processo', label: 'O Processo', render: () => <SlideNavigator /> },
   { id: 'meu-app', label: 'Meu Aplicativo', render: () => <MeuAplicativo /> },
+  { id: 'construindo', label: 'Construindo Aplicativos', render: () => <ConstruindoAplicativos /> },
 ]
 
 export default function ConstruindoTecnologia() {
@@ -25,7 +27,7 @@ export default function ConstruindoTecnologia() {
         </p>
 
         <div className="mt-12">
-          <Tabs tabs={TABS} defaultId="roteiro" />
+          <Tabs tabs={TABS} defaultId="processo" />
         </div>
       </div>
     </main>

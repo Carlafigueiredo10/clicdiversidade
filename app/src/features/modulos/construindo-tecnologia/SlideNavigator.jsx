@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
-const SRC = `${import.meta.env.BASE_URL}apresentacoes/bloco2-engenharia-prompt.html`
+const SRC = `${import.meta.env.BASE_URL}apresentacoes/bloco4-construindo-tecnologia.html`
 
 export default function SlideNavigator() {
   const containerRef = useRef(null)
@@ -47,7 +47,7 @@ export default function SlideNavigator() {
       <iframe
         ref={iframeRef}
         src={SRC}
-        title="Bloco 2 — Engenharia de Prompt"
+        title="Bloco 4 — Construindo Tecnologia"
         className={
           isPresenting
             ? 'w-full h-full border-0 block'
@@ -86,7 +86,7 @@ export default function SlideNavigator() {
 
       {!isPresenting && (
         <p className="absolute bottom-3 left-1/2 -translate-x-1/2 text-[10px] tracking-wider uppercase text-white/40 font-mono pointer-events-none">
-          Clique em ▶ Apresentar para tela cheia · 9 slides
+          Clique em ▶ Apresentar para tela cheia · 12 slides
         </p>
       )}
     </div>

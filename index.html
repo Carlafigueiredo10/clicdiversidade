@@ -73,13 +73,14 @@
     </script>
     <script>
       // Patches no header/CTAs do legacy (bundle pre-built sem source neste repo):
-      // 1) injeta itens "Trilhas" e "Glossario" no <ul> do header
+      // 1) injeta itens "Modulos", "Glossario" e "Entrar" no <ul> do header
       // 2) renomeia CTA "Explorar trilhas" para "Conhecer modulos" e leva pra /jornada/
       //    (a grid de modulos vive na propria pagina /jornada/)
       // MutationObserver cobre re-render do SPA.
       (function () {
-        var TRILHAS_HREF = '/jornada/modulos/trilhas';
+        var MODULOS_NAV_HREF = '/jornada/#modulos';
         var GLOSSARIO_HREF = '/jornada/glossario';
+        var LOGIN_HREF = '/jornada/login';
         var MODULOS_HREF = '/jornada/#modulos';
         var MODULOS_LABEL = 'Conhecer módulos';
 
@@ -119,8 +120,9 @@
         }
 
         function run() {
-          injectNavItem(TRILHAS_HREF, 'Trilhas', 'data-trilhas-link');
+          injectNavItem(MODULOS_NAV_HREF, 'Módulos', 'data-modulos-link');
           injectNavItem(GLOSSARIO_HREF, 'Glossário', 'data-glossario-link');
+          injectNavItem(LOGIN_HREF, 'Entrar', 'data-login-link');
           rewireModulosCTA();
         }
 
@@ -133,6 +135,61 @@
           childList: true,
           subtree: true,
         });
+      })();
+    </script>
+    <script>
+      // Patch no footer da landing legacy: o bundle pre-built renderiza
+      // TODOS os links do rodape como href="#". Aqui reescrevemos os que tem
+      // destino existente neste repo (a fonte do bundle nao esta aqui, entao
+      // patch em runtime e o caminho). MutationObserver cobre re-render.
+      (function () {
+        // { href, external? } por chave normalizada (sem acento, lowercase).
+        var FOOTER_MAP = {
+          'trilhas': { href: '/jornada/modulos/trilhas' },
+          'oficinas': { href: '/jornada/modulos/oficina' },
+          'certificacao': { href: '/jornada/certificado.html' },
+          'contato': { href: 'https://wa.me/5561998755013', external: true },
+          'linkedin': { href: 'https://www.linkedin.com/in/carlacristinefigueiredo', external: true },
+        };
+
+        // Links do footer pra remover (item nao existe).
+        var FOOTER_REMOVE = ['calendario', 'instagram'];
+
+        function normalize(s) {
+          return s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+        }
+
+        function rewireFooter(root) {
+          (root || document).querySelectorAll('footer a').forEach(function (el) {
+            if (el.__footerWired) return;
+            var key = normalize((el.textContent || '').trim());
+            if (FOOTER_REMOVE.indexOf(key) !== -1) {
+              var li = el.closest('li');
+              (li || el).remove();
+              return;
+            }
+            var entry = FOOTER_MAP[key];
+            if (!entry) return;
+            el.__footerWired = true;
+            try {
+              el.setAttribute('href', entry.href);
+              if (entry.external) {
+                el.setAttribute('target', '_blank');
+                el.setAttribute('rel', 'noopener noreferrer');
+              }
+            } catch (e) {}
+          });
+        }
+
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () { rewireFooter(); });
+        } else {
+          rewireFooter();
+        }
+        new MutationObserver(function () { rewireFooter(); }).observe(
+          document.documentElement,
+          { childList: true, subtree: true },
+        );
       })();
     </script>
     <script type="module" crossorigin src="/assets/index-ddgeai3h.js"></script>

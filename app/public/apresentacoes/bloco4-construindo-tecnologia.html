@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Construindo Tecnologia · Humanos no Comando</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#030307;
+  --surface:rgba(10,10,18,.90);
+  --surface-hi:rgba(16,14,26,.92);
+  --border:rgba(236,233,245,.08);
+  --border-hi:rgba(236,233,245,.14);
+  --text:#ece9f5;
+  --text-2:rgba(236,233,245,.72);
+  --text-3:rgba(236,233,245,.48);
+  --text-4:rgba(236,233,245,.28);
+  --purple:#a78bfa;
+  --blue:#7dd3fc;
+  --amber:#fbbf24;
+  --green:#6ee7b7;
+  --red:#fca5a5;
+  --f:'Space Grotesk',sans-serif;
+  --fi:'Inter',sans-serif;
+  --fm:'JetBrains Mono',monospace;
+}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--fi);}
+
+#bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
+
+#grain{
+  position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.45;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:160px 160px;mix-blend-mode:overlay;
+}
+
+#clight{
+  position:fixed;z-index:2;pointer-events:none;
+  width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle,rgba(167,139,250,.055) 0%,transparent 70%);
+  transform:translate(-50%,-50%);
+  transition:left .15s ease,top .15s ease;
+  left:50%;top:50%;
+}
+
+#atmo{
+  position:fixed;inset:0;z-index:2;pointer-events:none;
+  transition:background 1.4s cubic-bezier(.16,1,.3,1);
+}
+
+#deck{position:fixed;inset:0;z-index:3;}
+
+.slide{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  padding:5.5vh 6vw;
+  opacity:0;pointer-events:none;
+  will-change:opacity,transform;overflow:hidden;
+}
+.slide.active{opacity:1;pointer-events:all;}
+
+.eyebrow{
+  font-family:var(--fm);font-size:12px;font-weight:400;
+  letter-spacing:.16em;text-transform:uppercase;
+  color:var(--text-3);display:flex;align-items:center;gap:10px;
+  margin-bottom:.7rem;
+}
+.eyebrow-dot{
+  width:6px;height:6px;border-radius:50%;flex-shrink:0;
+}
+.dot-p{background:var(--purple);box-shadow:0 0 8px rgba(167,139,250,.7);}
+.dot-b{background:var(--blue);box-shadow:0 0 8px rgba(125,211,252,.6);}
+.dot-a{background:var(--amber);box-shadow:0 0 8px rgba(251,191,36,.6);}
+.dot-g{background:var(--green);box-shadow:0 0 8px rgba(110,231,183,.6);}
+.dot-r{background:var(--red);box-shadow:0 0 8px rgba(252,165,165,.5);}
+
+.display{font-family:var(--f);font-weight:700;line-height:.95;letter-spacing:-.03em;color:var(--text);}
+.display-xl{font-size:clamp(4rem,9vw,8rem);}
+.display-lg{font-size:clamp(2rem,3.5vw,3.2rem);}
+.display-md{font-size:clamp(1.4rem,2.2vw,2rem);}
+
+.grad-p{background:linear-gradient(135deg,var(--text) 0%,rgba(167,139,250,.85));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.grad-g{background:linear-gradient(135deg,var(--green),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+
+.body-lg{font-size:clamp(1rem,1.5vw,1.2rem);font-weight:300;color:var(--text-2);line-height:1.7;}
+.body-md{font-size:clamp(.88rem,1.2vw,1.05rem);color:var(--text-2);line-height:1.7;}
+.body-sm{font-size:clamp(.8rem,1.05vw,.94rem);color:var(--text-3);line-height:1.65;}
+.mono-sm{font-family:var(--fm);font-size:11px;letter-spacing:.1em;color:var(--text-3);}
+
+.panel{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:16px;
+  position:relative;overflow:hidden;
+}
+.panel-hi{background:var(--surface-hi);border-color:var(--border-hi);}
+.panel::after{
+  content:'';position:absolute;inset:0;border-radius:inherit;
+  background:linear-gradient(135deg,rgba(255,255,255,.025) 0%,transparent 50%);
+  pointer-events:none;
+}
+.rule{width:44px;height:1px;background:rgba(236,233,245,.14);margin:1.4rem 0;}
+
+@keyframes breath{0%,100%{opacity:.5}50%{opacity:1}}
+@keyframes drift{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+@keyframes spin-slow{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@keyframes scan{0%{top:-100%}100%{top:200%}}
+
+.L0{opacity:0;transform:translateY(0);transition:opacity .5s .05s ease,transform .5s .05s ease;}
+.L1{opacity:0;transform:translateY(18px);transition:opacity .7s .12s cubic-bezier(.16,1,.3,1),transform .7s .12s cubic-bezier(.16,1,.3,1);}
+.L2{opacity:0;transform:translateY(18px);transition:opacity .7s .24s cubic-bezier(.16,1,.3,1),transform .7s .24s cubic-bezier(.16,1,.3,1);}
+.L3{opacity:0;transform:translateY(18px);transition:opacity .7s .38s cubic-bezier(.16,1,.3,1),transform .7s .38s cubic-bezier(.16,1,.3,1);}
+.L4{opacity:0;transform:translateY(18px);transition:opacity .7s .52s cubic-bezier(.16,1,.3,1),transform .7s .52s cubic-bezier(.16,1,.3,1);}
+.L5{opacity:0;transform:translateY(18px);transition:opacity .7s .66s cubic-bezier(.16,1,.3,1),transform .7s .66s cubic-bezier(.16,1,.3,1);}
+.L6{opacity:0;transform:translateY(18px);transition:opacity .7s .80s cubic-bezier(.16,1,.3,1),transform .7s .80s cubic-bezier(.16,1,.3,1);}
+.Lscale{opacity:0;transform:scale(.92);transition:opacity .65s .1s cubic-bezier(.16,1,.3,1),transform .65s .1s cubic-bezier(.16,1,.3,1);}
+.slide.active .L0,.slide.active .L1,.slide.active .L2,.slide.active .L3,
+.slide.active .L4,.slide.active .L5,.slide.active .L6,.slide.active .Lscale{
+  opacity:1;transform:none;
+}
+
+#prog{position:fixed;top:0;left:0;height:1px;z-index:200;background:linear-gradient(90deg,rgba(167,139,250,.8),rgba(125,211,252,.5));box-shadow:0 0 6px rgba(167,139,250,.4);transition:width .55s cubic-bezier(.16,1,.3,1);}
+#logo{position:fixed;top:1.6rem;left:2rem;z-index:100;font-family:var(--fm);font-size:11px;letter-spacing:.1em;color:var(--text-4);display:flex;align-items:center;gap:8px;}
+#logo-dot{width:5px;height:5px;border-radius:50%;background:var(--purple);box-shadow:0 0 8px rgba(167,139,250,.7);animation:breath 2.5s ease-in-out infinite;}
+#ctr{position:fixed;top:1.6rem;right:2rem;z-index:100;font-family:var(--fm);font-size:11px;letter-spacing:.08em;color:var(--text-4);}
+.nav-wrap{position:fixed;bottom:1.8rem;left:50%;transform:translateX(-50%);z-index:100;display:flex;align-items:center;gap:1rem;}
+.nb{width:34px;height:34px;border-radius:50%;border:1px solid var(--border-hi);background:var(--surface);color:var(--text-3);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;transition:all .3s;}
+.nb:hover:not(:disabled){border-color:rgba(167,139,250,.4);color:var(--purple);box-shadow:0 0 16px rgba(167,139,250,.15);}
+.nb:disabled{opacity:.15;cursor:not-allowed;}
+.dots-row{display:flex;gap:5px;}
+.dot{width:4px;height:4px;border-radius:50%;background:rgba(236,233,245,.2);cursor:pointer;transition:all .35s;}
+.dot.on{width:22px;border-radius:2px;background:var(--purple);box-shadow:0 0 8px rgba(167,139,250,.5);}
+
+#s1{justify-content:flex-end;padding-bottom:11vh;}
+.s1-deco{position:absolute;right:5vw;top:50%;transform:translateY(-50%);width:36%;display:flex;align-items:center;justify-content:center;pointer-events:none;}
+.s1-orb{width:clamp(180px,26vw,360px);height:clamp(180px,26vw,360px);border-radius:50%;border:1px solid rgba(236,233,245,.04);position:relative;animation:drift 9s ease-in-out infinite;}
+.s1-ring{position:absolute;inset:-2px;border-radius:50%;padding:2px;background:conic-gradient(rgba(167,139,250,.25),rgba(125,211,252,.1),rgba(167,139,250,.05),rgba(167,139,250,.25));-webkit-mask:linear-gradient(white,white) content-box,linear-gradient(white,white);mask:linear-gradient(white,white) content-box,linear-gradient(white,white);-webkit-mask-composite:destination-out;mask-composite:exclude;animation:spin-slow 22s linear infinite;}
+.s1-inner{position:absolute;inset:14px;border-radius:50%;background:radial-gradient(circle,rgba(167,139,250,.08) 0%,transparent 70%);display:flex;align-items:center;justify-content:center;font-family:var(--f);font-size:clamp(2rem,4vw,4rem);font-weight:700;color:rgba(167,139,250,.3);}
+.s1-orbit{position:absolute;width:7px;height:7px;border-radius:50%;background:rgba(167,139,250,.7);box-shadow:0 0 10px rgba(167,139,250,.5);top:8%;left:50%;}
+
+#s2{flex-direction:row;padding:0;}
+.s2-h{flex:1;height:100%;display:flex;flex-direction:column;justify-content:center;padding:6vh 5.5vw;position:relative;}
+.s2-h-before{background:rgba(5,5,10,.5);border-right:1px solid var(--border);}
+.s2-h-after{background:rgba(12,8,22,.6);}
+.s2-badge{font-family:var(--fm);font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:4px 12px;border-radius:100px;display:inline-block;margin-bottom:1.5rem;}
+.b-before{background:rgba(236,233,245,.05);color:var(--text-3);border:1px solid var(--border);}
+.b-after{background:rgba(167,139,250,.1);color:rgba(167,139,250,.85);border:1px solid rgba(167,139,250,.2);}
+.s2-prompt{font-family:var(--fm);font-size:clamp(1rem,1.5vw,1.2rem);color:var(--text-3);line-height:1.7;margin-bottom:1.5rem;}
+.s2-prompt-hi{color:var(--text);}
+.s2-vs{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10;font-family:var(--fm);font-size:10px;letter-spacing:.1em;color:var(--text-4);width:36px;height:36px;border-radius:50%;background:var(--bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;}
+.s2-pull{margin-top:1.5rem;padding:1.1rem 1.4rem;background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.18);border-left:2px solid rgba(167,139,250,.6);border-radius:0 14px 14px 0;font-family:var(--f);font-size:clamp(.9rem,1.3vw,1.1rem);font-weight:500;color:var(--text);line-height:1.5;}
+
+#s3{justify-content:center;gap:3vh;align-items:center;}
+.s3-flow{display:flex;align-items:center;gap:1.5vw;width:100%;max-width:960px;margin:0 auto;}
+.s3-node{flex:1;padding:2rem 1.6rem;border-radius:18px;display:flex;flex-direction:column;gap:.6rem;text-align:center;animation:drift 7s ease-in-out infinite;}
+.sn-a{background:rgba(125,211,252,.05);border:1px solid rgba(125,211,252,.12);animation-delay:0s;}
+.sn-b{background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.18);box-shadow:0 0 50px rgba(167,139,250,.06);animation-delay:-2s;}
+.sn-c{background:rgba(110,231,183,.05);border:1px solid rgba(110,231,183,.12);animation-delay:-4s;}
+.s3-nicon{font-size:2.2rem;margin-bottom:.3rem;}
+.s3-nlabel{font-family:var(--fm);font-size:11px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.2rem;}
+.nl-b{color:rgba(125,211,252,.7);}
+.nl-p{color:rgba(167,139,250,.8);}
+.nl-g{color:rgba(110,231,183,.7);}
+.s3-nmain{font-family:var(--f);font-size:clamp(1rem,1.5vw,1.2rem);font-weight:600;color:var(--text);line-height:1.2;}
+.s3-nsub{font-size:clamp(.78rem,.95vw,.88rem);color:var(--text-3);line-height:1.55;}
+.s3-arrow{font-size:1.2rem;color:var(--text-4);flex-shrink:0;}
+.s3-tagline{text-align:center;max-width:680px;margin:0 auto;}
+.s3-main{font-family:var(--f);font-size:clamp(1.1rem,1.7vw,1.4rem);font-weight:600;color:var(--text);line-height:1.35;margin-bottom:.7rem;}
+.s3-main em{font-style:normal;color:var(--purple);}
+.s3-ethic{display:inline-flex;align-items:center;gap:.6rem;padding:.4rem 1rem;border-radius:100px;background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.18);font-family:var(--fm);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:rgba(251,191,36,.75);}
+
+#s4{flex-direction:row;align-items:center;gap:4vw;}
+.s4-stack{flex:0 0 auto;width:clamp(220px,32vw,380px);display:flex;flex-direction:column;gap:.7rem;perspective:600px;}
+.s4-layer{padding:1.2rem 1.5rem;border-radius:14px;display:flex;align-items:center;gap:1rem;transition:transform .4s ease;cursor:default;}
+.s4-layer:hover{transform:translateZ(16px) translateY(-2px);}
+.sl-top{background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.2);box-shadow:0 0 30px rgba(167,139,250,.06);}
+.sl-mid{background:var(--surface);border:1px solid var(--border);}
+.sl-bot{background:rgba(110,231,183,.05);border:1px solid rgba(110,231,183,.12);}
+.sl-icon{font-size:1.6rem;flex-shrink:0;}
+.sl-lbl{font-family:var(--fm);font-size:11px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.2rem;}
+.sl-desc{font-size:clamp(.78rem,1vw,.88rem);color:var(--text-3);line-height:1.5;}
+.s4-info{flex:1;display:flex;flex-direction:column;gap:1rem;}
+.s4-callout{padding:1.2rem 1.5rem;border-radius:0 14px 14px 0;border-left:2px solid rgba(251,191,36,.5);background:rgba(251,191,36,.04);border-top:1px solid rgba(251,191,36,.1);border-bottom:1px solid rgba(251,191,36,.1);border-right:1px solid rgba(251,191,36,.08);}
+.s4-clbl{font-family:var(--fm);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(251,191,36,.6);margin-bottom:.4rem;}
+.s4-callout-2{padding:1.2rem 1.5rem;border-radius:0 14px 14px 0;border-left:2px solid rgba(110,231,183,.4);background:rgba(110,231,183,.03);border-top:1px solid rgba(110,231,183,.08);border-bottom:1px solid rgba(110,231,183,.08);border-right:1px solid rgba(110,231,183,.06);}
+
+#s5{flex-direction:row;align-items:center;gap:0;padding:0;}
+.s5-left{flex:0 0 50%;height:100%;display:flex;align-items:center;justify-content:center;position:relative;border-right:1px solid var(--border);}
+.s5-orbital{position:relative;width:clamp(260px,36vw,440px);height:clamp(260px,36vw,440px);}
+.s5-ring-o{position:absolute;top:50%;left:50%;border-radius:50%;border:1px solid rgba(236,233,245,.04);transform:translate(-50%,-50%);}
+.s5-ring-1{width:140px;height:140px;}
+.s5-ring-2{width:260px;height:260px;animation:spin-slow 35s linear infinite;}
+.s5-ring-3{width:clamp(260px,36vw,440px);height:clamp(260px,36vw,440px);border-color:rgba(236,233,245,.02);}
+.s5-hub{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:80px;height:80px;border-radius:50%;background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.2);display:flex;align-items:center;justify-content:center;font-family:var(--fm);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(167,139,250,.6);text-align:center;line-height:1.4;box-shadow:0 0 40px rgba(167,139,250,.08);}
+.s5-tool{position:absolute;padding:.65rem 1.1rem;border-radius:11px;font-family:var(--f);font-size:clamp(.82rem,1.1vw,.96rem);font-weight:600;color:var(--text);background:var(--surface-hi);border:1px solid var(--border-hi);animation:drift 8s ease-in-out infinite;white-space:nowrap;}
+.s5-t1{top:4%;left:50%;transform:translateX(-50%);animation-delay:0s;border-color:rgba(125,211,252,.2);}
+.s5-t2{top:50%;right:3%;transform:translateY(-50%);animation-delay:-2s;border-color:rgba(110,231,183,.2);}
+.s5-t3{bottom:4%;left:50%;transform:translateX(-50%);animation-delay:-4s;border-color:rgba(251,191,36,.2);}
+.s5-t4{top:50%;left:3%;transform:translateY(-50%);animation-delay:-6s;border-color:rgba(167,139,250,.2);}
+.s5-right{flex:1;padding:6vh 5vw;display:flex;flex-direction:column;justify-content:center;}
+
+#s6{justify-content:center;gap:2.5vh;}
+.s6-path{display:flex;align-items:flex-start;gap:0;position:relative;}
+.s6-step{flex:1;display:flex;flex-direction:column;align-items:center;position:relative;}
+.s6-line{position:absolute;top:22px;left:50%;width:100%;height:1px;background:linear-gradient(to right,rgba(167,139,250,.2),rgba(125,211,252,.1));}
+.s6-step:last-child .s6-line{display:none;}
+.s6-num{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--fm);font-size:12px;font-weight:500;position:relative;z-index:1;margin-bottom:.9rem;}
+.n-std{background:var(--surface);border:1px solid var(--border);color:var(--text-3);}
+.n-key{background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.28);color:rgba(251,191,36,.9);box-shadow:0 0 20px rgba(251,191,36,.12);}
+.s6-title{font-family:var(--f);font-size:clamp(.85rem,1.2vw,1rem);font-weight:600;color:var(--text);text-align:center;margin-bottom:.3rem;}
+.s6-sub{font-size:clamp(.72rem,.9vw,.82rem);color:var(--text-3);text-align:center;line-height:1.55;padding:0 .5rem;}
+.s6-badge{margin-top:.5rem;font-family:var(--fm);font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:2px 9px;border-radius:100px;background:rgba(251,191,36,.08);color:rgba(251,191,36,.7);border:1px solid rgba(251,191,36,.18);}
+.s6-note{max-width:640px;margin:0 auto;text-align:center;padding:.9rem 1.4rem;border-radius:12px;background:rgba(251,191,36,.04);border:1px solid rgba(251,191,36,.1);}
+.s6-note p{font-size:clamp(.82rem,1.1vw,.96rem);color:var(--text-3);line-height:1.6;}
+.s6-note strong{color:var(--text);font-weight:500;}
+
+#s7{justify-content:center;gap:2vh;padding:4vh 5.5vw;}
+.s7-cols{display:flex;gap:1.5rem;flex:1;}
+.s7-col{flex:1;display:flex;flex-direction:column;gap:.6rem;}
+.s7-hdr{padding:.9rem 1.2rem;border-radius:12px 12px 0 0;display:flex;align-items:center;gap:.8rem;}
+.hdr-r{background:rgba(252,165,165,.06);border:1px solid rgba(252,165,165,.14);}
+.hdr-g{background:rgba(110,231,183,.05);border:1px solid rgba(110,231,183,.12);}
+.s7-htitle{font-family:var(--f);font-size:clamp(1rem,1.5vw,1.15rem);font-weight:700;color:var(--text);}
+.s7-row{padding:.85rem 1.1rem;border-radius:11px;font-size:clamp(.82rem,1.1vw,.96rem);line-height:1.6;color:var(--text-2);}
+.r-bad{background:var(--surface);border:1px solid rgba(252,165,165,.1);border-left:2px solid rgba(252,165,165,.3);}
+.r-bad::before{content:'✗  ';color:rgba(252,165,165,.6);}
+.r-good{background:var(--surface);border:1px solid rgba(110,231,183,.1);border-left:2px solid rgba(110,231,183,.4);}
+.r-good::before{content:'✓  ';color:rgba(110,231,183,.7);}
+.s7-row strong{color:var(--text);font-weight:500;}
+.s7-rule{text-align:center;padding:.9rem 1.4rem;border-radius:12px;background:var(--surface-hi);border:1px solid var(--border-hi);font-family:var(--f);font-size:clamp(.88rem,1.2vw,1.02rem);font-weight:500;color:var(--text);}
+.s7-rule em{font-style:normal;color:var(--purple);}
+
+#s8{flex-direction:row;gap:3vw;align-items:stretch;}
+.s8-terminal{flex:1.2;background:#020407;border:1px solid rgba(167,139,250,.18);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 0 60px rgba(167,139,250,.06),inset 0 1px 0 rgba(255,255,255,.03);}
+.s8-bar{background:rgba(0,0,0,.5);padding:.55rem 1rem;display:flex;align-items:center;gap:.4rem;border-bottom:1px solid rgba(255,255,255,.04);}
+.s8-bd{width:10px;height:10px;border-radius:50%;}
+.s8-bname{font-family:var(--fm);font-size:10px;color:rgba(236,233,245,.2);margin-left:.6rem;letter-spacing:.04em;}
+.s8-body{padding:1.2rem 1.4rem;font-family:var(--fm);font-size:clamp(.78rem,1.1vw,.9rem);line-height:2.05;flex:1;position:relative;overflow:hidden;}
+.s8-scan{position:absolute;top:0;left:0;right:0;height:40px;background:linear-gradient(to bottom,rgba(167,139,250,.025),transparent);animation:scan 5s linear infinite;pointer-events:none;}
+.cl{display:flex;gap:.9rem;}
+.cln{color:rgba(236,233,245,.12);font-size:.78em;min-width:1.8em;text-align:right;user-select:none;margin-top:.15em;}
+.ck{color:var(--purple);font-weight:600;}
+.cv{color:rgba(236,233,245,.72);}
+.cph{color:var(--amber);font-weight:600;background:rgba(251,191,36,.1);padding:1px 5px;border-radius:3px;border:1px solid rgba(251,191,36,.2);}
+.cmt{color:rgba(236,233,245,.2);}
+.s8-panel{flex:1;display:flex;flex-direction:column;justify-content:center;gap:1.1rem;}
+.s8-card{padding:1.1rem 1.3rem;border-radius:14px;background:var(--surface);border:1px solid var(--border);}
+.s8-c-accent{background:rgba(252,165,165,.05);border-color:rgba(252,165,165,.18);}
+.s8-clabel{font-family:var(--fm);font-size:11px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.4rem;}
+.cl-r{color:rgba(252,165,165,.65);}
+.cl-p{color:rgba(167,139,250,.6);}
+.s8-ctext{font-size:clamp(.82rem,1.1vw,.96rem);color:var(--text-2);line-height:1.65;}
+.s8-ctext strong{color:var(--text);font-weight:500;}
+
+#s9{flex-direction:row;padding:0;}
+.s9-h{flex:1;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:5vh 5vw;position:relative;}
+.s9-l{background:rgba(252,165,165,.015);border-right:1px solid var(--border);}
+.s9-r{background:rgba(110,231,183,.015);}
+.s9-num{font-family:var(--f);font-size:clamp(5.5rem,12vw,11rem);font-weight:700;line-height:.9;letter-spacing:-.04em;margin-bottom:.7rem;}
+.n-bad{color:rgba(252,165,165,.2);}
+.n-good{background:linear-gradient(135deg,var(--green),rgba(125,211,252,.7));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.s9-unit{font-family:var(--fm);font-size:clamp(.9rem,1.4vw,1.2rem);letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.2rem;}
+.u-bad{color:rgba(252,165,165,.4);}
+.u-good{color:rgba(110,231,183,.65);}
+.s9-label{font-family:var(--f);font-size:clamp(1.1rem,1.8vw,1.45rem);font-weight:600;color:var(--text);margin-bottom:.5rem;}
+.s9-sub{font-size:clamp(.8rem,1.05vw,.95rem);color:var(--text-3);line-height:1.65;max-width:260px;}
+.s9-sub strong{color:var(--text-2);font-weight:500;}
+.s9-footer{position:absolute;bottom:3vh;left:50%;transform:translateX(-50%);white-space:nowrap;font-family:var(--fm);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(251,191,36,.55);padding:4px 14px;border-radius:100px;background:rgba(251,191,36,.05);border:1px solid rgba(251,191,36,.12);}
+
+#s10{flex-direction:row;gap:4vw;align-items:center;}
+.s10-steps{flex:1;display:flex;flex-direction:column;gap:.75rem;}
+.s10-row{display:flex;align-items:center;gap:1.2rem;padding:.95rem 1.3rem;border-radius:13px;background:var(--surface);border:1px solid var(--border);transition:all .3s;cursor:default;}
+.s10-row:hover{border-color:rgba(167,139,250,.25);background:var(--surface-hi);transform:translateX(6px);}
+.s10-n{font-family:var(--f);font-size:clamp(1.5rem,2.5vw,2rem);font-weight:700;color:rgba(167,139,250,.22);flex-shrink:0;line-height:1;min-width:1.8rem;}
+.s10-title{font-family:var(--f);font-size:clamp(.88rem,1.3vw,1.05rem);font-weight:600;color:var(--text);margin-bottom:.15rem;}
+.s10-sub{font-size:clamp(.75rem,.95vw,.86rem);color:var(--text-3);line-height:1.5;}
+.s10-qr{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:.9rem;}
+.s10-qr-box{width:clamp(120px,14vw,180px);height:clamp(120px,14vw,180px);border-radius:16px;background:var(--surface-hi);border:1px solid var(--border-hi);display:flex;align-items:center;justify-content:center;font-size:3rem;}
+.s10-url{font-family:var(--fm);font-size:11px;letter-spacing:.06em;color:var(--purple);text-align:center;}
+
+#s11{justify-content:center;align-items:center;text-align:center;}
+.s11-pulse{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(167,139,250,.1) 0%,transparent 70%);animation:breath 5s ease-in-out infinite;pointer-events:none;}
+.s11-pre{font-family:var(--fm);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--text-4);margin-bottom:1.5rem;}
+.s11-word{font-family:var(--f);font-size:clamp(5rem,13vw,12rem);font-weight:700;letter-spacing:-.04em;line-height:.9;background:linear-gradient(135deg,var(--text) 0%,rgba(167,139,250,.75) 50%,rgba(125,211,252,.6));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 80px rgba(167,139,250,.18));margin-bottom:2rem;}
+.s11-sub{font-family:var(--f);font-size:clamp(1rem,1.7vw,1.4rem);font-weight:300;color:var(--text-3);max-width:560px;line-height:1.55;}
+.s11-sub strong{color:var(--text-2);font-weight:500;}
+
+#s12{justify-content:center;padding:6vh 10vw;}
+.mline{font-family:var(--f);font-size:clamp(1.6rem,3vw,2.8rem);font-weight:600;line-height:1.12;color:var(--text-4);margin-bottom:.25rem;}
+.mline.on{color:var(--text);}
+.mline.green{background:linear-gradient(90deg,var(--green),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.m-attr{font-family:var(--fm);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-4);}
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+<div id="grain"></div>
+<div id="clight"></div>
+<div id="atmo"></div>
+<div id="prog"></div>
+<div id="logo"><div id="logo-dot"></div>CLIC_diversidade</div>
+<div id="ctr">01 / 12</div>
+
+<div id="deck">
+
+<!-- S1 CAPA -->
+<div class="slide active" id="s1">
+  <div class="s1-deco Lscale">
+    <div class="s1-orb">
+      <div class="s1-ring"></div>
+      <div class="s1-inner">&lt;/&gt;</div>
+      <div class="s1-orbit"></div>
+    </div>
+  </div>
+  <div class="eyebrow L0"><div class="eyebrow-dot dot-p"></div>Bloco 04 · Humanos no Comando</div>
+  <div class="display display-xl L1">Construindo<br><span class="grad-p">Tecnologia</span></div>
+  <div class="body-lg L2" style="margin-top:1.2rem;max-width:52%;">De ideia a sistema publicado na internet — sem escrever uma linha de código.</div>
+  <div class="rule L3"></div>
+  <div style="display:flex;gap:2.5rem;" class="L3">
+    <div><div class="mono-sm" style="margin-bottom:3px;">Duração</div><div class="body-md">~20 minutos</div></div>
+    <div><div class="mono-sm" style="margin-bottom:3px;">Entregável</div><div class="body-md">App publicado · link público</div></div>
+    <div><div class="mono-sm" style="margin-bottom:3px;">Facilitadora</div><div class="body-md">Carla Figueiredo</div></div>
+  </div>
+</div>
+
+<!-- S2 A VIRADA -->
+<div class="slide" id="s2">
+  <div class="s2-vs">VS</div>
+  <div class="s2-h s2-h-before">
+    <span class="s2-badge b-before L1">Antes · Comunicação</span>
+    <div class="s2-prompt L2">"IA, escreva um resumo para mim."</div>
+    <div class="display display-md L3" style="color:var(--text-4);font-weight:300;">Você pede.<br>A IA entrega texto.</div>
+  </div>
+  <div class="s2-h s2-h-after">
+    <span class="s2-badge b-after L1">Agora · Construção</span>
+    <div class="s2-prompt s2-prompt-hi L2">"IA, construa um sistema onde eu possa ler e organizar resumos."</div>
+    <div class="display display-md L3">Você descreve.<br>A IA <em style="font-style:normal;color:var(--purple)">constrói</em> software.</div>
+    <div class="s2-pull L4">A barreira técnica caiu. Se você sabe explicar o problema, você sabe criar a solução.</div>
+  </div>
+</div>
+
+<!-- S3 VIBE CODING -->
+<div class="slide" id="s3">
+  <div class="eyebrow L0"><div class="eyebrow-dot dot-g"></div>03 · O conceito</div>
+  <div class="display display-lg L1" style="margin-bottom:2.5vh;">O que é <em style="font-style:italic;font-weight:300;color:var(--purple)">vibe coding</em></div>
+  <div class="s3-flow L2">
+    <div class="s3-node sn-a"><div class="s3-nicon">💬</div><div class="s3-nlabel nl-b">Intenção</div><div class="s3-nmain">Você descreve o que quer</div><div class="s3-nsub">Voz, objetivo, comportamento</div></div>
+    <div class="s3-arrow">→</div>
+    <div class="s3-node sn-b"><div class="s3-nicon">⚖️</div><div class="s3-nlabel nl-p">Filtragem por IA</div><div class="s3-nmain">A IA escreve o código</div><div class="s3-nsub">Sintaxe, banco de dados, segurança</div></div>
+    <div class="s3-arrow">→</div>
+    <div class="s3-node sn-c"><div class="s3-nicon">📱</div><div class="s3-nlabel nl-g">Software</div><div class="s3-nmain">Aplicativo funcional</div><div class="s3-nsub">Interface, design, funcionalidades</div></div>
+  </div>
+  <div class="s3-tagline L3">
+    <div class="s3-main">Você não diz <em>COMO</em> — você diz <em>O QUÊ</em> e <em>QUAIS OS LIMITES</em>.</div>
+    <div><span class="s3-ethic">⚠ sem limites, a IA embutirá vieses · Ethics by Design</span></div>
+  </div>
+</div>
+
+<!-- S4 ARQUITETURA -->
+<div class="slide" id="s4">
+  <div class="eyebrow L0"><div class="eyebrow-dot dot-b"></div>04 · O que está por baixo</div>
+  <div class="display display-lg L1" style="margin-bottom:3vh;">A arquitetura <em style="font-style:italic;font-weight:300;color:rgba(125,211,252,.7)">invisível</em></div>
+  <div style="display:flex;align-items:center;gap:4vw;flex:1;">
+    <div class="s4-stack L2">
+      <div class="s4-layer sl-top"><div class="sl-icon">📱</div><div><div class="sl-lbl" style="color:rgba(167,139,250,.65)">O que você vê</div><div class="sl-desc">Front-end · Interface · App</div></div></div>
+      <div class="s4-layer sl-mid"><div class="sl-icon">🔐</div><div><div class="sl-lbl" style="color:var(--text-3)">Autenticação</div><div class="sl-desc">Login · Permissões</div></div></div>
+      <div class="s4-layer sl-bot"><div class="sl-icon">🗄️</div><div><div class="sl-lbl" style="color:rgba(110,231,183,.6)">O que a IA fez</div><div class="sl-desc">Banco de dados · Servidor</div></div></div>
+    </div>
+    <div class="s4-info L3">
+      <div class="s4-callout">
+        <div class="s4-clbl">Caixa de vidro, não caixa-preta</div>
+        <div class="body-sm" style="color:var(--text-2);">Como servidor público, você responde pela <strong style="color:var(--text)">LGPD</strong>. A arquitetura invisível não pode ser opaca — saiba onde os dados dos cidadãos estão indo.</div>
+      </div>
+      <div class="s4-callout-2">
+        <div class="s4-clbl" style="color:rgba(110,231,183,.6);">Enquanto você descrevia</div>
+        <div class="body-sm" style="color:var(--text-2);">A IA escreveu o banco de dados, configurou a segurança e montou a estrutura técnica. <strong style="color:var(--text)">Em minutos.</strong></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- S5 ECOSSISTEMA -->
+<div class="slide" id="s5">
+  <div class="s5-left Lscale">
+    <div class="s5-orbital">
+      <div class="s5-ring-o s5-ring-1"></div>
+      <div class="s5-ring-o s5-ring-2"></div>
+      <div class="s5-ring-o s5-ring-3"></div>
+      <div class="s5-hub">No-code<br>&amp; IA</div>
+      <div class="s5-tool s5-t1">⚡ Lovable</div>
+      <div class="s5-tool s5-t2">🧩 Base44</div>
+      <div class="s5-tool s5-t3">🔥 Bolt.new</div>
+      <div class="s5-tool s5-t4">💻 Replit</div>
+    </div>
+  </div>
+  <div class="s5-right">
+    <div class="eyebrow L0"><div class="eyebrow-dot dot-p"></div>05 · O ecossistema</div>
+    <div class="display display-lg L1">Você aprendeu uma <em style="font-style:italic;font-weight:300;color:var(--purple)">competência,</em><br>não uma ferramenta.</div>
+    <div class="rule L2"></div>
+    <div class="body-md L2">A lógica de autoria tecnológica funciona em qualquer plataforma desta lista. <strong style="color:var(--text)">Hoje usamos a Lovable.</strong> Amanhã, você escolhe a ferramenta certa para cada situação.</div>
+    <div class="body-sm L3" style="margin-top:1rem;font-style:italic;color:var(--text-4);">"Aprenda o princípio. A ferramenta é só o instrumento."</div>
+  </div>
+</div>
+
+<!-- S6 5 PASSOS -->
+<div class="slide" id="s6">
+  <div class="eyebrow L0"><div class="eyebrow-dot dot-b"></div>06 · O processo</div>
+  <div class="display display-lg L1" style="margin-bottom:3vh;">Do zero ao <em style="font-style:italic;font-weight:300;color:rgba(125,211,252,.7)">deploy</em></div>
+  <div class="s6-path L2">
+    <div class="s6-step"><div class="s6-line"></div><div class="s6-num n-std">01</div><div class="s6-title">Planejar</div><div class="s6-sub">O que é? Para quem? Qual problema resolve?</div></div>
+    <div class="s6-step"><div class="s6-line"></div><div class="s6-num n-std">02</div><div class="s6-title">Arquitetar</div><div class="s6-sub">Plan Mode: estrutura antes de gerar código</div></div>
+    <div class="s6-step"><div class="s6-line"></div><div class="s6-num n-std">03</div><div class="s6-title">Construir</div><div class="s6-sub">Agent Mode: o app toma forma</div></div>
+    <div class="s6-step"><div class="s6-line"></div><div class="s6-num n-key">04</div><div class="s6-title">Auditar</div><div class="s6-sub">O app exclui alguém? Testa impacto e acessibilidade</div><div class="s6-badge">Human-in-the-loop</div></div>
+    <div class="s6-step"><div class="s6-num n-std">05</div><div class="s6-title">Publicar</div><div class="s6-sub">Um clique. Link público. Software no ar.</div></div>
+  </div>
+  <div class="s6-note L3"><p>A etapa 04 não é "o botão funcionou?" — é <strong>"esse sistema serve a todas as pessoas que precisam dele?"</strong></p></div>
+</div>
+
+<!-- S7 ERROS -->
+<div class="slide" id="s7">
+  <div class="eyebrow L0"><div class="eyebrow-dot dot-r"></div>07 · Antes de começar</div>
+  <div class="display display-md L1" style="margin-bottom:2vh;">Erros que <em style="font-style:italic;font-weight:300;color:rgba(252,165,165,.6)">custam crédito</em></div>
+  <div class="s7-cols L2">
+    <div class="s7-col">
+      <div class="s7-hdr hdr-r"><span style="font-size:1.1rem">✗</span><div><div class="s7-htitle">Não faça</div></div></div>
+      <div class="s7-row r-bad">Prompts longos e <strong>confusos</strong></div>
+      <div class="s7-row r-bad">Construir o app <strong>inteiro de uma vez</strong></div>
+      <div class="s7-row r-bad">Textos genéricos como <strong>"lorem ipsum"</strong></div>
+      <div class="s7-row r-bad">Começar sem <strong>revisar a estrutura</strong></div>
+    </div>
+    <div class="s7-col">
+      <div class="s7-hdr hdr-g"><span style="font-size:1.1rem">✓</span><div><div class="s7-htitle">Faça</div></div></div>
+      <div class="s7-row r-good">Seja <strong>direto e específico</strong></div>
+      <div class="s7-row r-good">Quebre em <strong>partes menores</strong></div>
+      <div class="s7-row r-good">Use <strong>conteúdo real</strong> desde o início</div>
+      <div class="s7-row r-good">Use <strong>Plan Mode</strong> antes de gerar código</div>
+    </div>
+  </div>
+  <div class="s7-rule L3"><em>3–4 prompts estruturados</em> entregam mais que 20 prompts vagos.</div>
+</div>
+
+<!-- S8 EDITOR -->
+<div class="slide" id="s8">
+  <div class="s8-terminal L2">
+    <div class="s8-bar">
+      <div class="s8-bd" style="background:#ef4444"></div>
+      <div class="s8-bd" style="background:#f59e0b"></div>
+      <div class="s8-bd" style="background:#10b981"></div>
+      <div class="s8-bname">prompt_software.ptcfl</div>
+    </div>
+    <div class="s8-body">
+      <div class="s8-scan"></div>
+      <div class="cl"><span class="cln">1</span><span><span class="ck">[PERSONA]</span> <span class="cv">Desenvolvedor UX de inovação no setor público.</span></span></div>
+      <div class="cl"><span class="cln">2</span><span class="cmt">// define tom e especialização</span></div>
+      <div class="cl"><span class="cln">3</span></div>
+      <div class="cl"><span class="cln">4</span><span><span class="ck">[TAREFA]</span> <span class="cv">Crie um "Painel Inteligente de Prazos".</span></span></div>
+      <div class="cl"><span class="cln">5</span></div>
+      <div class="cl"><span class="cln">6</span><span><span class="ck">[CONTEXTO]</span> <span class="cv">Design limpo (azul e branco). Mobile-first.</span></span></div>
+      <div class="cl"><span class="cln">7</span></div>
+      <div class="cl"><span class="cln">8</span><span><span class="ck">[FORMATO]</span> <span class="cv">4 cards (Total, Em Dia, Atrasados).</span></span></div>
+      <div class="cl"><span class="cln">9</span><span class="cv">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tabela: Processo, Assunto, Prazo.</span></div>
+      <div class="cl"><span class="cln">10</span></div>
+      <div class="cl"><span class="cln">11</span><span><span class="ck">[LIMITES]</span> <span class="cv">Acessibilidade WCAG. Sem dados sensíveis.</span></span></div>
+      <div class="cl"><span class="cln">12</span><span class="cv">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Apenas dados fictícios (fake data).</span></div>
+    </div>
+  </div>
+  <div class="s8-panel L1">
+    <div class="eyebrow"><div class="eyebrow-dot dot-p"></div>08 · O prompt de software</div>
+    <div class="display display-md">PTCFL aplicado a <em style="font-style:italic;font-weight:300;color:var(--purple)">criar apps</em></div>
+    <div class="s8-card s8-c-accent">
+      <div class="s8-clabel cl-r">L — Limites · O pilar crítico</div>
+      <div class="s8-ctext">Um app sem <strong>Limites</strong> pode ser inacessível ou violar a LGPD. O L é onde você programa <strong>guardrails de equidade.</strong></div>
+    </div>
+    <div class="s8-card">
+      <div class="s8-clabel cl-p">2 cores no editor — intencionais</div>
+      <div class="s8-ctext">Roxo para as tags PTCFL. Branco para os valores. Sem ruído visual — só hierarquia.</div>
+    </div>
+  </div>
+</div>
+
+<!-- S9 RESULTADO -->
+<div class="slide" id="s9">
+  <div class="s9-h s9-l">
+    <div class="s9-num n-bad L2">6</div>
+    <div class="s9-unit u-bad L3">meses</div>
+    <div class="s9-label L3">Método tradicional</div>
+    <div class="s9-sub L4">Edital de TI, orçamento, licitação, homologação, treinamento.</div>
+  </div>
+  <div class="s9-h s9-r">
+    <div class="s9-num n-good L2">3</div>
+    <div class="s9-unit u-good L3">minutos</div>
+    <div class="s9-label L3">Autoria tecnológica</div>
+    <div class="s9-sub L4">Prompt estruturado + Plan Mode + Agent Mode + Publicar. <strong>App no ar.</strong></div>
+  </div>
+  <div class="s9-footer L5">⚠ a velocidade não elimina a responsabilidade — a assinatura é sua</div>
+</div>
+
+<!-- S10 MÃO NA MASSA -->
+<div class="slide" id="s10">
+  <div class="eyebrow L0"><div class="eyebrow-dot dot-a"></div>10 · É sua vez</div>
+  <div class="display display-lg L1" style="margin-bottom:2.5vh;">Mão na <em style="font-style:italic;font-weight:300;color:rgba(251,191,36,.8)">massa</em></div>
+  <div style="display:flex;gap:4vw;align-items:center;flex:1;">
+    <div class="s10-steps L2">
+      <div class="s10-row"><div class="s10-n">1</div><div><div class="s10-title">Abra a Lovable e crie um projeto</div><div class="s10-sub">Acesse lovable.dev e clique em novo projeto.</div></div></div>
+      <div class="s10-row"><div class="s10-n">2</div><div><div class="s10-title">Copie o prompt modelo PTCFL</div><div class="s10-sub">Use o template disponível no módulo.</div></div></div>
+      <div class="s10-row"><div class="s10-n">3</div><div><div class="s10-title">Adapte para sua realidade</div><div class="s10-sub">Troque "Prazos" pela dor real da sua secretaria.</div></div></div>
+      <div class="s10-row"><div class="s10-n">4</div><div><div class="s10-title">Audite antes de publicar</div><div class="s10-sub">O app é acessível? Exclui alguém? Viola a LGPD?</div></div></div>
+      <div class="s10-row"><div class="s10-n">5</div><div><div class="s10-title">Clique em Publicar</div><div class="s10-sub">Em 20 minutos: um sistema funcional no ar.</div></div></div>
+    </div>
+    <div class="s10-qr L3">
+      <div class="s10-qr-box">📱</div>
+      <div class="s10-url">clicdiversidade.netlify.app<br>módulo 04</div>
+    </div>
+  </div>
+</div>
+
+<!-- S11 RUPTURA -->
+<div class="slide" id="s11">
+  <div class="s11-pulse"></div>
+  <div class="s11-pre L1">O momento da ruptura</div>
+  <div class="s11-word L2">PUBLICAR</div>
+  <div class="s11-sub L3">Nesse exato momento, vocês deixaram de ser apenas <strong>usuários.</strong><br>Vocês construíram e publicaram um software funcional.</div>
+</div>
+
+<!-- S12 MANIFESTO -->
+<div class="slide" id="s12">
+  <div style="max-width:820px;">
+    <div class="mline on L1">A transformação digital</div>
+    <div class="mline on L2" style="color:var(--text);font-style:italic;font-weight:300;">justa</div>
+    <div class="mline on L2">começa na sua mesa.</div>
+    <div class="rule L3"></div>
+    <div class="mline L3">Não espere o edital da caixa-preta.</div>
+    <div class="mline L4">Não espere a TI.</div>
+    <div class="rule L4"></div>
+    <div class="mline green L5">A diversidade é a arquitetura.</div>
+    <div class="mline on L6">Nós estamos no comando.</div>
+    <div class="rule L6"></div>
+    <div class="m-attr L6">CLIC_diversidade · Humanos no Comando · 2025</div>
+  </div>
+</div>
+
+</div><!-- /deck -->
+
+<nav class="nav-wrap">
+  <button class="nb" id="pb" onclick="go(-1)" disabled>←</button>
+  <div class="dots-row" id="dots"></div>
+  <button class="nb" id="nb2" onclick="go(1)">→</button>
+</nav>
+
+<script>
+(function(){
+  const c=document.getElementById('bg-canvas');
+  const x=c.getContext('2d');
+  let W,H,P=[];
+  const rs=()=>{W=c.width=innerWidth;H=c.height=innerHeight;};
+  const Pt=()=>({
+    x:Math.random()*W, y:Math.random()*H,
+    vx:(Math.random()-.5)*.15, vy:(Math.random()-.5)*.15,
+    r:Math.random()*.8+.15,
+    a:Math.random()*.14+.03,
+    h:[270,220,210][Math.floor(Math.random()*3)],
+    lf:Math.random()*Math.PI*2
+  });
+  const init=()=>{rs();P=Array.from({length:50},Pt);};
+  const draw=()=>{
+    x.fillStyle='rgba(3,3,7,.22)'; x.fillRect(0,0,W,H);
+    x.strokeStyle='rgba(167,139,250,.03)'; x.lineWidth=1;
+    for(let i=0;i<W;i+=80){x.beginPath();x.moveTo(i,0);x.lineTo(i,H);x.stroke();}
+    for(let i=0;i<H;i+=80){x.beginPath();x.moveTo(0,i);x.lineTo(W,i);x.stroke();}
+    P.forEach((p,i)=>{
+      p.x+=p.vx; p.y+=p.vy; p.lf+=.006;
+      const a=p.a*(0.5+Math.sin(p.lf)*.5);
+      if(p.x<0)p.x=W; if(p.x>W)p.x=0; if(p.y<0)p.y=H; if(p.y>H)p.y=0;
+      x.beginPath(); x.arc(p.x,p.y,p.r,0,Math.PI*2);
+      x.fillStyle=`hsla(${p.h},60%,75%,${a})`; x.fill();
+      for(let j=i+1;j<P.length;j++){
+        const q=P[j],d=Math.hypot(p.x-q.x,p.y-q.y);
+        if(d<90){x.beginPath();x.moveTo(p.x,p.y);x.lineTo(q.x,q.y);x.strokeStyle=`hsla(${p.h},50%,70%,${.035*(1-d/90)})`;x.lineWidth=.5;x.stroke();}
+      }
+    });
+    requestAnimationFrame(draw);
+  };
+  addEventListener('resize',rs); init(); draw();
+})();
+
+const cl=document.getElementById('clight');
+document.addEventListener('mousemove',e=>{cl.style.left=e.clientX+'px';cl.style.top=e.clientY+'px';});
+
+const atmos=[
+  'radial-gradient(ellipse 65% 60% at 28% 50%,rgba(167,139,250,.1) 0%,transparent 65%)',
+  'radial-gradient(ellipse 55% 70% at 75% 40%,rgba(125,211,252,.07) 0%,transparent 60%)',
+  'radial-gradient(ellipse 75% 50% at 50% 65%,rgba(110,231,183,.06) 0%,transparent 55%)',
+  'radial-gradient(ellipse 55% 65% at 35% 50%,rgba(125,211,252,.07) 0%,transparent 60%)',
+  'radial-gradient(ellipse 65% 70% at 50% 50%,rgba(167,139,250,.07) 0%,transparent 60%)',
+  'radial-gradient(ellipse 75% 50% at 50% 50%,rgba(125,211,252,.06) 0%,transparent 55%)',
+  'radial-gradient(ellipse 55% 60% at 28% 50%,rgba(252,165,165,.05) 0%,transparent 55%),radial-gradient(ellipse 55% 60% at 72% 50%,rgba(110,231,183,.05) 0%,transparent 55%)',
+  'radial-gradient(ellipse 50% 60% at 50% 60%,rgba(167,139,250,.09) 0%,transparent 60%)',
+  'radial-gradient(ellipse 45% 70% at 25% 50%,rgba(252,165,165,.05) 0%,transparent 55%),radial-gradient(ellipse 45% 70% at 75% 50%,rgba(110,231,183,.05) 0%,transparent 55%)',
+  'radial-gradient(ellipse 60% 60% at 50% 40%,rgba(251,191,36,.06) 0%,transparent 55%)',
+  'radial-gradient(ellipse 80% 80% at 50% 50%,rgba(167,139,250,.12) 0%,transparent 60%)',
+  'radial-gradient(ellipse 70% 70% at 50% 55%,rgba(110,231,183,.07) 0%,transparent 60%)',
+];
+const atmoEl=document.getElementById('atmo');
+
+const TOTAL=12; let cur=0,busy=false;
+const SS=document.querySelectorAll('.slide');
+const DE=document.getElementById('dots');
+const CT=document.getElementById('ctr');
+const PG=document.getElementById('prog');
+const PB=document.getElementById('pb');
+const NB=document.getElementById('nb2');
+
+for(let i=0;i<TOTAL;i++){
+  const d=document.createElement('div');
+  d.className='dot'+(i===0?' on':'');
+  d.onclick=()=>gt(i);
+  DE.appendChild(d);
+}
+
+function upd(){
+  CT.textContent=`${String(cur+1).padStart(2,'0')} / ${String(TOTAL).padStart(2,'0')}`;
+  PG.style.width=`${(cur+1)/TOTAL*100}%`;
+  PB.disabled=cur===0; NB.disabled=cur===TOTAL-1;
+  document.querySelectorAll('.dot').forEach((d,i)=>d.className='dot'+(i===cur?' on':''));
+  atmoEl.style.background=atmos[cur]||'none';
+}
+
+function gt(idx){
+  if(busy||idx===cur||idx<0||idx>=TOTAL)return;
+  busy=true;
+  const prev=SS[cur], next=SS[idx], dir=idx>cur?1:-1;
+
+  prev.style.transition='opacity .45s cubic-bezier(.4,0,1,1),transform .45s cubic-bezier(.4,0,1,1)';
+  prev.style.opacity='0';
+  prev.style.transform=`translateY(${dir*-16}px) scale(.985)`;
+
+  setTimeout(()=>{
+    prev.classList.remove('active');
+    prev.style.cssText='';
+    cur=idx;
+
+    next.style.opacity='0';
+    next.style.transform=`translateY(${dir*16}px) scale(1.008)`;
+    next.classList.add('active');
+    next.getBoundingClientRect();
+
+    next.style.transition='opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)';
+    next.style.opacity='1';
+    next.style.transform='none';
+
+    upd();
+    setTimeout(()=>{next.style.cssText='';busy=false;},750);
+  },280);
+}
+
+function go(d){gt(cur+d);}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='ArrowDown')go(1);
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp')go(-1);
+});
+let tx=0;
+document.addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});
+document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>50)go(dx<0?1:-1);},{passive:true});
+
+document.addEventListener('mousemove',e=>{
+  const cx=(e.clientX/innerWidth-.5)*.6;
+  const cy=(e.clientY/innerHeight-.5)*.4;
+  document.querySelectorAll('.s1-deco,.s5-left,.s11-pulse').forEach(el=>{
+    el.style.transform=`translate(${cx*-14}px,${cy*-10}px)`;
+  });
+});
+
+upd();
+</script>
+</body>
+</html>

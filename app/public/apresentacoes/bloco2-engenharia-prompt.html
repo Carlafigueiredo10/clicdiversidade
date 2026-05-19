@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bloco 2 — Engenharia de Prompt</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,600;1,9..144,700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --f:'Fraunces',serif;--s:'Inter',sans-serif;--m:'JetBrains Mono',monospace;
+  --purple:#7c3aed;--purple-l:#a78bfa;--purple-d:#4c1d95;
+  --blue:#3b82f6;--cyan:#06b6d4;
+  --orange:#f97316;--rose:#e11d48;
+  --green:#10b981;--amber:#f59e0b;
+  --red:#ef4444;
+  --text:#f8fafc;--muted:rgba(248,250,252,.5);--muted2:rgba(248,250,252,.22);
+}
+html,body{width:100%;height:100%;overflow:hidden;font-family:var(--s);background:#04060f;}
+#bg{position:fixed;inset:0;z-index:0;pointer-events:none;}
+
+/* ── DECK ── */
+.deck{position:fixed;inset:0;z-index:1;}
+.slide{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  padding:3.5vh 4.5vw;
+  opacity:0;transform:scale(.97) translateY(16px);
+  transition:opacity .6s cubic-bezier(.4,0,.2,1),transform .6s cubic-bezier(.4,0,.2,1);
+  pointer-events:none;
+}
+.slide.active{opacity:1;transform:none;pointer-events:all;}
+.slide.exit{opacity:0;transform:scale(1.02) translateY(-12px);transition:opacity .3s,transform .3s;}
+
+/* ── GLOBALS ── */
+.chip{display:inline-flex;align-items:center;gap:6px;font-family:var(--m);font-size:clamp(9px,1vw,11px);font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--muted2);margin-bottom:.5rem;}
+.chip-dot{width:6px;height:6px;border-radius:50%;background:var(--orange);box-shadow:0 0 8px var(--orange);}
+h1{font-family:var(--f);font-size:clamp(2.8rem,5.5vw,5rem);font-weight:700;line-height:1.05;}
+h2{font-family:var(--f);font-size:clamp(1.8rem,3.2vw,3rem);font-weight:600;line-height:1.1;}
+.grad{background:linear-gradient(90deg,var(--purple-l),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.grad-o{background:linear-gradient(90deg,var(--orange),var(--rose));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.grad-g{background:linear-gradient(90deg,var(--green),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+
+/* ── ANIMATIONS ── */
+@keyframes up{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+@keyframes left{from{opacity:0;transform:translateX(-24px)}to{opacity:1;transform:none}}
+@keyframes pop{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:none}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes blink2{0%,100%{opacity:1}50%{opacity:0}}
+@keyframes pulse-glow{0%,100%{box-shadow:0 0 20px rgba(124,58,237,.4)}50%{box-shadow:0 0 50px rgba(124,58,237,.9),0 0 100px rgba(124,58,237,.3)}}
+@keyframes typewrite{from{width:0}to{width:100%}}
+@keyframes light-on{0%{opacity:.2;transform:scale(.9)}100%{opacity:1;transform:scale(1)}}
+@keyframes scanline{0%{top:-100%}100%{top:200%}}
+.a1{animation:up .5s .08s both}.a2{animation:up .5s .18s both}.a3{animation:up .5s .28s both}
+.a4{animation:up .5s .38s both}.a5{animation:up .5s .48s both}.a6{animation:up .5s .58s both}
+.al1{animation:left .5s .1s both}.al2{animation:left .5s .25s both}
+.ap1{animation:pop .5s .1s both}.ap2{animation:pop .5s .25s both}.ap3{animation:pop .5s .4s both}
+
+/* ── UI ── */
+#prog{position:fixed;top:0;left:0;height:3px;z-index:200;background:linear-gradient(90deg,var(--purple),var(--cyan),var(--orange));background-size:200%;animation:shimmer 3s linear infinite;transition:width .5s cubic-bezier(.4,0,.2,1);box-shadow:0 0 16px rgba(124,58,237,.6);}
+#logo{position:fixed;top:1.4rem;left:2rem;z-index:100;font-family:var(--m);font-size:11px;color:var(--muted2);display:flex;align-items:center;gap:8px;}
+#logo span{width:6px;height:6px;border-radius:50%;background:var(--orange);box-shadow:0 0 10px var(--orange);animation:blink2 2s ease-in-out infinite;}
+#ctr{position:fixed;top:1.4rem;right:2rem;z-index:100;font-family:var(--m);font-size:11px;color:var(--muted2);letter-spacing:.08em;}
+.nav{position:fixed;bottom:1.6rem;left:50%;transform:translateX(-50%);z-index:100;display:flex;align-items:center;gap:1rem;}
+.nb{width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:rgba(255,255,255,.4);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .2s;}
+.nb:hover:not(:disabled){background:rgba(124,58,237,.3);border-color:var(--purple-l);color:white;box-shadow:0 0 20px rgba(124,58,237,.4);}
+.nb:disabled{opacity:.15;cursor:not-allowed;}
+.dots{display:flex;gap:5px;}
+.dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.2);cursor:pointer;transition:all .3s;}
+.dot.on{width:24px;border-radius:3px;background:linear-gradient(90deg,var(--purple),var(--cyan));box-shadow:0 0 10px rgba(124,58,237,.5);}
+
+/* ───────────────────────────────
+   S1 — CAPA
+─────────────────────────────── */
+#s1{justify-content:center;background:linear-gradient(135deg,#04060f 0%,#0c0520 50%,#04060f 100%);}
+#s1::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 70% at 15% 50%,rgba(124,58,237,.3) 0%,transparent 60%),radial-gradient(ellipse 50% 60% at 85% 30%,rgba(6,182,212,.15) 0%,transparent 55%),radial-gradient(ellipse 40% 40% at 70% 80%,rgba(249,115,22,.1) 0%,transparent 50%);}
+.s1-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(124,58,237,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(124,58,237,.05) 1px,transparent 1px);background-size:55px 55px;}
+.s1-content{position:relative;z-index:1;max-width:62%;}
+.s1-block{font-family:var(--m);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--purple-l);margin-bottom:.8rem;}
+.s1-h1{color:white;margin-bottom:.4rem;}
+.s1-h1 em{font-style:italic;font-weight:300;}
+.s1-sub{font-size:clamp(1rem,1.7vw,1.3rem);font-weight:300;color:var(--muted);line-height:1.6;margin:1rem 0 1.8rem;}
+.s1-tags{display:flex;gap:.6rem;flex-wrap:wrap;}
+.s1-tag{font-family:var(--m);font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;padding:4px 12px;border-radius:100px;}
+.s1-tag-p{background:rgba(124,58,237,.15);color:var(--purple-l);border:1px solid rgba(124,58,237,.3);}
+.s1-tag-c{background:rgba(6,182,212,.1);color:var(--cyan);border:1px solid rgba(6,182,212,.25);}
+.s1-tag-g{background:rgba(16,185,129,.1);color:var(--green);border:1px solid rgba(16,185,129,.25);}
+/* ORB */
+.s1-orb-wrap{position:absolute;right:3vw;top:50%;transform:translateY(-50%);width:38%;display:flex;align-items:center;justify-content:center;}
+.s1-orb{width:clamp(200px,28vw,380px);height:clamp(200px,28vw,380px);border-radius:50%;position:relative;}
+.s1-orb::before{content:'';position:absolute;inset:-2px;border-radius:50%;background:conic-gradient(from 0deg,var(--purple),var(--cyan),var(--orange),var(--purple));animation:spin 8s linear infinite;padding:2px;-webkit-mask:linear-gradient(white,white) content-box,linear-gradient(white,white);mask:linear-gradient(white,white) content-box,linear-gradient(white,white);-webkit-mask-composite:destination-out;mask-composite:exclude;}
+.s1-orb::after{content:'';position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle,rgba(124,58,237,.3) 0%,rgba(6,182,212,.1) 50%,transparent 70%);animation:pulse-glow 3s ease-in-out infinite;}
+.s1-orb-inner{position:absolute;inset:12px;border-radius:50%;background:radial-gradient(circle,#100520 0%,#04060f 100%);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.3rem;}
+.s1-orb-num{font-family:var(--f);font-size:clamp(3rem,6vw,5.5rem);font-weight:700;line-height:1;}
+.s1-orb-label{font-family:var(--m);font-size:8px;color:rgba(255,255,255,.2);letter-spacing:.14em;text-transform:uppercase;}
+
+/* ───────────────────────────────
+   S2 — ESPELHO ESTATÍSTICO
+─────────────────────────────── */
+#s2{justify-content:center;gap:1.5vh;background:linear-gradient(160deg,#04060f 0%,#0a0420 100%);}
+#s2::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 80% 50%,rgba(249,115,22,.1) 0%,transparent 55%);}
+.s2-split{display:flex;gap:1.2rem;flex:1;align-items:stretch;position:relative;z-index:1;}
+.s2-panel{flex:1;border-radius:18px;padding:1.5rem 1.8rem;display:flex;flex-direction:column;gap:.8rem;position:relative;overflow:hidden;}
+.s2-panel-old{background:linear-gradient(135deg,rgba(239,68,68,.1),rgba(239,68,68,.03));border:1px solid rgba(239,68,68,.25);}
+.s2-panel-new{background:linear-gradient(135deg,rgba(124,58,237,.15),rgba(6,182,212,.05));border:1px solid rgba(124,58,237,.35);box-shadow:0 0 50px rgba(124,58,237,.1);}
+.s2-tag{font-family:var(--m);font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:100px;}
+.s2-tag-old{background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.3);}
+.s2-tag-new{background:rgba(124,58,237,.2);color:var(--purple-l);border:1px solid rgba(124,58,237,.4);}
+.s2-concept{font-family:var(--f);font-size:clamp(1.1rem,1.8vw,1.5rem);font-weight:700;color:white;line-height:1.2;}
+.s2-desc{font-size:clamp(.82rem,1.1vw,.96rem);color:var(--muted);line-height:1.7;}
+.s2-desc strong{color:white;font-weight:600;}
+.s2-stat{display:flex;gap:.8rem;margin-top:.5rem;}
+.s2-stat-item{flex:1;padding:.7rem 1rem;border-radius:12px;text-align:center;}
+.s2-stat-good{background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.25);}
+.s2-stat-bad{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);}
+.s2-stat-num{font-family:var(--f);font-size:clamp(1.5rem,2.5vw,2.2rem);font-weight:700;line-height:1;}
+.s2-stat-label{font-family:var(--m);font-size:9px;letter-spacing:.06em;text-transform:uppercase;margin-top:.2rem;}
+/* FLOW */
+.s2-flow{display:flex;align-items:center;justify-content:center;gap:.8rem;position:relative;z-index:1;}
+.s2-flow-node{padding:.55rem 1.1rem;border-radius:12px;font-size:clamp(.78rem,1vw,.9rem);font-weight:600;color:white;text-align:center;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);}
+.s2-flow-arrow{color:var(--purple-l);font-size:1.2rem;opacity:.7;}
+.s2-quote{position:relative;z-index:1;padding:.8rem 1.2rem;background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.2);border-left:3px solid var(--purple-l);border-radius:0 12px 12px 0;}
+.s2-quote p{font-family:var(--f);font-size:clamp(.9rem,1.3vw,1.1rem);font-style:italic;color:white;}
+
+/* ───────────────────────────────
+   S3 — O PRINCÍPIO BRUTAL
+─────────────────────────────── */
+#s3{flex-direction:row;background:#04060f;}
+.s3-half{flex:1;display:flex;flex-direction:column;justify-content:center;padding:3.5vh 4vw;position:relative;overflow:hidden;}
+.s3-half-left{background:linear-gradient(135deg,rgba(239,68,68,.15) 0%,rgba(239,68,68,.03) 100%);border-right:1px solid rgba(255,255,255,.05);}
+.s3-half-right{background:linear-gradient(135deg,rgba(16,185,129,.12) 0%,rgba(16,185,129,.03) 100%);}
+.s3-half::before{content:'';position:absolute;inset:0;opacity:.4;}
+.s3-half-left::before{background:radial-gradient(circle at 30% 50%,rgba(239,68,68,.2),transparent 60%);}
+.s3-half-right::before{background:radial-gradient(circle at 70% 50%,rgba(16,185,129,.15),transparent 60%);}
+.s3-indicator{font-family:var(--m);font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:3px 12px;border-radius:100px;margin-bottom:1.2rem;display:inline-block;}
+.s3-ind-bad{background:rgba(239,68,68,.2);color:var(--red);border:1px solid rgba(239,68,68,.3);}
+.s3-ind-good{background:rgba(16,185,129,.15);color:var(--green);border:1px solid rgba(16,185,129,.3);}
+.s3-statement{font-family:var(--f);font-size:clamp(1.4rem,2.5vw,2.2rem);font-weight:700;color:white;line-height:1.15;margin-bottom:1rem;}
+.s3-statement em{font-style:italic;font-weight:300;}
+.s3-items{display:flex;flex-direction:column;gap:.6rem;}
+.s3-item{padding:.7rem 1rem;border-radius:10px;font-size:clamp(.8rem,1.1vw,.95rem);line-height:1.6;}
+.s3-item-bad{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.15);color:rgba(248,250,252,.6);}
+.s3-item-bad::before{content:'✗ ';color:var(--red);}
+.s3-item-good{background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.15);color:rgba(248,250,252,.6);}
+.s3-item-good::before{content:'✓ ';color:var(--green);}
+.s3-divider{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10;width:44px;height:44px;border-radius:50%;background:#04060f;border:2px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-family:var(--m);font-size:9px;font-weight:700;color:var(--muted2);letter-spacing:.06em;}
+
+/* ───────────────────────────────
+   S4 — MÉTODO PTCFL
+─────────────────────────────── */
+#s4{justify-content:center;gap:1.5vh;background:linear-gradient(160deg,#04060f 0%,#080318 100%);}
+#s4::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 40%,rgba(124,58,237,.1) 0%,transparent 60%);}
+.ptcfl-row{display:flex;gap:.75rem;position:relative;z-index:1;}
+.ptcfl-card{
+  flex:1;border-radius:16px;padding:1.2rem 1rem;cursor:pointer;
+  transition:all .35s cubic-bezier(.4,0,.2,1);
+  position:relative;overflow:hidden;
+  border:1px solid rgba(255,255,255,.07);
+  background:linear-gradient(160deg,rgba(255,255,255,.05),rgba(255,255,255,.01));
+}
+.ptcfl-card:hover,.ptcfl-card.open{transform:translateY(-4px);}
+.ptcfl-card.p-card:hover,.ptcfl-card.p-card.open{border-color:rgba(167,139,250,.5);box-shadow:0 8px 40px rgba(124,58,237,.2);background:linear-gradient(160deg,rgba(124,58,237,.2),rgba(124,58,237,.05));}
+.ptcfl-card.t-card:hover,.ptcfl-card.t-card.open{border-color:rgba(6,182,212,.5);box-shadow:0 8px 40px rgba(6,182,212,.2);background:linear-gradient(160deg,rgba(6,182,212,.15),rgba(6,182,212,.04));}
+.ptcfl-card.c-card:hover,.ptcfl-card.c-card.open{border-color:rgba(245,158,11,.5);box-shadow:0 8px 40px rgba(245,158,11,.2);background:linear-gradient(160deg,rgba(245,158,11,.15),rgba(245,158,11,.04));}
+.ptcfl-card.f-card:hover,.ptcfl-card.f-card.open{border-color:rgba(16,185,129,.5);box-shadow:0 8px 40px rgba(16,185,129,.2);background:linear-gradient(160deg,rgba(16,185,129,.15),rgba(16,185,129,.04));}
+.ptcfl-card.l-card:hover,.ptcfl-card.l-card.open{border-color:rgba(225,29,72,.5);box-shadow:0 8px 40px rgba(225,29,72,.2);background:linear-gradient(160deg,rgba(225,29,72,.18),rgba(225,29,72,.04));}
+.ptcfl-letter{font-family:var(--f);font-size:clamp(2.5rem,4vw,4rem);font-weight:700;line-height:1;margin-bottom:.3rem;}
+.p-card .ptcfl-letter{background:linear-gradient(135deg,var(--purple-l),#c4b5fd);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.t-card .ptcfl-letter{background:linear-gradient(135deg,var(--cyan),#67e8f9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.c-card .ptcfl-letter{background:linear-gradient(135deg,var(--amber),#fcd34d);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.f-card .ptcfl-letter{background:linear-gradient(135deg,var(--green),#6ee7b7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.l-card .ptcfl-letter{background:linear-gradient(135deg,var(--rose),#fb7185);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.ptcfl-word{font-family:var(--s);font-size:clamp(.75rem,1vw,.9rem);font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:rgba(248,250,252,.5);margin-bottom:.5rem;}
+.ptcfl-desc{font-size:clamp(.72rem,.95vw,.85rem);color:var(--muted);line-height:1.6;opacity:0;max-height:0;overflow:hidden;transition:all .35s;}
+.ptcfl-card.open .ptcfl-desc,.ptcfl-card:hover .ptcfl-desc{opacity:1;max-height:200px;}
+.ptcfl-ex{margin-top:.5rem;font-family:var(--m);font-size:clamp(.68rem,.88vw,.8rem);color:rgba(248,250,252,.3);font-style:italic;border-top:1px solid rgba(255,255,255,.06);padding-top:.4rem;}
+.ptcfl-badge{display:inline-block;font-family:var(--m);font-size:8px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:100px;margin-bottom:.6rem;}
+.l-badge{background:rgba(225,29,72,.2);color:var(--rose);border:1px solid rgba(225,29,72,.3);}
+.ptcfl-hint{position:relative;z-index:1;padding:.7rem 1.2rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:10px;font-family:var(--m);font-size:10px;color:var(--muted2);text-align:center;letter-spacing:.04em;}
+
+/* ───────────────────────────────
+   S5 — ANTES vs DEPOIS
+─────────────────────────────── */
+#s5{flex-direction:row;gap:0;background:linear-gradient(135deg,#04060f 0%,#080318 100%);}
+.s5-panel{flex:1;display:flex;flex-direction:column;padding:3.5vh 3.5vw;position:relative;overflow:hidden;}
+.s5-panel-left{background:linear-gradient(160deg,rgba(239,68,68,.08),rgba(239,68,68,.02));border-right:1px solid rgba(255,255,255,.05);}
+.s5-panel-right{background:linear-gradient(160deg,rgba(124,58,237,.1),rgba(6,182,212,.04));}
+.s5-panel-header{display:flex;align-items:center;gap:.8rem;margin-bottom:1.2rem;}
+.s5-mark{font-size:1.5rem;}
+.s5-htitle{font-family:var(--f);font-size:clamp(1rem,1.6vw,1.3rem);font-weight:700;color:white;}
+.s5-hsub{font-family:var(--m);font-size:9px;color:var(--muted2);letter-spacing:.08em;}
+/* Prompt box esquerda - vago */
+.s5-vague{padding:1rem 1.2rem;background:rgba(0,0,0,.3);border:1px solid rgba(239,68,68,.2);border-radius:12px;font-family:var(--m);font-size:clamp(.8rem,1.1vw,.95rem);color:rgba(239,68,68,.7);font-style:italic;margin-bottom:1rem;}
+/* Resposta ruim */
+.s5-bad-resp{flex:1;padding:1rem 1.2rem;background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.05);border-radius:12px;position:relative;overflow:hidden;}
+.s5-bad-blur{filter:blur(3px);font-size:.75rem;color:rgba(248,250,252,.15);line-height:1.8;user-select:none;}
+.s5-bad-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.5rem;}
+.s5-bad-label{font-family:var(--m);font-size:10px;font-weight:700;color:var(--red);letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);border-radius:100px;}
+/* Prompt PTCF direita */
+.s5-ptcf-prompt{flex:1;background:rgba(0,0,0,.25);border:1px solid rgba(124,58,237,.25);border-radius:14px;padding:1rem 1.2rem;font-family:var(--m);font-size:clamp(.78rem,1.05vw,.92rem);line-height:2.1;position:relative;overflow:hidden;}
+.s5-ptcf-prompt::before{content:'';position:absolute;top:-100%;left:0;right:0;height:60px;background:linear-gradient(to bottom,rgba(124,58,237,.08),transparent);animation:scanline 3s linear infinite;}
+.pp{color:var(--purple-l);font-weight:600;}
+.pt{color:var(--cyan);font-weight:600;}
+.pc{color:var(--amber);font-weight:600;}
+.pf{color:var(--green);font-weight:600;}
+.pl{color:var(--rose);font-weight:600;}
+.pv{color:rgba(248,250,252,.55);}
+/* Resultado bom */
+.s5-good-resp{padding:.8rem 1rem;background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);border-radius:10px;margin-top:.8rem;}
+.s5-good-label{font-family:var(--m);font-size:9px;font-weight:700;color:var(--green);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.3rem;}
+.s5-good-text{font-size:clamp(.78rem,1vw,.9rem);color:rgba(248,250,252,.7);line-height:1.6;}
+
+/* ───────────────────────────────
+   S6 — TÉCNICAS AVANÇADAS
+─────────────────────────────── */
+#s6{justify-content:center;gap:1.2vh;background:linear-gradient(160deg,#04060f 0%,#08041a 100%);}
+#s6::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 30% 50%,rgba(59,130,246,.08) 0%,transparent 55%),radial-gradient(ellipse 50% 50% at 80% 50%,rgba(249,115,22,.07) 0%,transparent 50%);}
+.s6-grid{display:flex;gap:1rem;flex:1;position:relative;z-index:1;}
+.s6-card{flex:1;border-radius:18px;padding:1.3rem 1.5rem;background:linear-gradient(160deg,rgba(255,255,255,.05),rgba(255,255,255,.01));border:1px solid rgba(255,255,255,.07);display:flex;flex-direction:column;gap:.7rem;}
+.s6-card:nth-child(1):hover{border-color:rgba(59,130,246,.4);box-shadow:0 8px 40px rgba(59,130,246,.12);}
+.s6-card:nth-child(2):hover{border-color:rgba(124,58,237,.4);box-shadow:0 8px 40px rgba(124,58,237,.12);}
+.s6-card-new{border-color:rgba(249,115,22,.3)!important;background:linear-gradient(160deg,rgba(249,115,22,.12),rgba(249,115,22,.03))!important;}
+.s6-card-new:hover{border-color:rgba(249,115,22,.6)!important;box-shadow:0 8px 40px rgba(249,115,22,.2)!important;}
+.s6-tech-badge{font-family:var(--m);font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:100px;display:inline-block;margin-bottom:.2rem;}
+.badge-blue{background:rgba(59,130,246,.15);color:var(--blue);border:1px solid rgba(59,130,246,.3);}
+.badge-purple{background:rgba(124,58,237,.15);color:var(--purple-l);border:1px solid rgba(124,58,237,.3);}
+.badge-orange{background:rgba(249,115,22,.15);color:var(--orange);border:1px solid rgba(249,115,22,.3);}
+.s6-tech-name{font-family:var(--f);font-size:clamp(1rem,1.5vw,1.3rem);font-weight:700;color:white;line-height:1.2;}
+.s6-tech-desc{font-size:clamp(.78rem,1vw,.9rem);color:var(--muted);line-height:1.65;}
+.s6-example{background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:.8rem 1rem;font-family:var(--m);font-size:clamp(.72rem,.95vw,.84rem);color:rgba(248,250,252,.55);line-height:1.8;}
+.s6-example strong{color:white;font-weight:600;}
+/* Contrafactual especial */
+.s6-contra{display:flex;gap:.6rem;margin-top:.3rem;}
+.s6-contra-side{flex:1;padding:.6rem .8rem;border-radius:10px;font-size:clamp(.7rem,.9vw,.82rem);line-height:1.6;}
+.s6-contra-a{background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2);color:rgba(248,250,252,.6);}
+.s6-contra-b{background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.25);color:rgba(248,250,252,.6);}
+.s6-contra-label{font-family:var(--m);font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.3rem;}
+.clbl-a{color:var(--blue);}
+.clbl-b{color:var(--orange);}
+.s6-contra-result{margin-top:.5rem;padding:.5rem .8rem;background:rgba(249,115,22,.12);border:1px solid rgba(249,115,22,.25);border-radius:8px;font-size:clamp(.7rem,.88vw,.82rem);color:var(--orange);}
+.s6-contra-result strong{font-weight:700;}
+
+/* ───────────────────────────────
+   S7 — SEMÁFORO
+─────────────────────────────── */
+#s7{flex-direction:row;align-items:center;gap:3vw;background:linear-gradient(135deg,#04060f 0%,#080416 100%);}
+#s7::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 50% 70% at 30% 50%,rgba(239,68,68,.06) 0%,transparent 50%),radial-gradient(ellipse 50% 70% at 70% 50%,rgba(16,185,129,.05) 0%,transparent 50%);}
+/* Semáforo SVG */
+.s7-light-col{flex:0 0 auto;display:flex;align-items:center;justify-content:center;position:relative;z-index:1;}
+.traffic-light{display:flex;flex-direction:column;align-items:center;gap:0;}
+.tl-housing{background:linear-gradient(180deg,#0f0f1a,#080810);border:2px solid rgba(255,255,255,.08);border-radius:20px;padding:1.2rem .9rem;display:flex;flex-direction:column;gap:1rem;box-shadow:0 0 40px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,255,255,.05);}
+.tl-light{width:clamp(50px,6vw,80px);height:clamp(50px,6vw,80px);border-radius:50%;position:relative;transition:all .5s;}
+.tl-light::after{content:'';position:absolute;inset:-4px;border-radius:50%;opacity:0;transition:opacity .5s;}
+.tl-red{background:radial-gradient(circle,#ff4444 0%,#990000 80%);box-shadow:0 0 40px rgba(255,68,68,.8),0 0 80px rgba(255,68,68,.4);animation:pulse-red 2s ease-in-out infinite;}
+.tl-yellow{background:rgba(100,80,0,.3);box-shadow:none;}
+.tl-yellow.lit{background:radial-gradient(circle,#ffd700 0%,#cc8800 80%);box-shadow:0 0 40px rgba(255,215,0,.8),0 0 80px rgba(255,215,0,.3);animation:pulse-yellow 2s ease-in-out 2s infinite;}
+.tl-green{background:rgba(0,60,20,.3);box-shadow:none;}
+.tl-green.lit{background:radial-gradient(circle,#00ff88 0%,#008844 80%);box-shadow:0 0 40px rgba(0,255,136,.7),0 0 80px rgba(0,255,136,.3);animation:pulse-green 2s ease-in-out 4s infinite;}
+@keyframes pulse-red{0%,100%{box-shadow:0 0 30px rgba(255,68,68,.7),0 0 60px rgba(255,68,68,.3)}50%{box-shadow:0 0 50px rgba(255,68,68,1),0 0 100px rgba(255,68,68,.5)}}
+@keyframes pulse-yellow{0%,100%{box-shadow:0 0 30px rgba(255,215,0,.6)}50%{box-shadow:0 0 50px rgba(255,215,0,1),0 0 100px rgba(255,215,0,.4)}}
+@keyframes pulse-green{0%,100%{box-shadow:0 0 30px rgba(0,255,136,.6)}50%{box-shadow:0 0 50px rgba(0,255,136,1),0 0 100px rgba(0,255,136,.4)}}
+.tl-post{width:12px;height:clamp(30px,4vh,60px);background:linear-gradient(to bottom,#1a1a2e,#0a0a1a);margin:0 auto;}
+.tl-base{width:clamp(60px,8vw,110px);height:12px;background:linear-gradient(to right,#0a0a1a,#1a1a2e,#0a0a1a);border-radius:4px;}
+/* Cards semáforo */
+.s7-cards-col{flex:1;display:flex;flex-direction:column;gap:1rem;position:relative;z-index:1;}
+.s7-rule{border-radius:16px;padding:1.1rem 1.4rem;transition:all .3s;}
+.s7-rule-r{background:linear-gradient(135deg,rgba(239,68,68,.15),rgba(239,68,68,.04));border:1px solid rgba(239,68,68,.3);box-shadow:0 0 30px rgba(239,68,68,.08);}
+.s7-rule-y{background:linear-gradient(135deg,rgba(245,158,11,.12),rgba(245,158,11,.03));border:1px solid rgba(245,158,11,.25);}
+.s7-rule-g{background:linear-gradient(135deg,rgba(16,185,129,.12),rgba(16,185,129,.03));border:1px solid rgba(16,185,129,.25);}
+.s7-rule-header{display:flex;align-items:center;gap:.8rem;margin-bottom:.4rem;}
+.s7-rule-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;}
+.s7-dot-r{background:var(--red);box-shadow:0 0 10px var(--red);}
+.s7-dot-y{background:var(--amber);box-shadow:0 0 10px var(--amber);}
+.s7-dot-g{background:var(--green);box-shadow:0 0 10px var(--green);}
+.s7-rule-word{font-family:var(--f);font-size:clamp(1rem,1.6vw,1.3rem);font-weight:700;color:white;}
+.s7-rule-tag{font-family:var(--m);font-size:8px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;border-radius:100px;margin-left:.4rem;}
+.tag-r{background:rgba(239,68,68,.2);color:var(--red);border:1px solid rgba(239,68,68,.3);}
+.tag-y{background:rgba(245,158,11,.15);color:var(--amber);border:1px solid rgba(245,158,11,.3);}
+.tag-g{background:rgba(16,185,129,.15);color:var(--green);border:1px solid rgba(16,185,129,.3);}
+.s7-rule-text{font-size:clamp(.78rem,1.05vw,.95rem);color:var(--muted);line-height:1.65;}
+.s7-rule-text strong{color:rgba(248,250,252,.85);font-weight:600;}
+.s7-slogan{position:relative;z-index:1;margin-top:.5rem;padding:.8rem 1.4rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;text-align:center;}
+.s7-slogan p{font-family:var(--f);font-size:clamp(.95rem,1.4vw,1.15rem);font-style:italic;color:rgba(248,250,252,.7);}
+.s7-slogan em{font-style:normal;font-weight:700;background:linear-gradient(90deg,var(--purple-l),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+
+/* ───────────────────────────────
+   S8 — ANATOMIA PROMPT MESTRE
+─────────────────────────────── */
+#s8{flex-direction:row;gap:2vw;align-items:stretch;background:linear-gradient(135deg,#04060f 0%,#080318 100%);}
+#s8::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 50%,rgba(124,58,237,.08) 0%,transparent 60%);}
+.s8-left{flex:1;display:flex;flex-direction:column;justify-content:center;position:relative;z-index:1;}
+.s8-editor{flex:1.2;background:#030810;border:1px solid rgba(124,58,237,.3);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;position:relative;z-index:1;box-shadow:0 0 60px rgba(124,58,237,.1),inset 0 1px 0 rgba(255,255,255,.04);}
+.s8-titlebar{background:rgba(0,0,0,.5);padding:.55rem 1rem;display:flex;align-items:center;gap:.4rem;border-bottom:1px solid rgba(255,255,255,.05);}
+.s8-dot{width:11px;height:11px;border-radius:50%;}
+.s8-fname{font-family:var(--m);font-size:10px;color:rgba(255,255,255,.2);margin-left:.6rem;}
+.s8-code{padding:1rem 1.2rem;font-family:var(--m);font-size:clamp(.72rem,1.05vw,.88rem);line-height:2.1;flex:1;overflow:hidden;}
+.s8-line{display:flex;gap:.8rem;}
+.s8-ln{color:rgba(255,255,255,.1);font-size:.78em;min-width:1.6em;text-align:right;user-select:none;margin-top:.15em;}
+/* Cores do prompt */
+.sp{color:#a78bfa;font-weight:600;}/* PERSONA */
+.st{color:#67e8f9;font-weight:600;}/* TAREFA */
+.sc{color:#fcd34d;font-weight:600;}/* CONTEXTO */
+.sf{color:#6ee7b7;font-weight:600;}/* FORMATO */
+.sl{color:#fb7185;font-weight:600;}/* LIMITES */
+.sv{color:rgba(248,250,252,.55);}/* valor normal */
+.sph{color:#f97316;font-weight:700;background:rgba(249,115,22,.15);padding:1px 4px;border-radius:4px;border:1px solid rgba(249,115,22,.25);}/* placeholder */
+.scm{color:#1e3a52;}/* comment */
+/* Info direita */
+.s8-infos{display:flex;flex-direction:column;gap:.8rem;}
+.s8-info-card{padding:.9rem 1.1rem;border-radius:14px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.03);}
+.s8-info-title{font-family:var(--m);font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.4rem;}
+.s8-info-text{font-size:clamp(.78rem,1vw,.9rem);color:var(--muted);line-height:1.6;}
+.s8-info-text strong{color:white;font-weight:600;}
+.s8-pulo{border-color:rgba(249,115,22,.25);background:rgba(249,115,22,.06);}
+.s8-pulo .s8-info-title{color:var(--orange);}
+
+/* ───────────────────────────────
+   S9 — CHECKLIST INTERATIVO
+─────────────────────────────── */
+#s9{flex-direction:row;gap:2.5vw;align-items:stretch;background:linear-gradient(135deg,#04060f 0%,#080220 100%);}
+#s9::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 50%,rgba(16,185,129,.07) 0%,transparent 55%);}
+.s9-left{flex:0 0 42%;display:flex;flex-direction:column;justify-content:center;position:relative;z-index:1;}
+.s9-right{flex:1;display:flex;flex-direction:column;justify-content:center;gap:.65rem;position:relative;z-index:1;}
+.s9-item{
+  display:flex;align-items:flex-start;gap:1rem;padding:1rem 1.2rem;
+  border-radius:14px;border:1px solid rgba(255,255,255,.07);
+  background:rgba(255,255,255,.03);cursor:pointer;
+  transition:all .3s cubic-bezier(.4,0,.2,1);
+  position:relative;overflow:hidden;
+}
+.s9-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:rgba(255,255,255,.1);border-radius:3px 0 0 3px;transition:all .3s;}
+.s9-item:hover{border-color:rgba(255,255,255,.15);transform:translateX(4px);}
+.s9-item.checked{background:rgba(16,185,129,.07);border-color:rgba(16,185,129,.3);}
+.s9-item.checked::before{background:var(--green);box-shadow:0 0 10px rgba(16,185,129,.5);}
+.s9-item.mandatory{background:rgba(249,115,22,.05);border-color:rgba(249,115,22,.2);}
+.s9-item.mandatory::before{background:var(--orange);}
+.s9-item.mandatory.checked{background:rgba(16,185,129,.07);border-color:rgba(16,185,129,.3);}
+.s9-item.mandatory.checked::before{background:var(--green);box-shadow:0 0 10px rgba(16,185,129,.5);}
+.s9-checkbox{width:22px;height:22px;border-radius:6px;border:1.5px solid rgba(255,255,255,.2);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;transition:all .25s;}
+.s9-item.checked .s9-checkbox{background:var(--green);border-color:var(--green);box-shadow:0 0 12px rgba(16,185,129,.4);}
+.s9-item-content{}
+.s9-item-label{font-family:var(--s);font-size:clamp(.82rem,1.1vw,.96rem);font-weight:600;color:white;margin-bottom:.15rem;}
+.s9-item-desc{font-size:clamp(.74rem,.95vw,.86rem);color:var(--muted);line-height:1.55;}
+.s9-mandatory-badge{font-family:var(--m);font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:1px 7px;border-radius:100px;background:rgba(249,115,22,.15);color:var(--orange);border:1px solid rgba(249,115,22,.3);margin-left:.5rem;vertical-align:middle;}
+/* Progress do checklist */
+.s9-progress-wrap{margin-top:1rem;}
+.s9-progress-label{font-family:var(--m);font-size:10px;color:var(--muted2);margin-bottom:.4rem;display:flex;justify-content:space-between;}
+.s9-progress-bar{height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;}
+.s9-progress-fill{height:100%;background:linear-gradient(90deg,var(--purple),var(--green));border-radius:2px;transition:width .4s cubic-bezier(.4,0,.2,1);box-shadow:0 0 10px rgba(16,185,129,.4);}
+.s9-complete{margin-top:.8rem;padding:.8rem 1.2rem;background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.3);border-radius:12px;display:none;text-align:center;}
+.s9-complete p{font-family:var(--f);font-size:clamp(.9rem,1.3vw,1.1rem);font-style:italic;color:var(--green);}
+</style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+<div id="prog"></div>
+<div id="logo"><span></span>CLIC_diversidade</div>
+<div id="ctr">01 / 09</div>
+<div class="deck" id="deck">
+
+<!-- ━━━━━━━━━━━━━━ S1 CAPA ━━━━━━━━━━━━━━ -->
+<div class="slide active" id="s1">
+  <div class="s1-grid"></div>
+  <div class="s1-content">
+    <div class="s1-block a1">· Bloco 02 · Humanos no Comando</div>
+    <h1 class="s1-h1 a2">Engenharia<br>de <em class="grad">prompt</em></h1>
+    <p class="s1-sub a3">A arte de programar limites para máquinas que não pensam — mas reproduzem tudo.</p>
+    <div class="s1-tags a4">
+      <span class="s1-tag s1-tag-p">Método PTCFL</span>
+      <span class="s1-tag s1-tag-c">Red Teaming</span>
+      <span class="s1-tag s1-tag-g">Human-in-the-loop</span>
+      <span class="s1-tag" style="background:rgba(225,29,72,.12);color:#fb7185;border:1px solid rgba(225,29,72,.3);">Agente Lélia</span>
+    </div>
+  </div>
+  <div class="s1-orb-wrap a3">
+    <div class="s1-orb">
+      <div class="s1-orb-inner">
+        <div class="s1-orb-num grad">02</div>
+        <div class="s1-orb-label">engenharia de prompt</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ━━━━━━━━━━━━━━ S2 ESPELHO ESTATÍSTICO ━━━━━━━━━━━━━━ -->
+<div class="slide" id="s2">
+  <div class="chip a1"><div class="chip-dot"></div>01 · Redefinindo a analogia</div>
+  <h2 class="a2" style="margin-bottom:.8rem">Não é uma estagiária.<br><em class="grad-o">É um espelho estatístico.</em></h2>
+  <div class="s2-split a3">
+    <div class="s2-panel s2-panel-old">
+      <span class="s2-tag s2-tag-old">Analogia antiga · imprecisa</span>
+      <div class="s2-concept">A "estagiária digital"</div>
+      <div class="s2-desc">Competente, culta, rápida, mas literal. <strong>Um estagiário humano tem senso moral, empatia e ética.</strong> A IA, não. Essa analogia humaniza a máquina e esconde seus perigos reais.</div>
+      <div class="s2-stat">
+        <div class="s2-stat-item s2-stat-bad"><div class="s2-stat-num" style="color:var(--red)">&lt;9</div><div class="s2-stat-label" style="color:rgba(239,68,68,.6)">palavras = prompt ruim</div></div>
+      </div>
+    </div>
+    <div class="s2-panel s2-panel-new">
+      <span class="s2-tag s2-tag-new">Nova analogia · precisa</span>
+      <div class="s2-concept">O <span class="grad">espelho estatístico</span></div>
+      <div class="s2-desc">A IA processa <strong>o passado com probabilidade</strong>. Se o passado foi excludente, ela replica. Se os dados eram racistas, ela é racista. Engenharia de prompt = programar guardrails para que a máquina não reproduza vieses estruturais.</div>
+      <div class="s2-stat">
+        <div class="s2-stat-item s2-stat-good"><div class="s2-stat-num" style="color:var(--green)">21+</div><div class="s2-stat-label" style="color:rgba(16,185,129,.6)">palavras = prompt eficaz</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="s2-flow a4">
+    <div class="s2-flow-node">Você instrui</div>
+    <div class="s2-flow-arrow">→</div>
+    <div class="s2-flow-node" style="border-color:rgba(124,58,237,.3);background:rgba(124,58,237,.08);">IA processa<br><span style="font-family:var(--m);font-size:.75em;color:rgba(167,139,250,.6)">dados históricos</span></div>
+    <div class="s2-flow-arrow">→</div>
+    <div class="s2-flow-node">Entrega</div>
+    <div class="s2-flow-arrow" style="color:var(--orange)">⚠</div>
+    <div class="s2-flow-node" style="border-color:rgba(249,115,22,.3);background:rgba(249,115,22,.06);color:rgba(249,115,22,.8);font-size:.82rem">Sem guardrails<br>= viés automático</div>
+  </div>
+</div>
+
+<!-- ━━━━━━━━━━━━━━ S3 PRINCÍPIO BRUTAL ━━━━━━━━━━━━━━ -->
+<div class="slide" id="s3">
+  <div class="s3-half s3-half-left">
+    <div class="chip al1" style="position:relative;z-index:1"><div class="chip-dot" style="background:var(--red);box-shadow:0 0 8px var(--red)"></div>Sem instrução</div>
+    <span class="s3-indicator s3-ind-bad al1" style="position:relative;z-index:1">✗ Território perigoso</span>
+    <div class="s3-statement al2" style="position:relative;z-index:1">A IA <em>inventa</em> o que você deixa em aberto.</div>
+    <div class="s3-items" style="position:relative;z-index:1">
+      <div class="s3-item s3-item-bad a3">Preenche lacunas com estereótipos estatísticos</div>
+      <div class="s3-item s3-item-bad a4">Presume gênero, raça e classe por associação</div>
+      <div class="s3-item s3-item-bad a5">Reproduz padrões excludentes do passado</div>
+      <div class="s3-item s3-item-bad a6">Gera alucinações com aparência de verdade</div>
+    </div>
+  </div>
+  <div class="s3-divider">VS</div>
+  <div class="s3-half s3-half-right">
+    <div class="chip al1" style="position:relative;z-index:1"><div class="chip-dot" style="background:var(--green);box-shadow:0 0 8px var(--green)"></div>Com instrução clara</div>
+    <span class="s3-indicator s3-ind-good al1" style="position:relative;z-index:1">✓ Você no comando</span>
+    <div class="s3-statement al2" style="position:relative;z-index:1">A IA executa <em>exatamente</em> o que você especifica.</div>
+    <div class="s3-items" style="position:relative;z-index:1">
+      <div class="s3-item s3-item-good a3">Linguagem neutra e inclusiva por instrução</div>
+      <div class="s3-item s3-item-good a4">Formato, tom e escopo definidos por você</div>
+      <div class="s3-item s3-item-good a5">Limites explícitos impedem vieses</div>
+      <div class="s3-item s3-item-good a6">Responsabilidade humana preservada</div>
+    </div>
+  </div>
+</div>
+
+<!-- ━━━━━━━━━━━━━━ S4 MÉTODO PTCFL ━━━━━━━━━━━━━━ -->
+<div class="slide" id="s4">
+  <div class="chip a1" style="position:relative;z-index:1"><div class="chip-dot"></div>03 · A estrutura universal</div>
+  <h2 class="a2" style="margin-bottom:.6rem;position:relative;z-index:1">O método <span class="grad">PTCFL</span></h2>
+  <p class="a3" style="color:var(--muted);font-size:clamp(.82rem,1.1vw,.96rem);margin-bottom:1rem;position:relative;z-index:1;">Passe o mouse sobre cada pilar para expandir. Cinco elementos — resultado perfeito.</p>
+  <div class="ptcfl-row a4">
+    <div class="ptcfl-card p-card">
+      <div class="ptcfl-letter">P</div>
+      <div class="ptcfl-word">Persona</div>
+      <div class="ptcfl-desc">Quem é a IA? Define o tom, a postura e o especialista que ela será.<div class="ptcfl-ex">Ex: "Atue como especialista em direito administrativo e linguagem inclusiva."</div></div>
+    </div>
+    <div class="ptcfl-card t-card">
+      <div class="ptcfl-letter">T</div>
+      <div class="ptcfl-word">Tarefa</div>
+      <div class="ptcfl-desc">O que fazer? Use verbos de comando diretos e específicos.<div class="ptcfl-ex">Ex: "Redija", "Extraia", "Analise", "Revise", "Simplifique".</div></div>
+    </div>
+    <div class="ptcfl-card c-card">
+      <div class="ptcfl-letter">C</div>
+      <div class="ptcfl-word">Contexto</div>
+      <div class="ptcfl-desc">O cenário. Antídoto da alucinação — a IA não sabe o que acontece na sua repartição.<div class="ptcfl-ex">Ex: "Com base na Lei 14.133", "Para público com baixa escolaridade".</div></div>
+    </div>
+    <div class="ptcfl-card f-card">
+      <div class="ptcfl-letter">F</div>
+      <div class="ptcfl-word">Formato</div>
+      <div class="ptcfl-desc">Como deve ser a entrega. Não aceite paredes de texto.<div class="ptcfl-ex">Ex: "Tabela com 3 colunas", "Lista com bullets", "Ofício formal".</div></div>
+    </div>
+    <div class="ptcfl-card l-card">
+      <div class="ptcfl-letter">L</div>
+      <div class="ptcfl-word">Limites</div>
+      <span class="ptcfl-badge l-badge">Novo · crítico</span>
+      <div class="ptcfl-desc">Guardrails de equidade. O que a IA <strong style="color:white">não deve</strong> fazer.<div class="ptcfl-ex">Ex: "Utilize linguagem neutra. Não presuma gênero ou raça. Alerte se os dados carecerem de diversidade representativa."</div></div>
+    </div>
+  </div>
+  <div class="ptcfl-hint a5">💡 O pilar L transforma um prompt de produtividade em um prompt de responsabilidade</div>
+</div>
+
+<!-- ━━━━━━━━━━━━━━ S5 ANTES vs DEPOIS ━━━━━━━━━━━━━━ -->
+<div class="slide" id="s5">
+  <div class="s5-panel s5-panel-left">
+    <div class="s5-panel-header a1">
+      <div class="s5-mark">✗</div>
+      <div>
+        <div class="s5-htitle">Prompt preguiçoso</div>
+        <div class="s5-hsub">Sem estrutura · Resultado imprevisível</div>
+      </div>
+    </div>
+    <div class="s5-vague a2">"Escreva sobre a nova lei de licitações."</div>
+    <div class="s5-bad-resp a3">
+      <div class="s5-bad-blur">Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat duis aute irure dolor in reprehenderit voluptate velit esse cillum dolore eu fugiat nulla pariatur excepteur sint occaecat cupidatat non proident sunt in culpa qui officia deserunt mollit anim id est laborum sed perspiciatis onde omnis natus error sit voluptatem accusantium doloremque laudantium</div>
+      <div class="s5-bad-overlay">
+        <div class="s5-bad-label">⚠ Genérico · Fora do contexto · Inútil</div>
+      </div>
+    </div>
+  </div>
+  <div class="s5-panel s5-panel-right">
+    <div class="s5-panel-header a1">
+      <div class="s5-mark">✓</div>
+      <div>
+        <div class="s5-htitle">Prompt PTCFL</div>
+        <div class="s5-hsub">Estruturado · Entrega garantida</div>
+      </div>
+    </div>
+    <div class="s5-ptcf-prompt a2">
+      <div class="s5-line"><span class="pp">[Persona]</span> <span class="pv">Aja como especialista em compras governamentais.</span></div>
+      <div class="s5-line"><span class="pt">[Tarefa]</span> <span class="pv">Crie tabela comparativa entre Lei 8.666 e Lei 14.133.</span></div>
+      <div class="s5-line"><span class="pc">[Contexto]</span> <span class="pv">Foco em obras de engenharia civil.</span></div>
+      <div class="s5-line"><span class="pf">[Formato]</span> <span class="pv">Tabela com 3 colunas: tema, lei antiga, lei nova.</span></div>
+      <div class="s5-line"><span class="pl">[Limites]</span> <span class="pv">Use linguagem clara. Não presuma o gênero do gestor. Alerte sobre lacunas.</span></div>
+    </div>
+    <div class="s5-good-resp a3">
+      <div class="s5-good-label">✓ Resultado</div>
+      <div class="s5-good-text">Tabela precisa, formatada, com contexto correto, linguagem neutra — pronta para assinar.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ━━━━━━━━━━━━━━ S6 TÉCNICAS AVANÇADAS ━━━━━━━━━━━━━━ -->
+<div class="slide" id="s6">
+  <div class="chip a1" style="position:relative;z-index:1"><div class="chip-dot"></div>05 · Técnicas avançadas</div>
+  <h2 class="a2" style="margin-bottom:.8rem;position:relative;z-index:1">Elevando o <span class="grad">nível</span></h2>
+  <div class="s6-grid a3">
+    <div class="s6-card">
+      <span class="s6-tech-badge badge-blue">Few-shot prompting</span>
+      <div class="s6-tech-name">Dê exemplos — a IA aprende por padrão</div>
+      <div class="s6-tech-desc">A IA não adivinha o estilo que você quer. Mostre um exemplo antes de pedir.</div>
+      <div class="s6-example">"Analise este texto. <strong>Aqui está um exemplo</strong> de como quero o resumo: [Exemplo anterior com linguagem acessível]. Agora faça o mesmo com o novo texto."</div>
+    </div>
+    <div class="s6-card">
+      <span class="s6-tech-badge badge-purple">Chain of Thought</span>
+      <div class="s6-tech-name">Cadeia de pensamento — peça o raciocínio</div>
+      <div class="s6-tech-desc">Para tarefas complexas, peça que a IA "pense alto" antes de responder.</div>
+      <div class="s6-example">"Antes de responder, <strong>explique o passo a passo</strong> do seu raciocínio lógico para chegar a essa conclusão. Depois dê a resposta final."</div>
+    </div>
+    <div class="s6-card s6-card-new">
+      <span class="s6-tech-badge badge-orange">Teste Contrafactual · Red Teaming</span>
+      <div class="s6-tech-name">Hackeie seu próprio prompt — encontre o viés</div>
+      <div class="s6-tech-desc">Mude variáveis sensíveis e veja se o resultado muda. Se mudar, você encontrou discriminação algorítmica.</div>
+      <div class="s6-contra">
+        <div class="s6-contra-side s6-contra-a">
+          <div class="s6-contra-label clbl-a">Teste A</div>
+          "Analise o risco do candidato <strong>João</strong>, morador do <strong>Jardim Europa</strong>."
+        </div>
+        <div class="s6-contra-side s6-contra-b">
+          <div class="s6-contra-label clbl-b">Teste B</div>
+          "Analise o risco do candidato <strong>Maicon</strong>, morador da <strong>Vila do Sapo</strong>."
+        </div>
+      </div>
+      <div class="s6-contra-result">⚠ <strong>Se o resultado mudou:</strong> a IA usou CEP e nome como proxy de raça e classe — racismo algorítmico identificado.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ━━━━━━━━━━━━━━ S7 SEMÁFORO ━━━━━━━━━━━━━━ -->
+<div class="slide" id="s7">
+  <div class="s7-light-col">
+    <div class="traffic-light">
+      <div class="tl-housing">
+        <div class="tl-light tl-red" id="tl-r"></div>
+        <div class="tl-light tl-yellow" id="tl-y"></div>
+        <div class="tl-light tl-green" id="tl-g"></div>
+      </div>
+      <div class="tl-post"></div>
+      <div class="tl-base"></div>
+    </div>
+  </div>
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:0;position:relative;z-index:1;">
+    <div class="chip a1"><div class="chip-dot"></div>06 · Regras de ouro no serviço público</div>
+    <div class="s7-cards-col">
+      <div class="s7-rule s7-rule-r a2">
+        <div class="s7-rule-header">
+          <div class="s7-rule-dot s7-dot-r"></div>
+          <div class="s7-rule-word">PARE <span class="s7-rule-tag tag-r">Dados e direitos</span></div>
+        </div>
+        <div class="s7-rule-text">Nunca insira dados sensíveis (CPF, saúde, sigilo) em plataformas abertas. <strong>Vá além:</strong> questione antes de automatizar decisões que afetam direitos. Cuidado com proxies de exclusão — CEP e nome associados a raça ou classe geram discriminação indireta.</div>
+      </div>
+      <div class="s7-rule s7-rule-y a3">
+        <div class="s7-rule-header">
+          <div class="s7-rule-dot s7-dot-y"></div>
+          <div class="s7-rule-word">ATENÇÃO <span class="s7-rule-tag tag-y">Vieses e alucinações</span></div>
+        </div>
+        <div class="s7-rule-text">A IA pode inventar fatos e leis — mas também <strong>herda e automatiza preconceitos históricos</strong>. Ela apaga grupos minorizados e naturaliza exclusões. A responsabilidade ética e jurídica pela assinatura do documento público é <strong>inteiramente sua</strong>.</div>
+      </div>
+      <div class="s7-rule s7-rule-g a4">
+        <div class="s7-rule-header">
+          <div class="s7-rule-dot s7-dot-g"></div>
+          <div class="s7-rule-word">SIGA <span class="s7-rule-tag tag-g">Autonomia crítica</span></div>
+        </div>
+        <div class="s7-rule-text">Use para estruturar, resumir e redigir. <strong>Vá além da eficiência:</strong> transforme a IA em agente crítico. Revise acessibilidade da linguagem, identifique jargões burocráticos excludentes e promova comunicação democrática com a sociedade.</div>
+      </div>
+    </div>
+    <div class="s7-slogan a5">
+      <p>"A IA é sua <em>copiloto</em> — não a comandante. A responsabilidade do voo é de vocês."</p>
+    </div>
+  </div>
+</div>
+
+<!-- ━━━━━━━━━━━━━━ S8 ANATOMIA PROMPT MESTRE ━━━━━━━━━━━━━━ -->
+<div class="slide" id="s8">
+  <div class="s8-left a1">
+    <div class="chip" style="margin-bottom:.5rem"><div class="chip-dot"></div>07 · O prompt mestre</div>
+    <h2 style="margin-bottom:.8rem">Anatomia da<br><span class="grad">Agente Lélia</span></h2>
+    <p style="font-size:clamp(.82rem,1.1vw,.96rem);color:var(--muted);line-height:1.65;margin-bottom:1.2rem;">Lélia é uma agente especialista em direitos humanos e linguagem inclusiva. Esse é o prompt que a cria — linha por linha.</p>
+    <div class="s8-infos">
+      <div class="s8-info-card">
+        <div class="s8-info-title" style="color:var(--purple-l)">Prompt mestre</div>
+        <div class="s8-info-text">Persona e Regras fixas. Apenas os <strong>[[PLACEHOLDERS]]</strong> variam a cada uso — você nunca começa do zero.</div>
+      </div>
+      <div class="s8-info-card s8-pulo">
+        <div class="s8-info-title">O pulo do gato</div>
+        <div class="s8-info-text">Colchetes duplos <strong style="color:var(--orange)">[[CAMPO]]</strong> marcam onde colar a informação nova. O prompt base permanece intacto.</div>
+      </div>
+      <div class="s8-info-card">
+        <div class="s8-info-title" style="color:var(--rose)">O pilar L em ação</div>
+        <div class="s8-info-text">Os <strong>Limites</strong> não são opcionais aqui — são a essência da agente. Ela audita <em>ativamente</em> em busca de exclusões.</div>
+      </div>
+    </div>
+  </div>
+  <div class="s8-editor a2">
+    <div class="s8-titlebar">
+      <div class="s8-dot" style="background:#ef4444"></div>
+      <div class="s8-dot" style="background:#f59e0b"></div>
+      <div class="s8-dot" style="background:#10b981"></div>
+      <div class="s8-fname">agente_lelia.prompt</div>
+    </div>
+    <div class="s8-code">
+      <div class="s8-line"><span class="s8-ln">1</span><span class="sp">[PERSONA]</span></div>
+      <div class="s8-line"><span class="s8-ln">2</span><span class="sv">Você é Lélia, especialista em direitos humanos,</span></div>
+      <div class="s8-line"><span class="s8-ln">3</span><span class="sv">linguagem inclusiva e auditoria de políticas públicas.</span></div>
+      <div class="s8-line"><span class="s8-ln">4</span><span class="scm">// Tom: técnico, crítico e acessível.</span></div>
+      <div class="s8-line"><span class="s8-ln">5</span></div>
+      <div class="s8-line"><span class="s8-ln">6</span><span class="st">[TAREFA]</span></div>
+      <div class="s8-line"><span class="s8-ln">7</span><span class="sv">Revise a minuta: identifique jargões excludentes,</span></div>
+      <div class="s8-line"><span class="s8-ln">8</span><span class="sv">apagamentos de grupos e barreiras de acessibilidade.</span></div>
+      <div class="s8-line"><span class="s8-ln">9</span></div>
+      <div class="s8-line"><span class="s8-ln">10</span><span class="sc">[CONTEXTO]</span></div>
+      <div class="s8-line"><span class="s8-ln">11</span><span class="sv">Documento: <span class="sph">[[TIPO_DOCUMENTO]]</span></span></div>
+      <div class="s8-line"><span class="s8-ln">12</span><span class="sv">Público-alvo: <span class="sph">[[PÚBLICO]]</span></span></div>
+      <div class="s8-line"><span class="s8-ln">13</span></div>
+      <div class="s8-line"><span class="s8-ln">14</span><span class="sf">[FORMATO]</span></div>
+      <div class="s8-line"><span class="s8-ln">15</span><span class="sv">Relatório estruturado: problemas / impacto / sugestão.</span></div>
+      <div class="s8-line"><span class="s8-ln">16</span></div>
+      <div class="s8-line"><span class="s8-ln">17</span><span class="sl">[LIMITES]</span></div>
+      <div class="s8-line"><span class="s8-ln">18</span><span class="sv">Use linguagem neutra. Não presuma gênero ou raça.</span></div>
+      <div class="s8-line"><span class="s8-ln">19</span><span class="sv">Alerte se os dados carecerem de diversidade representativa.</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ━━━━━━━━━━━━━━ S9 CHECKLIST ━━━━━━━━━━━━━━ -->
+<div class="slide" id="s9">
+  <div class="s9-left">
+    <div class="chip a1"><div class="chip-dot"></div>08 · Antes de enviar</div>
+    <h2 class="a2" style="margin-bottom:.5rem">Checklist de<br><span class="grad">decolagem</span></h2>
+    <p class="a3" style="font-size:clamp(.82rem,1.1vw,.96rem);color:var(--muted);line-height:1.65;margin-bottom:1rem;">Clique em cada item antes de enviar seu prompt. Todas as caixas precisam estar verdes.</p>
+    <div class="s9-progress-wrap a4">
+      <div class="s9-progress-label">
+        <span id="prog-label">0 de 7 concluídos</span>
+        <span id="prog-pct">0%</span>
+      </div>
+      <div class="s9-progress-bar"><div class="s9-progress-fill" id="prog-fill" style="width:0%"></div></div>
+    </div>
+    <div class="s9-complete a5" id="s9-complete">
+      <p>✓ Prompt aprovado. Você está no comando.</p>
+    </div>
+  </div>
+  <div class="s9-right a3">
+    <div class="s9-item" onclick="toggleCheck(this)">
+      <div class="s9-checkbox"></div>
+      <div class="s9-item-content">
+        <div class="s9-item-label">Persona</div>
+        <div class="s9-item-desc">Defini quem a IA deve ser — especialista, com tom e postura claros?</div>
+      </div>
+    </div>
+    <div class="s9-item" onclick="toggleCheck(this)">
+      <div class="s9-checkbox"></div>
+      <div class="s9-item-content">
+        <div class="s9-item-label">Tarefa</div>
+        <div class="s9-item-desc">Usei um verbo de ação claro e específico?</div>
+      </div>
+    </div>
+    <div class="s9-item" onclick="toggleCheck(this)">
+      <div class="s9-checkbox"></div>
+      <div class="s9-item-content">
+        <div class="s9-item-label">Contexto</div>
+        <div class="s9-item-desc">Dei informações suficientes para evitar alucinações?</div>
+      </div>
+    </div>
+    <div class="s9-item" onclick="toggleCheck(this)">
+      <div class="s9-checkbox"></div>
+      <div class="s9-item-content">
+        <div class="s9-item-label">Formato</div>
+        <div class="s9-item-desc">Especifiquei o tipo de saída esperada?</div>
+      </div>
+    </div>
+    <div class="s9-item" onclick="toggleCheck(this)">
+      <div class="s9-checkbox"></div>
+      <div class="s9-item-content">
+        <div class="s9-item-label">Segurança</div>
+        <div class="s9-item-desc">Removi CPF, RG, dados de saúde e informações sigilosas?</div>
+      </div>
+    </div>
+    <div class="s9-item mandatory" onclick="toggleCheck(this)">
+      <div class="s9-checkbox"></div>
+      <div class="s9-item-content">
+        <div class="s9-item-label">Equidade e vieses <span class="s9-mandatory-badge">obrigatório</span></div>
+        <div class="s9-item-desc">Inseri comandos explícitos exigindo linguagem neutra e sem estereótipos? Testei o prompt com variáveis sensíveis diferentes?</div>
+      </div>
+    </div>
+    <div class="s9-item mandatory" onclick="toggleCheck(this)">
+      <div class="s9-checkbox"></div>
+      <div class="s9-item-content">
+        <div class="s9-item-label">Human-in-the-loop <span class="s9-mandatory-badge">obrigatório</span></div>
+        <div class="s9-item-desc">A decisão gerada será obrigatoriamente revisada por mim antes de afetar o cidadão?</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /deck -->
+
+<nav class="nav">
+  <button class="nb" id="pb" onclick="go(-1)" disabled>←</button>
+  <div class="dots" id="dots"></div>
+  <button class="nb" id="nb2" onclick="go(1)">→</button>
+</nav>
+
+<script>
+/* BG PARTÍCULAS */
+(function(){
+  const c=document.getElementById('bg'),x=c.getContext('2d');
+  let W,H,P=[];
+  const rs=()=>{W=c.width=innerWidth;H=c.height=innerHeight;};
+  const Pt=()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.35,vy:(Math.random()-.5)*.35,r:Math.random()*1.8+.3,hue:[270,200,25,340,160][Math.floor(Math.random()*5)],a:Math.random()*.22+.04});
+  const init=()=>{rs();P=Array.from({length:75},Pt);};
+  const draw=()=>{
+    x.clearRect(0,0,W,H);
+    x.strokeStyle='rgba(124,58,237,0.04)';x.lineWidth=1;
+    for(let i=0;i<W;i+=65){x.beginPath();x.moveTo(i,0);x.lineTo(i,H);x.stroke();}
+    for(let i=0;i<H;i+=65){x.beginPath();x.moveTo(0,i);x.lineTo(W,i);x.stroke();}
+    P.forEach((p,i)=>{
+      p.x+=p.vx;p.y+=p.vy;
+      if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;
+      x.beginPath();x.arc(p.x,p.y,p.r,0,Math.PI*2);
+      x.fillStyle=`hsla(${p.hue},70%,65%,${p.a})`;x.fill();
+      for(let j=i+1;j<P.length;j++){
+        const q=P[j],d=Math.hypot(p.x-q.x,p.y-q.y);
+        if(d<120){x.beginPath();x.moveTo(p.x,p.y);x.lineTo(q.x,q.y);x.strokeStyle=`hsla(${p.hue},60%,60%,${.05*(1-d/120)})`;x.lineWidth=.8;x.stroke();}
+      }
+    });
+    requestAnimationFrame(draw);
+  };
+  addEventListener('resize',rs);
+  init();draw();
+})();
+
+/* DECK */
+const TOTAL=9;let cur=0,busy=false;
+const SS=document.querySelectorAll('.slide');
+const DE=document.getElementById('dots');
+const CT=document.getElementById('ctr');
+const PG=document.getElementById('prog');
+const PB=document.getElementById('pb');
+const NB=document.getElementById('nb2');
+for(let i=0;i<TOTAL;i++){
+  const d=document.createElement('div');
+  d.className='dot'+(i===0?' on':'');
+  d.onclick=()=>gt(i);
+  DE.appendChild(d);
+}
+const upd=()=>{
+  CT.textContent=`${String(cur+1).padStart(2,'0')} / ${String(TOTAL).padStart(2,'0')}`;
+  PG.style.width=`${(cur+1)/TOTAL*100}%`;
+  PB.disabled=cur===0;NB.disabled=cur===TOTAL-1;
+  document.querySelectorAll('.dot').forEach((d,i)=>d.className='dot'+(i===cur?' on':''));
+  /* Semáforo animação */
+  if(cur===6){
+    setTimeout(()=>document.getElementById('tl-y').classList.add('lit'),800);
+    setTimeout(()=>document.getElementById('tl-g').classList.add('lit'),1600);
+  } else {
+    document.getElementById('tl-y').classList.remove('lit');
+    document.getElementById('tl-g').classList.remove('lit');
+  }
+};
+const gt=idx=>{
+  if(busy||idx===cur||idx<0||idx>=TOTAL)return;
+  busy=true;SS[cur].classList.add('exit');const p=cur;
+  setTimeout(()=>{SS[p].classList.remove('active','exit');cur=idx;SS[cur].classList.add('active');upd();setTimeout(()=>busy=false,600);},130);
+};
+const go=d=>gt(cur+d);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' ')go(1);if(e.key==='ArrowLeft'||e.key==='ArrowUp')go(-1);});
+let tx=0;
+document.addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});
+document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>50)go(dx<0?1:-1);},{passive:true});
+
+/* CHECKLIST */
+function toggleCheck(el){
+  el.classList.toggle('checked');
+  el.querySelector('.s9-checkbox').textContent = el.classList.contains('checked') ? '✓' : '';
+  const all=document.querySelectorAll('.s9-item');
+  const done=[...all].filter(i=>i.classList.contains('checked')).length;
+  const total=all.length;
+  const pct=Math.round(done/total*100);
+  document.getElementById('prog-label').textContent=`${done} de ${total} concluídos`;
+  document.getElementById('prog-pct').textContent=`${pct}%`;
+  document.getElementById('prog-fill').style.width=pct+'%';
+  document.getElementById('s9-complete').style.display=done===total?'block':'none';
+}
+
+upd();
+</script>
+</body>
+</html>

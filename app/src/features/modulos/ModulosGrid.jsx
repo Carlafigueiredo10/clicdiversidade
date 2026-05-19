@@ -62,13 +62,14 @@ const MODULOS = [
     icon: '\u{1F393}',
     titulo: 'Material da Oficina',
     descricao:
-      'Slides, cards e conteúdo dos 3 blocos da oficina Servidoras no Comando Digital — Convergência.',
+      'Roteiro completo da oficina Humanos no Comando. 4 blocos, apresentação cinematográfica de abertura e ponteiros para os módulos.',
     stats: [
-      { value: '5', label: 'Materiais' },
+      { value: '4', label: 'Blocos' },
       { value: '80min', label: 'Oficina' },
     ],
-    ctaText: 'Ver materiais',
-    disponivel: false,
+    ctaText: 'Ver roteiro',
+    to: '/modulos/oficina',
+    disponivel: true,
   },
   {
     numero: '06',

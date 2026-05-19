@@ -35,6 +35,12 @@
   to = "/.netlify/functions/lelia"
   status = 200
 
+# Rota da function do Agente de Governanca (Lelia em modo Mediacao de Risco).
+[[redirects]]
+  from = "/api/governanca"
+  to = "/.netlify/functions/governanca"
+  status = 200
+
 # O SPA fallback do /jornada/* e gerado em build time como dist/_redirects
 # (ver scripts/build.mjs). Isso evita um bug do netlify-cli no Windows
 # que aplicava path.join() no rewrite e quebrava /jornada/ em dev.

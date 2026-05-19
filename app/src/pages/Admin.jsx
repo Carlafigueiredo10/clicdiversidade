@@ -1,10 +1,6 @@
 import { useEffect, useState } from 'react'
-import {
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-  signOut,
-} from 'firebase/auth'
-import { auth } from '../services/firebase'
+import { Navigate } from 'react-router-dom'
+import { isAdmin, signOutUser, useAuthUser } from '../services/auth'
 import { getAllVisitas } from '../services/visits'
 
 const SECOES = {
@@ -16,61 +12,6 @@ const SECOES = {
 function formatDate(ts) {
   if (!ts || typeof ts.toDate !== 'function') return '—'
   return ts.toDate().toLocaleString('pt-BR')
-}
-
-function LoginForm({ onSubmit, erro, enviando }) {
-  const [email, setEmail] = useState('')
-  const [senha, setSenha] = useState('')
-  return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault()
-        onSubmit(email, senha)
-      }}
-      className="mx-auto max-w-sm space-y-4"
-    >
-      <div>
-        <label className="block text-sm text-ink-soft mb-1" htmlFor="email">
-          E-mail
-        </label>
-        <input
-          id="email"
-          type="email"
-          required
-          autoComplete="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-full rounded-lg border border-line bg-page px-4 py-2.5 text-ink focus:outline-none focus:border-ink"
-        />
-      </div>
-      <div>
-        <label className="block text-sm text-ink-soft mb-1" htmlFor="senha">
-          Senha
-        </label>
-        <input
-          id="senha"
-          type="password"
-          required
-          autoComplete="current-password"
-          value={senha}
-          onChange={(e) => setSenha(e.target.value)}
-          className="w-full rounded-lg border border-line bg-page px-4 py-2.5 text-ink focus:outline-none focus:border-ink"
-        />
-      </div>
-      {erro && (
-        <p className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg py-2 px-3">
-          {erro}
-        </p>
-      )}
-      <button
-        type="submit"
-        disabled={enviando}
-        className="w-full rounded-full bg-ink text-page px-6 py-3 font-medium hover:opacity-90 transition disabled:opacity-40"
-      >
-        {enviando ? 'Entrando…' : 'Entrar'}
-      </button>
-    </form>
-  )
 }
 
 function Metricas({ user, onSair }) {
@@ -181,62 +122,51 @@ function Metricas({ user, onSair }) {
   )
 }
 
+function AcessoNegado({ user, onSair }) {
+  return (
+    <div className="text-center">
+      <p className="text-xs tracking-[0.25em] uppercase text-red-700 font-semibold">
+        Acesso negado
+      </p>
+      <h1 className="mt-4 font-display font-semibold text-3xl text-ink">
+        Essa conta não tem permissão de admin
+      </h1>
+      <p className="mt-4 text-ink-soft text-sm">
+        Você entrou como <span className="font-mono">{user.email}</span>. Saia e
+        entre com a conta autorizada.
+      </p>
+      <button
+        onClick={onSair}
+        className="mt-8 rounded-full border border-line px-6 py-3 text-sm text-ink-soft hover:bg-card transition"
+      >
+        Sair desta conta
+      </button>
+    </div>
+  )
+}
+
 export default function Admin() {
-  const [user, setUser] = useState(null)
-  const [carregandoAuth, setCarregandoAuth] = useState(true)
-  const [erro, setErro] = useState(null)
-  const [enviando, setEnviando] = useState(false)
+  const { user, loading } = useAuthUser()
 
-  useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (u) => {
-      setUser(u)
-      setCarregandoAuth(false)
-    })
-    return unsub
-  }, [])
+  if (loading) {
+    return (
+      <main className="px-5 py-16 md:py-24">
+        <p className="text-center text-ink-soft">Carregando…</p>
+      </main>
+    )
+  }
 
-  async function entrar(email, senha) {
-    setErro(null)
-    setEnviando(true)
-    try {
-      await signInWithEmailAndPassword(auth, email, senha)
-    } catch (e) {
-      setErro(
-        e.code === 'auth/invalid-credential'
-          ? 'E-mail ou senha incorretos.'
-          : e.message || 'Erro ao entrar.',
-      )
-    } finally {
-      setEnviando(false)
-    }
+  if (!user) {
+    return <Navigate to="/login" replace state={{ from: '/admin' }} />
   }
 
   return (
     <main className="px-5 py-16 md:py-24">
       <div className="mx-auto max-w-3xl">
-        {carregandoAuth ? (
-          <p className="text-center text-ink-soft">Carregando…</p>
-        ) : user ? (
-          <Metricas user={user} onSair={() => signOut(auth)} />
+        {isAdmin(user) ? (
+          <Metricas user={user} onSair={signOutUser} />
         ) : (
-          <>
-            <p className="text-xs tracking-[0.25em] uppercase text-accent-fg font-semibold text-center">
-              Admin
-            </p>
-            <h1 className="mt-4 font-display font-semibold text-3xl text-ink text-center">
-              Acesso restrito
-            </h1>
-            <p className="mt-3 text-center text-ink-soft text-sm">
-              Métricas internas do programa.
-            </p>
-            <div className="mt-10">
-              <LoginForm
-                onSubmit={entrar}
-                erro={erro}
-                enviando={enviando}
-              />
-            </div>
-          </>
+          <AcessoNegado user={user} onSair={signOutUser} />
         )}
       </div>
     </main>

@@ -1,9 +1,51 @@
 import { NavLink } from 'react-router-dom'
+import { signOutUser, useAuthUser } from '../services/auth'
 
 const NAV_ITEMS = [
   { to: '/', label: 'Jornada', end: true },
   { to: '/glossario', label: 'Glossário' },
 ]
+
+function shortName(user) {
+  if (user.displayName) return user.displayName.split(' ')[0]
+  return user.email?.split('@')[0] ?? 'Você'
+}
+
+function AuthSlot() {
+  const { user, loading } = useAuthUser()
+  // Enquanto o Firebase resolve o estado de auth, mostramos o botao "Entrar"
+  // como padrao otimista (pra evitar flash vazio). Se houver sessao, troca pro pill do usuario.
+  if (!user) {
+    return (
+      <NavLink
+        to="/login"
+        className={
+          'text-sm px-4 py-2.5 rounded-full transition border border-line text-ink hover:bg-card ' +
+          (loading ? 'opacity-60' : '')
+        }
+      >
+        Entrar
+      </NavLink>
+    )
+  }
+  return (
+    <div className="flex items-center gap-1 ml-1 pl-2 border-l border-line">
+      <span
+        className="text-sm text-ink-soft px-2 truncate max-w-[140px]"
+        title={user.email}
+      >
+        {shortName(user)}
+      </span>
+      <button
+        type="button"
+        onClick={() => signOutUser()}
+        className="text-xs text-ink-soft hover:text-ink underline px-2"
+      >
+        Sair
+      </button>
+    </div>
+  )
+}
 
 export default function Header() {
   return (
@@ -48,6 +90,13 @@ export default function Header() {
               {item.label}
             </NavLink>
           ))}
+          <a
+            href="/jornada/#modulos"
+            className="text-sm px-4 py-2.5 rounded-full transition text-ink-soft hover:text-ink"
+          >
+            Módulos
+          </a>
+          <AuthSlot />
         </nav>
       </div>
     </header>

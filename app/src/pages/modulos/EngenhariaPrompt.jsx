@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom'
 import Tabs from '../../features/modulos/Tabs'
 import SlideNavigator from '../../features/modulos/engenharia-prompt/SlideNavigator'
 import TemplateAgenteAdmin from '../../features/modulos/engenharia-prompt/TemplateAgenteAdmin'
+import TemplateAgenteContraditorio from '../../features/modulos/engenharia-prompt/TemplateAgenteContraditorio'
+import SemaforoHumanosComando from '../../features/modulos/engenharia-prompt/SemaforoHumanosComando'
 
 const TABS = [
   {
@@ -10,9 +12,14 @@ const TABS = [
     render: () => <SlideNavigator />,
   },
   {
-    id: 'template',
+    id: 'template-admin',
     label: 'Template Agente Admin',
     render: () => <TemplateAgenteAdmin />,
+  },
+  {
+    id: 'template-contraditorio',
+    label: 'Template Debatedor Crítico',
+    render: () => <TemplateAgenteContraditorio />,
   },
 ]
 
@@ -42,6 +49,8 @@ export default function EngenhariaPrompt() {
         <div className="mt-10">
           <Tabs tabs={TABS} />
         </div>
+
+        <SemaforoHumanosComando />
       </div>
     </main>
   )
