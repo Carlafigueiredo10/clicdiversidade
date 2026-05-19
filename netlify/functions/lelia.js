@@ -1,5 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk'
 import { PERSONA } from './_persona.js'
+import { MAPA_PLATAFORMA } from './_mapa_plataforma.js'
 
 const MODEL = process.env.LELIA_MODEL || 'claude-sonnet-4-6'
 const MAX_TOKENS = parseInt(process.env.LELIA_MAX_TOKENS || '1024', 10)
@@ -35,17 +36,31 @@ export default async (req) => {
     ? `\n\n## Contexto desta conversa\n\nA pessoa esta na pagina: ${page}`
     : ''
 
+  // Tres blocos system com cache_control independentes:
+  //   1. PERSONA (raramente muda — cache mais durador)
+  //   2. MAPA_PLATAFORMA (atualizado quando paginas mudam — cache separado evita invalidar persona)
+  //   3. contextHint (efemero por requisicao — sem cache)
+  const systemBlocks = [
+    {
+      type: 'text',
+      text: PERSONA,
+      cache_control: { type: 'ephemeral' },
+    },
+    {
+      type: 'text',
+      text: MAPA_PLATAFORMA,
+      cache_control: { type: 'ephemeral' },
+    },
+  ]
+  if (contextHint) {
+    systemBlocks.push({ type: 'text', text: contextHint })
+  }
+
   try {
     const response = await client.messages.create({
       model: MODEL,
       max_tokens: MAX_TOKENS,
-      system: [
-        {
-          type: 'text',
-          text: PERSONA + contextHint,
-          cache_control: { type: 'ephemeral' },
-        },
-      ],
+      system: systemBlocks,
       messages: sanitized,
     })
 

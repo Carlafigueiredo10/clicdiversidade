@@ -20,5 +20,11 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <!-- Widget flutuante da Lelia (vanilla JS). Same-origin: o asset mora na
+         raiz e tanto netlify dev quanto producao servem /assets/* dali. O
+         widget se auto-injeta no body e protege contra dupla inicializacao
+         via window.__leliaInit. Layout React esconde o widget em rotas onde
+         ele atrapalha (ex: /modulos/governanca/agente). -->
+    <script defer src="/assets/lelia-widget.js"></script>
   </body>
 </html>
