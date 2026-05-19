@@ -9,6 +9,7 @@ export default function ModuloCard({
   stats,
   ctaText,
   disponivel = true,
+  external = false,
 }) {
   const inner = (
     <div className="relative z-10">
@@ -78,14 +79,26 @@ export default function ModuloCard({
     return <div className={baseClasses + ' opacity-70'}>{inner}</div>
   }
 
+  const linkClasses =
+    baseClasses +
+    ' hover:border-accent hover:shadow-md focus:outline-none focus:ring-2 focus:ring-accent/40'
+
+  if (external) {
+    return (
+      <a
+        href={to}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={linkClasses}
+      >
+        {curtain}
+        {inner}
+      </a>
+    )
+  }
+
   return (
-    <Link
-      to={to}
-      className={
-        baseClasses +
-        ' hover:border-accent hover:shadow-md focus:outline-none focus:ring-2 focus:ring-accent/40'
-      }
-    >
+    <Link to={to} className={linkClasses}>
       {curtain}
       {inner}
     </Link>

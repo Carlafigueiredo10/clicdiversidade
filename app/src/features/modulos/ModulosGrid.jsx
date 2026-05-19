@@ -12,7 +12,8 @@ const MODULOS = [
       { value: '10', label: 'Categorias' },
     ],
     ctaText: 'Explorar catálogo',
-    to: '/modulos/ferramentas',
+    to: 'https://clicedu.com.br/ferramentas',
+    external: true,
     disponivel: true,
   },
   {
