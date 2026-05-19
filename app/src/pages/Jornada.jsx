@@ -280,12 +280,18 @@ export default function Jornada() {
               )}
             </div>
 
-            <div className="mt-10 flex justify-center">
+            <div className="mt-10 flex flex-wrap justify-center gap-3">
               <a
                 href="#modulos"
                 className="rounded-full bg-ink text-page px-7 py-3 text-sm font-medium hover:opacity-90 transition"
               >
                 Começar pelos módulos ↓
+              </a>
+              <a
+                href="/jornada/certificado.html"
+                className="rounded-full border border-line bg-card text-ink px-7 py-3 text-sm font-medium hover:border-accent/40 transition"
+              >
+                Gerar certificado
               </a>
             </div>
           </div>
