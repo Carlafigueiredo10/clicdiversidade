@@ -281,6 +281,16 @@ export default function Jornada() {
             </div>
 
             <div className="mt-10 flex flex-wrap justify-center gap-3">
+              {form.quer_grupo_whatsapp === true && (
+                <a
+                  href="https://chat.whatsapp.com/CDv95OwuUag4nTpzzLPvyE"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-full bg-emerald-600 text-white px-7 py-3 text-sm font-medium hover:bg-emerald-700 transition"
+                >
+                  Entrar no grupo do WhatsApp ↗
+                </a>
+              )}
               <a
                 href="#modulos"
                 className="rounded-full bg-ink text-page px-7 py-3 text-sm font-medium hover:opacity-90 transition"

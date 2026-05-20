@@ -140,8 +140,9 @@
     <script>
       // Patch no footer da landing legacy: o bundle pre-built renderiza
       // TODOS os links do rodape como href="#". Aqui reescrevemos os que tem
-      // destino existente neste repo (a fonte do bundle nao esta aqui, entao
-      // patch em runtime e o caminho). MutationObserver cobre re-render.
+      // destino existente neste repo, removemos os mortos e injetamos o link
+      // "Base teorica" (que nao existe no bundle). A fonte do bundle nao esta
+      // aqui, entao patch em runtime e o caminho. MutationObserver cobre re-render.
       (function () {
         // { href, external? } por chave normalizada (sem acento, lowercase).
         var FOOTER_MAP = {
@@ -150,6 +151,7 @@
           'certificacao': { href: '/jornada/certificado.html' },
           'contato': { href: 'https://wa.me/5561998755013', external: true },
           'linkedin': { href: 'https://www.linkedin.com/in/carlacristinefigueiredo', external: true },
+          'newsletter': { href: 'https://whatsapp.com/channel/0029Vb6DD2AAu3aXBFT6So0R', external: true },
         };
 
         // Links do footer pra remover (item nao existe).
@@ -181,12 +183,41 @@
           });
         }
 
-        if (document.readyState === 'loading') {
-          document.addEventListener('DOMContentLoaded', function () { rewireFooter(); });
-        } else {
-          rewireFooter();
+        // Injeta o link "Base teorica" no rodape — o bundle legacy nao tem
+        // esse item. Clona o <li> de "Trilhas" pra herdar o estilo da coluna
+        // e aponta pra pagina /jornada/base-teorica do app React.
+        function injectFooterLink(root) {
+          var doc = root || document;
+          if (doc.querySelector('footer a[data-base-teorica]')) return;
+          var anchor = null;
+          doc.querySelectorAll('footer a').forEach(function (el) {
+            if (!anchor && normalize((el.textContent || '').trim()) === 'trilhas') {
+              anchor = el;
+            }
+          });
+          if (!anchor) return;
+          var li = anchor.closest('li');
+          if (!li || !li.parentNode) return;
+          var newLi = li.cloneNode(true);
+          var a = newLi.querySelector('a');
+          if (!a) return;
+          a.textContent = 'Base teórica';
+          a.setAttribute('href', '/jornada/base-teorica');
+          a.setAttribute('data-base-teorica', '1');
+          li.parentNode.appendChild(newLi);
         }
-        new MutationObserver(function () { rewireFooter(); }).observe(
+
+        function run() {
+          rewireFooter();
+          injectFooterLink();
+        }
+
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', run);
+        } else {
+          run();
+        }
+        new MutationObserver(run).observe(
           document.documentElement,
           { childList: true, subtree: true },
         );
