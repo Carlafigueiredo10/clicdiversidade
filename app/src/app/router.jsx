@@ -9,6 +9,7 @@ import Governanca from '../pages/modulos/Governanca'
 import GovernancaAgente from '../pages/modulos/GovernancaAgente'
 import GovernancaAIE from '../pages/modulos/GovernancaAIE'
 import MaterialOficina from '../pages/modulos/MaterialOficina'
+import QuebrandoOMito from '../pages/modulos/QuebrandoOMito'
 import Glossario from '../pages/Glossario'
 import BaseTeorica from '../pages/BaseTeorica'
 import LeliaTest from '../pages/LeliaTest'
@@ -32,6 +33,10 @@ export const router = createBrowserRouter(
         { path: '/modulos/governanca/agente', element: <GovernancaAgente /> },
         { path: '/modulos/governanca/aie', element: <GovernancaAIE /> },
         { path: '/modulos/oficina', element: <MaterialOficina /> },
+        {
+          path: '/modulos/oficina/quebrando-o-mito',
+          element: <QuebrandoOMito />,
+        },
         { path: '/glossario', element: <Glossario /> },
         { path: '/base-teorica', element: <BaseTeorica /> },
         { path: '/lelia-test', element: <LeliaTest /> },

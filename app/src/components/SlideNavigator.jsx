@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 
-const SRC = `${import.meta.env.BASE_URL}apresentacoes/bloco2-engenharia-prompt.html`
-
-export default function SlideNavigator() {
+// Embute um deck HTML standalone (app/public/...) num iframe, com controle de
+// tela cheia (Apresentar / Sair). Usado pelas apresentacoes dos blocos da oficina.
+export default function SlideNavigator({ src, title, slideCount }) {
   const containerRef = useRef(null)
   const iframeRef = useRef(null)
   const [isPresenting, setIsPresenting] = useState(false)
+
+  const fullSrc = `${import.meta.env.BASE_URL}${src}`
 
   async function enterPresentation() {
     if (!containerRef.current) return
@@ -46,8 +48,8 @@ export default function SlideNavigator() {
     >
       <iframe
         ref={iframeRef}
-        src={SRC}
-        title="Bloco 2 — Engenharia de Prompt"
+        src={fullSrc}
+        title={title}
         className={
           isPresenting
             ? 'w-full h-full border-0 block'
@@ -86,7 +88,8 @@ export default function SlideNavigator() {
 
       {!isPresenting && (
         <p className="absolute bottom-3 left-1/2 -translate-x-1/2 text-[10px] tracking-wider uppercase text-white/40 font-mono pointer-events-none">
-          Clique em ▶ Apresentar para tela cheia · 9 slides
+          Clique em ▶ Apresentar para tela cheia
+          {slideCount ? ` · ${slideCount} slides` : ''}
         </p>
       )}
     </div>

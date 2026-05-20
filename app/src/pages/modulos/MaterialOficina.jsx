@@ -31,7 +31,7 @@ function BlocoCard({ bloco }) {
           {bloco.cta}
           {!bloco.placeholder && ' →'}
         </span>
-        {bloco.external && (
+        {bloco.tipo === 'apresentacao' && (
           <span className="text-[10px] uppercase tracking-wider text-muted">
             Apresentação
           </span>

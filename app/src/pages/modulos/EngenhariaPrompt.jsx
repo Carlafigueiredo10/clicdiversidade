@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import Tabs from '../../features/modulos/Tabs'
-import SlideNavigator from '../../features/modulos/engenharia-prompt/SlideNavigator'
+import SlideNavigator from '../../components/SlideNavigator'
 import TemplateAgenteAdmin from '../../features/modulos/engenharia-prompt/TemplateAgenteAdmin'
 import TemplateAgenteContraditorio from '../../features/modulos/engenharia-prompt/TemplateAgenteContraditorio'
 import SemaforoHumanosComando from '../../features/modulos/engenharia-prompt/SemaforoHumanosComando'
@@ -9,7 +9,13 @@ const TABS = [
   {
     id: 'apresentacao',
     label: 'Apresentação',
-    render: () => <SlideNavigator />,
+    render: () => (
+      <SlideNavigator
+        src="apresentacoes/bloco2-engenharia-prompt.html"
+        title="Bloco 2 — Engenharia de Prompt"
+        slideCount={9}
+      />
+    ),
   },
   {
     id: 'template-admin',

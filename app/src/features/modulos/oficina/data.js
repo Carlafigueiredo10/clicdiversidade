@@ -5,13 +5,13 @@
 export const BLOCOS = [
   {
     numero: '01',
-    titulo: 'Introdução · Quebrando o mito',
+    titulo: 'Quebrando o mito',
     descricao:
       'Tecnologia orientada por pessoas. Apresentação cinematográfica de abertura: pensamento estruturado, a lógica invisível por trás do código e a virada de chave.',
     duracao: '~15 min',
     cta: 'Abrir apresentação',
-    href: '/jornada/oficina/bloco1.html',
-    external: true,
+    href: '/modulos/oficina/quebrando-o-mito',
+    external: false,
     tipo: 'apresentacao',
   },
   {
