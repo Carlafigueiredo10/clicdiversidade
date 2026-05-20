@@ -197,6 +197,11 @@ export const EIXOS = [
           'Política de Governança de IA no MGI: o arcabouço normativo que o agente executa. Uso de IA generativa restrito a informação pública como regra, supervisão humana proporcional ao risco, identificação de conteúdo apoiado por IA, notificação de incidentes ao SCIA.',
       },
       {
+        titulo: 'Portaria MDHC nº 1.522, de 1º de setembro de 2025',
+        descricao:
+          'Estabelece diretrizes para o uso ético, seguro e transparente de soluções de inteligência artificial no âmbito do Ministério dos Direitos Humanos e da Cidadania. Ancora a leitura de que governança de IA e proteção de direitos humanos são inseparáveis: o uso de IA no Estado precisa ser auditável, supervisionado por pessoas e orientado pela não discriminação. É a norma setorial que aproxima o marco regulatório do eixo de diversidade do projeto.',
+      },
+      {
         titulo: 'Framework AIE (Autoavaliação de Impacto Ético) — MGI',
         descricao:
           'Define o conceito de Risco Excessivo: usos vedados por contrariarem direitos fundamentais. Base das Red Lines do agente.',
