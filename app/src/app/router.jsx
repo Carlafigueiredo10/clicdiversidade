@@ -12,6 +12,8 @@ import MaterialOficina from '../pages/modulos/MaterialOficina'
 import QuebrandoOMito from '../pages/modulos/QuebrandoOMito'
 import Glossario from '../pages/Glossario'
 import BaseTeorica from '../pages/BaseTeorica'
+import Equipe from '../pages/Equipe'
+import Manifesto from '../pages/Manifesto'
 import LeliaTest from '../pages/LeliaTest'
 import Admin from '../pages/Admin'
 import Login from '../pages/Login'
@@ -39,6 +41,8 @@ export const router = createBrowserRouter(
         },
         { path: '/glossario', element: <Glossario /> },
         { path: '/base-teorica', element: <BaseTeorica /> },
+        { path: '/equipe', element: <Equipe /> },
+        { path: '/manifesto', element: <Manifesto /> },
         { path: '/lelia-test', element: <LeliaTest /> },
         { path: '/admin', element: <Admin /> },
         { path: '/login', element: <Login /> },

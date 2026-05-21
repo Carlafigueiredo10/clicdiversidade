@@ -21,10 +21,13 @@ const COLUMNS = [
   {
     title: 'Institucional',
     items: [
-      { label: 'Manifesto', soon: true },
-      { label: 'Equipe', soon: true },
-      { label: 'Parcerias', soon: true },
-      { label: 'Contato', soon: true },
+      { label: 'Manifesto', to: '/manifesto' },
+      { label: 'Equipe', to: '/equipe' },
+      {
+        label: 'Parcerias',
+        mailto: 'carlacristinesoares@gmail.com',
+        subject: 'Parceria — CLIC Diversidade',
+      },
     ],
   },
 ]
@@ -46,6 +49,16 @@ function Item({ item }) {
         href={item.external}
         className="text-sm text-ink-soft hover:text-ink transition"
       >
+        {item.label}
+      </a>
+    )
+  }
+  if (item.mailto) {
+    const href = item.subject
+      ? `mailto:${item.mailto}?subject=${encodeURIComponent(item.subject)}`
+      : `mailto:${item.mailto}`
+    return (
+      <a href={href} className="text-sm text-ink-soft hover:text-ink transition">
         {item.label}
       </a>
     )
