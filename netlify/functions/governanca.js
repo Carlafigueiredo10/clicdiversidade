@@ -3,7 +3,10 @@ import { PERSONA_GOVERNANCA } from './_persona_governanca.js'
 
 const MODEL = process.env.GOVERNANCA_MODEL || 'claude-opus-4-7'
 const MAX_TOKENS = parseInt(process.env.GOVERNANCA_MAX_TOKENS || '16000', 10)
-const THINKING_BUDGET = parseInt(process.env.GOVERNANCA_THINKING_BUDGET || '8000', 10)
+// Opus 4.7 usa thinking adaptativo: o modelo decide a profundidade do
+// raciocinio. 'effort' controla o teto de esforco/tokens; 'high' e o minimo
+// recomendado para trabalho sensivel a inteligencia (analise de risco).
+const EFFORT = process.env.GOVERNANCA_EFFORT || 'high'
 
 const AMBIENTES_VALIDOS = new Set(['aberta', 'api', 'contratada', 'propria'])
 
@@ -63,7 +66,8 @@ export default async (req) => {
     const response = await client.messages.create({
       model: MODEL,
       max_tokens: MAX_TOKENS,
-      thinking: { type: 'enabled', budget_tokens: THINKING_BUDGET },
+      thinking: { type: 'adaptive' },
+      output_config: { effort: EFFORT },
       system: systemBlocks,
       messages: sanitized,
     })
