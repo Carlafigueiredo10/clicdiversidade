@@ -138,5 +138,28 @@ service cloud.firestore {
       allow update: if validDiagStatsIncrement(request.resource.data, resource.data);
       allow delete: if false;
     }
+
+    // Sugestoes de melhoria. Anonimo: qualquer pessoa pode enviar.
+    // Leitura restrita ao admin (mesma funcao isAdmin acima).
+    function validCategoria(c) {
+      return c in ['conteudo', 'erro', 'ideia', 'outro'];
+    }
+
+    function validNewSugestao(data) {
+      return data.keys().hasAll(['mensagem', 'categoria', 'criado_em'])
+          && data.keys().hasOnly(['mensagem', 'categoria', 'contato', 'criado_em'])
+          && data.mensagem is string
+          && data.mensagem.size() > 0 && data.mensagem.size() <= 2000
+          && validCategoria(data.categoria)
+          && (!('contato' in data) || data.contato == null
+              || (data.contato is string && data.contato.size() <= 200))
+          && data.criado_em == request.time;
+    }
+
+    match /sugestoes/{id} {
+      allow create: if validNewSugestao(request.resource.data);
+      allow read: if isAdmin();
+      allow update, delete: if false;
+    }
   }
 }

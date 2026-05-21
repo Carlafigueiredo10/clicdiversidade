@@ -5,6 +5,7 @@ import LevelCard from '../components/LevelCard'
 import PillToggle from '../components/PillToggle'
 import ChartLevelLine from '../components/ChartLevelLine'
 import ModulosGrid from '../features/modulos/ModulosGrid'
+import SugestaoForm from '../features/sugestoes/SugestaoForm'
 import {
   submeterParticipante,
   onDistribuicao,
@@ -327,6 +328,22 @@ export default function Jornada() {
 
         <div className="mt-14">
           <ModulosGrid />
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-3xl mt-28 pt-16 border-t border-line">
+        <p className="text-xs tracking-[0.25em] uppercase text-accent-fg font-semibold text-center">
+          Constrói com a gente
+        </p>
+        <h2 className="mt-6 font-display font-semibold text-3xl md:text-5xl text-ink text-center leading-[1.05]">
+          Sugira uma melhoria
+        </h2>
+        <p className="mt-6 max-w-xl mx-auto text-center text-ink-soft text-base md:text-lg leading-relaxed">
+          Achou algo confuso, sentiu falta de um conteúdo ou teve uma ideia? Conta
+          pra gente — o CLIC é construído ouvindo quem usa.
+        </p>
+        <div className="mt-10">
+          <SugestaoForm />
         </div>
       </section>
     </main>

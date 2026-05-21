@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import { isAdmin, signOutUser, useAuthUser } from '../services/auth'
 import { getAllVisitas } from '../services/visits'
+import { getSugestoes } from '../services/sugestoes'
 
 const SECOES = {
   home: { label: 'Landing', path: '/' },
@@ -9,12 +10,31 @@ const SECOES = {
   lelia: { label: 'Lélia', path: '/lelia' },
 }
 
+const CATEGORIA_LABEL = {
+  conteudo: 'Conteúdo / trilhas',
+  erro: 'Algo com erro',
+  ideia: 'Ideia nova',
+  outro: 'Outro',
+}
+
 function formatDate(ts) {
   if (!ts || typeof ts.toDate !== 'function') return '—'
   return ts.toDate().toLocaleString('pt-BR')
 }
 
-function Metricas({ user, onSair }) {
+function Carregando() {
+  return <p className="text-ink-soft text-sm">Carregando…</p>
+}
+
+function Erro({ children }) {
+  return (
+    <p className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg py-3 px-4">
+      {children}
+    </p>
+  )
+}
+
+function Metricas() {
   const [visitas, setVisitas] = useState(null)
   const [erro, setErro] = useState(null)
 
@@ -33,6 +53,121 @@ function Metricas({ user, onSair }) {
     .sort((a, b) => (b.total ?? 0) - (a.total ?? 0))
   const total = (visitas || []).reduce((acc, v) => acc + (v.total ?? 0), 0)
 
+  if (erro) return <Erro>{erro}</Erro>
+  if (!visitas) return <Carregando />
+
+  return (
+    <div className="space-y-8">
+      <div className="bg-card rounded-2xl border border-line p-6">
+        <p className="text-xs tracking-[0.2em] uppercase text-ink-soft">
+          Total acumulado
+        </p>
+        <p className="mt-2 font-display text-5xl text-ink">{total}</p>
+      </div>
+
+      <div className="bg-card rounded-2xl border border-line overflow-hidden">
+        <table className="w-full text-sm">
+          <thead className="bg-page/50">
+            <tr className="text-left text-ink-soft">
+              <th className="py-3 px-5 font-medium">Seção</th>
+              <th className="py-3 px-5 font-medium text-right">Visitas</th>
+              <th className="py-3 px-5 font-medium">Atualizado</th>
+            </tr>
+          </thead>
+          <tbody>
+            {ordenado.length === 0 && (
+              <tr>
+                <td colSpan={3} className="py-6 px-5 text-center text-ink-soft">
+                  Nenhuma visita registrada ainda.
+                </td>
+              </tr>
+            )}
+            {ordenado.map((v) => {
+              const meta = SECOES[v.id] || { label: v.id, path: '/' + v.id }
+              return (
+                <tr key={v.id} className="border-t border-line">
+                  <td className="py-3 px-5">
+                    <span className="text-ink">{meta.label}</span>
+                    <span className="ml-2 text-ink-soft text-xs">
+                      {meta.path}
+                    </span>
+                  </td>
+                  <td className="py-3 px-5 text-right font-mono text-ink">
+                    {v.total ?? 0}
+                  </td>
+                  <td className="py-3 px-5 text-ink-soft">
+                    {formatDate(v.updated_at)}
+                  </td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  )
+}
+
+function Sugestoes() {
+  const [itens, setItens] = useState(null)
+  const [erro, setErro] = useState(null)
+
+  useEffect(() => {
+    let alive = true
+    getSugestoes()
+      .then((s) => alive && setItens(s))
+      .catch((e) => alive && setErro(e.message || 'Erro ao ler sugestões'))
+    return () => {
+      alive = false
+    }
+  }, [])
+
+  if (erro) return <Erro>{erro}</Erro>
+  if (!itens) return <Carregando />
+  if (itens.length === 0) {
+    return (
+      <p className="text-ink-soft text-sm">Nenhuma sugestão recebida ainda.</p>
+    )
+  }
+
+  return (
+    <div className="space-y-4">
+      <p className="text-sm text-ink-soft">
+        {itens.length} {itens.length === 1 ? 'sugestão' : 'sugestões'}
+      </p>
+      {itens.map((s) => (
+        <article
+          key={s.id}
+          className="bg-card border border-line rounded-xl p-5"
+        >
+          <div className="flex items-center justify-between gap-3 mb-2">
+            <span className="text-[10px] uppercase tracking-wider bg-page border border-line text-ink-soft rounded px-2 py-0.5">
+              {CATEGORIA_LABEL[s.categoria] || s.categoria}
+            </span>
+            <span className="text-xs text-muted">{formatDate(s.criado_em)}</span>
+          </div>
+          <p className="text-sm text-ink leading-relaxed whitespace-pre-wrap">
+            {s.mensagem}
+          </p>
+          {s.contato && (
+            <p className="mt-3 pt-3 border-t border-line text-xs text-ink-soft">
+              Contato: <span className="font-mono">{s.contato}</span>
+            </p>
+          )}
+        </article>
+      ))}
+    </div>
+  )
+}
+
+const ABAS = [
+  { id: 'metricas', label: 'Métricas' },
+  { id: 'sugestoes', label: 'Sugestões' },
+]
+
+function Painel({ user, onSair }) {
+  const [aba, setAba] = useState('metricas')
+
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
@@ -41,7 +176,7 @@ function Metricas({ user, onSair }) {
             Admin · {user.email}
           </p>
           <h1 className="mt-2 font-display font-semibold text-3xl text-ink">
-            Métricas de visitas
+            Painel
           </h1>
         </div>
         <button
@@ -52,72 +187,23 @@ function Metricas({ user, onSair }) {
         </button>
       </div>
 
-      {erro && (
-        <p className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg py-3 px-4">
-          {erro}
-        </p>
-      )}
+      <div className="flex gap-1 border-b border-line">
+        {ABAS.map((t) => (
+          <button
+            key={t.id}
+            onClick={() => setAba(t.id)}
+            className={
+              aba === t.id
+                ? 'px-4 py-2 text-sm font-medium text-ink border-b-2 border-ink -mb-px'
+                : 'px-4 py-2 text-sm text-ink-soft hover:text-ink transition'
+            }
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
 
-      {!visitas && !erro && (
-        <p className="text-ink-soft text-sm">Carregando…</p>
-      )}
-
-      {visitas && (
-        <>
-          <div className="bg-card rounded-2xl border border-line p-6">
-            <p className="text-xs tracking-[0.2em] uppercase text-ink-soft">
-              Total acumulado
-            </p>
-            <p className="mt-2 font-display text-5xl text-ink">{total}</p>
-          </div>
-
-          <div className="bg-card rounded-2xl border border-line overflow-hidden">
-            <table className="w-full text-sm">
-              <thead className="bg-page/50">
-                <tr className="text-left text-ink-soft">
-                  <th className="py-3 px-5 font-medium">Seção</th>
-                  <th className="py-3 px-5 font-medium text-right">Visitas</th>
-                  <th className="py-3 px-5 font-medium">Atualizado</th>
-                </tr>
-              </thead>
-              <tbody>
-                {ordenado.length === 0 && (
-                  <tr>
-                    <td
-                      colSpan={3}
-                      className="py-6 px-5 text-center text-ink-soft"
-                    >
-                      Nenhuma visita registrada ainda.
-                    </td>
-                  </tr>
-                )}
-                {ordenado.map((v) => {
-                  const meta = SECOES[v.id] || {
-                    label: v.id,
-                    path: '/' + v.id,
-                  }
-                  return (
-                    <tr key={v.id} className="border-t border-line">
-                      <td className="py-3 px-5">
-                        <span className="text-ink">{meta.label}</span>
-                        <span className="ml-2 text-ink-soft text-xs">
-                          {meta.path}
-                        </span>
-                      </td>
-                      <td className="py-3 px-5 text-right font-mono text-ink">
-                        {v.total ?? 0}
-                      </td>
-                      <td className="py-3 px-5 text-ink-soft">
-                        {formatDate(v.updated_at)}
-                      </td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
-          </div>
-        </>
-      )}
+      {aba === 'metricas' ? <Metricas /> : <Sugestoes />}
     </div>
   )
 }
@@ -164,7 +250,7 @@ export default function Admin() {
     <main className="px-5 py-16 md:py-24">
       <div className="mx-auto max-w-3xl">
         {isAdmin(user) ? (
-          <Metricas user={user} onSair={signOutUser} />
+          <Painel user={user} onSair={signOutUser} />
         ) : (
           <AcessoNegado user={user} onSair={signOutUser} />
         )}
