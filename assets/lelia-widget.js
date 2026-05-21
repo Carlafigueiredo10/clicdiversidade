@@ -210,9 +210,8 @@
       var open = panel.classList.toggle('__lelia-panel--open')
       fab.style.display = open ? 'none' : 'inline-flex'
       if (open) {
-        if (history.length === 0) {
-          renderMessage('system', 'Oi. Sou a Lélia. Como posso te ajudar?')
-        }
+        // O cumprimento ja foi renderizado por render() no init — nao
+        // re-renderizar aqui (causava balao duplicado a cada abertura).
         setTimeout(function () {
           input.focus()
         }, 50)
