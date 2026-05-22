@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import FormField from '../components/FormField'
 import HeadlineCinematic from '../components/HeadlineCinematic'
 import LevelCard from '../components/LevelCard'
@@ -328,6 +329,49 @@ export default function Jornada() {
 
         <div className="mt-14">
           <ModulosGrid />
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-3xl mt-28 pt-16 border-t border-line">
+        <p className="text-xs tracking-[0.25em] uppercase text-accent-fg font-semibold text-center">
+          Oficina Humanos no Comando
+        </p>
+        <h2 className="mt-6 font-display font-semibold text-3xl md:text-5xl text-ink text-center leading-[1.05]">
+          Como foi a oficina?
+        </h2>
+        <p className="mt-6 max-w-xl mx-auto text-center text-ink-soft text-base md:text-lg leading-relaxed">
+          Participou da oficina Humanos no Comando? Sua avaliação leva um minuto
+          e ajuda a desenhar as próximas turmas.
+        </p>
+        <div className="mt-10 flex justify-center">
+          <Link
+            to="/avaliacao"
+            className="rounded-full bg-ink text-page px-7 py-3 text-sm font-medium hover:opacity-90 transition"
+          >
+            Avaliar a oficina →
+          </Link>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-3xl mt-28 pt-16 border-t border-line">
+        <p className="text-xs tracking-[0.25em] uppercase text-accent-fg font-semibold text-center">
+          A visão do programa
+        </p>
+        <h2 className="mt-6 font-display font-semibold text-3xl md:text-5xl text-ink text-center leading-[1.05]">
+          Desde a origem.
+        </h2>
+        <p className="mt-6 max-w-xl mx-auto text-center text-ink-soft text-base md:text-lg leading-relaxed">
+          Antes dos módulos, a visão que sustenta o CLIC_diversidade: por que IA
+          pública só se faz com diversidade, inclusão e responsabilidade — e por
+          que isso começa na origem, não no ajuste.
+        </p>
+        <div className="mt-10 flex justify-center">
+          <Link
+            to="/visao"
+            className="rounded-full bg-ink text-page px-7 py-3 text-sm font-medium hover:opacity-90 transition"
+          >
+            Abrir apresentação →
+          </Link>
         </div>
       </section>
 

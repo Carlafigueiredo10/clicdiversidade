@@ -14,6 +14,8 @@ import Glossario from '../pages/Glossario'
 import BaseTeorica from '../pages/BaseTeorica'
 import Equipe from '../pages/Equipe'
 import Manifesto from '../pages/Manifesto'
+import Visao from '../pages/Visao'
+import Avaliacao from '../pages/Avaliacao'
 import LeliaTest from '../pages/LeliaTest'
 import Admin from '../pages/Admin'
 import Login from '../pages/Login'
@@ -43,6 +45,8 @@ export const router = createBrowserRouter(
         { path: '/base-teorica', element: <BaseTeorica /> },
         { path: '/equipe', element: <Equipe /> },
         { path: '/manifesto', element: <Manifesto /> },
+        { path: '/visao', element: <Visao /> },
+        { path: '/avaliacao', element: <Avaliacao /> },
         { path: '/lelia-test', element: <LeliaTest /> },
         { path: '/admin', element: <Admin /> },
         { path: '/login', element: <Login /> },

@@ -3,6 +3,7 @@ import { Navigate } from 'react-router-dom'
 import { isAdmin, signOutUser, useAuthUser } from '../services/auth'
 import { getAllVisitas } from '../services/visits'
 import { getSugestoes } from '../services/sugestoes'
+import { getAvaliacoes } from '../services/avaliacoes'
 
 const SECOES = {
   home: { label: 'Landing', path: '/' },
@@ -160,9 +161,144 @@ function Sugestoes() {
   )
 }
 
+function mediaDe(itens, campo) {
+  const vals = itens.map((i) => i[campo]).filter((v) => typeof v === 'number')
+  if (vals.length === 0) return null
+  return (vals.reduce((a, b) => a + b, 0) / vals.length).toFixed(1)
+}
+
+function Avaliacoes() {
+  const [itens, setItens] = useState(null)
+  const [erro, setErro] = useState(null)
+
+  useEffect(() => {
+    let alive = true
+    getAvaliacoes()
+      .then((a) => alive && setItens(a))
+      .catch((e) => alive && setErro(e.message || 'Erro ao ler avaliações'))
+    return () => {
+      alive = false
+    }
+  }, [])
+
+  if (erro) return <Erro>{erro}</Erro>
+  if (!itens) return <Carregando />
+  if (itens.length === 0) {
+    return (
+      <p className="text-ink-soft text-sm">Nenhuma avaliação recebida ainda.</p>
+    )
+  }
+
+  const mediaGeral = mediaDe(itens, 'nota_geral')
+  const mediaConteudo = mediaDe(itens, 'nota_conteudo')
+  const recomendam = itens.filter((i) => i.recomenda === true).length
+  const opinaramRecomenda = itens.filter(
+    (i) => typeof i.recomenda === 'boolean',
+  ).length
+
+  return (
+    <div className="space-y-6">
+      <div className="grid gap-4 sm:grid-cols-3">
+        <div className="bg-card rounded-2xl border border-line p-5">
+          <p className="text-xs tracking-[0.2em] uppercase text-ink-soft">
+            Nota geral · média
+          </p>
+          <p className="mt-2 font-display text-4xl text-ink">
+            {mediaGeral ?? '—'}
+            <span className="text-lg text-muted">/5</span>
+          </p>
+        </div>
+        <div className="bg-card rounded-2xl border border-line p-5">
+          <p className="text-xs tracking-[0.2em] uppercase text-ink-soft">
+            Conteúdo · média
+          </p>
+          <p className="mt-2 font-display text-4xl text-ink">
+            {mediaConteudo ?? '—'}
+            <span className="text-lg text-muted">/5</span>
+          </p>
+        </div>
+        <div className="bg-card rounded-2xl border border-line p-5">
+          <p className="text-xs tracking-[0.2em] uppercase text-ink-soft">
+            Recomendam
+          </p>
+          <p className="mt-2 font-display text-4xl text-ink">
+            {recomendam}
+            <span className="text-lg text-muted">/{opinaramRecomenda}</span>
+          </p>
+        </div>
+      </div>
+
+      <p className="text-sm text-ink-soft">
+        {itens.length} {itens.length === 1 ? 'avaliação' : 'avaliações'}
+      </p>
+
+      {itens.map((a) => (
+        <article
+          key={a.id}
+          className="bg-card border border-line rounded-xl p-5"
+        >
+          <div className="flex items-center justify-between gap-3 mb-3">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-sm font-semibold text-ink">
+                Geral {a.nota_geral}/5
+              </span>
+              {typeof a.nota_conteudo === 'number' && (
+                <span className="text-xs text-ink-soft">
+                  · Conteúdo {a.nota_conteudo}/5
+                </span>
+              )}
+              {typeof a.recomenda === 'boolean' && (
+                <span
+                  className={
+                    'text-[10px] uppercase tracking-wider rounded px-2 py-0.5 border ' +
+                    (a.recomenda
+                      ? 'border-success text-success-fg bg-success/10'
+                      : 'border-line text-ink-soft bg-page')
+                  }
+                >
+                  {a.recomenda ? 'Recomenda' : 'Não recomenda'}
+                </span>
+              )}
+            </div>
+            <span className="text-xs text-muted">{formatDate(a.criado_em)}</span>
+          </div>
+
+          <div className="space-y-2 text-sm text-ink leading-relaxed">
+            {a.funcionou && (
+              <p className="whitespace-pre-wrap">
+                <span className="text-ink-soft">Funcionou: </span>
+                {a.funcionou}
+              </p>
+            )}
+            {a.melhorar && (
+              <p className="whitespace-pre-wrap">
+                <span className="text-ink-soft">Melhorar: </span>
+                {a.melhorar}
+              </p>
+            )}
+            {a.assunto_proximo && (
+              <p className="whitespace-pre-wrap">
+                <span className="text-ink-soft">Próxima oficina: </span>
+                {a.assunto_proximo}
+              </p>
+            )}
+          </div>
+
+          {(a.nome || a.orgao) && (
+            <p className="mt-3 pt-3 border-t border-line text-xs text-ink-soft">
+              {[a.nome, a.orgao].filter(Boolean).join(' · ')}
+            </p>
+          )}
+        </article>
+      ))}
+    </div>
+  )
+}
+
 const ABAS = [
   { id: 'metricas', label: 'Métricas' },
   { id: 'sugestoes', label: 'Sugestões' },
+  { id: 'avaliacoes', label: 'Avaliações' },
 ]
 
 function Painel({ user, onSair }) {
@@ -203,7 +339,9 @@ function Painel({ user, onSair }) {
         ))}
       </div>
 
-      {aba === 'metricas' ? <Metricas /> : <Sugestoes />}
+      {aba === 'metricas' && <Metricas />}
+      {aba === 'sugestoes' && <Sugestoes />}
+      {aba === 'avaliacoes' && <Avaliacoes />}
     </div>
   )
 }

@@ -161,5 +161,32 @@ service cloud.firestore {
       allow read: if isAdmin();
       allow update, delete: if false;
     }
+
+    // Avaliacoes da oficina "Humanos no Comando". Anonimo: qualquer pessoa
+    // pode enviar. Leitura restrita ao admin (mesma funcao isAdmin acima).
+    function validNota5(n) {
+      return n is int && n >= 1 && n <= 5;
+    }
+
+    function validNewAvaliacao(data) {
+      return data.keys().hasAll(['nota_geral', 'criado_em'])
+          && data.keys().hasOnly(['nota_geral', 'nota_conteudo', 'funcionou',
+              'melhorar', 'recomenda', 'assunto_proximo', 'nome', 'orgao', 'criado_em'])
+          && validNota5(data.nota_geral)
+          && (!('nota_conteudo' in data) || validNota5(data.nota_conteudo))
+          && (!('recomenda' in data) || data.recomenda is bool)
+          && (!('funcionou' in data) || (data.funcionou is string && data.funcionou.size() <= 2000))
+          && (!('melhorar' in data) || (data.melhorar is string && data.melhorar.size() <= 2000))
+          && (!('assunto_proximo' in data) || (data.assunto_proximo is string && data.assunto_proximo.size() <= 2000))
+          && (!('nome' in data) || (data.nome is string && data.nome.size() <= 200))
+          && (!('orgao' in data) || (data.orgao is string && data.orgao.size() <= 200))
+          && data.criado_em == request.time;
+    }
+
+    match /avaliacoes/{id} {
+      allow create: if validNewAvaliacao(request.resource.data);
+      allow read: if isAdmin();
+      allow update, delete: if false;
+    }
   }
 }
