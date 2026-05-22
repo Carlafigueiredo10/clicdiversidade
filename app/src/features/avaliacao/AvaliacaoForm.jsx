@@ -19,10 +19,10 @@ function Nota({ value, onChange, ariaLabel }) {
           onClick={() => onChange(n)}
           aria-pressed={value === n}
           className={
-            'w-11 h-11 rounded-xl border text-sm font-medium transition ' +
+            'w-11 h-11 rounded-xl border text-sm font-semibold transition ' +
             (value === n
-              ? 'border-accent bg-accent/10 text-accent-fg'
-              : 'border-line text-ink-soft hover:bg-page hover:text-ink')
+              ? 'border-ink bg-ink text-page shadow-sm'
+              : 'border-line text-ink-soft hover:border-ink/40 hover:text-ink')
           }
         >
           {n}
