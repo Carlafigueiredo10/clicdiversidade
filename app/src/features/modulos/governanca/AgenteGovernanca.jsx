@@ -205,16 +205,49 @@ export default function AgenteGovernanca() {
 
 function EmptyState() {
   return (
-    <div className="py-6 md:py-10 text-center">
+    <div className="flex gap-3">
       <img
         src="/jornada/lelia.png"
         alt="Lélia"
-        className="mx-auto w-16 h-16 rounded-full border border-line bg-page object-cover opacity-90"
+        className="shrink-0 w-9 h-9 rounded-full border border-line bg-card object-cover"
       />
-      <p className="mt-4 text-ink-soft text-sm md:text-base leading-relaxed max-w-md mx-auto">
-        Descreva o caso para a Lélia analisar, ou escolha um caso de teste no
-        painel acima.
-      </p>
+      <div className="flex-1 min-w-0 space-y-4 text-sm md:text-[0.95rem] text-ink leading-relaxed">
+        <p className="font-display text-base font-semibold">Oi, sou a Lélia.</p>
+        <p>
+          Sou uma agente de apoio para servidores públicos que precisam decidir
+          se (e como) podem usar IA numa tarefa concreta. Traduzo risco em
+          caminho viável e gero um extrato que você anexa ao processo.
+        </p>
+        <p>Para te ajudar de verdade, me conta:</p>
+        <ol className="list-decimal pl-5 space-y-2">
+          <li>
+            <strong className="font-semibold">
+              O que você quer fazer com IA?
+            </strong>{' '}
+            <span className="text-ink-soft">
+              (ex.: resumir uma ata, classificar processos, redigir resposta a
+              cidadão, analisar dados para uma decisão)
+            </span>
+          </li>
+          <li>
+            <strong className="font-semibold">
+              Que tipo de informação está em jogo?
+            </strong>{' '}
+            <span className="text-ink-soft">
+              (pública, processo interno comum, dados de pessoas, algo sigiloso)
+            </span>
+          </li>
+        </ol>
+        <p className="text-ink-soft">
+          Se você já escolheu o ambiente tecnológico no painel acima (aberta, por
+          API, contratada ou própria), não precisa repetir. Manda o caso real e
+          eu devolvo análise + rastro decisório.
+        </p>
+        <p className="text-xs text-muted">
+          Sem um caso em mente? Use os <strong className="font-medium">Casos de
+          teste</strong> no painel acima.
+        </p>
+      </div>
     </div>
   )
 }
