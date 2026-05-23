@@ -156,12 +156,14 @@ export default function Governanca() {
           </p>
 
           <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-            <Link
-              to="/modulos/governanca/agente"
+            <a
+              href="https://avaliadados.streamlit.app"
+              target="_blank"
+              rel="noopener noreferrer"
               className="rounded-full bg-ink text-page px-6 py-3 text-sm font-medium hover:opacity-90 transition"
             >
-              Iniciar análise com a Lélia →
-            </Link>
+              Iniciar análise com a Lélia ↗
+            </a>
             <Link
               to="/modulos/governanca/aie"
               className="rounded-full border border-line bg-card text-ink px-6 py-3 text-sm font-medium hover:border-accent/40 transition"
@@ -346,12 +348,14 @@ export default function Governanca() {
             rastreabilidade.
           </p>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-            <Link
-              to="/modulos/governanca/agente"
+            <a
+              href="https://avaliadados.streamlit.app"
+              target="_blank"
+              rel="noopener noreferrer"
               className="rounded-full bg-page text-ink px-6 py-3 text-sm font-medium hover:opacity-90 transition"
             >
-              Iniciar análise →
-            </Link>
+              Iniciar análise ↗
+            </a>
             <Link
               to="/modulos/governanca/aie"
               className="rounded-full border border-page/30 text-page px-6 py-3 text-sm font-medium hover:bg-page/10 transition"
