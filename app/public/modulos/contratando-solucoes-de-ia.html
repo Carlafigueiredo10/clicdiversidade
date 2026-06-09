@@ -1,0 +1,552 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>contratando soluções de IA — CLIC_diversidade</title>
+<meta name="description" content="As perguntas que o gestor público precisa fazer antes de assinar um contrato de IA. Cinco eixos, visão crítica, método CLIC." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" />
+<style>
+  :root {
+    --navy-0: #070b1a;
+    --navy-1: #0c1126;
+    --navy-2: #141a36;
+    --line: rgba(184, 168, 240, 0.14);
+    --line-soft: rgba(184, 168, 240, 0.08);
+    --text: #e9e7f4;
+    --text-2: #a7a3c4;
+    --lavanda: #b8a8f0;
+    --ciano: #6fd9e8;
+    --ouro: #e8c46a;
+    --ouro-dim: rgba(232, 196, 106, 0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--navy-0);
+    color: var(--text);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 28px; }
+
+  /* ---------- hero ---------- */
+  .hero {
+    position: relative;
+    min-height: 92vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .orbitas {
+    position: absolute;
+    top: 50%;
+    right: -22vmin;
+    transform: translateY(-50%);
+    width: 92vmin;
+    height: 92vmin;
+    pointer-events: none;
+    opacity: 0.9;
+  }
+  .orbitas circle { fill: none; stroke-width: 1; }
+  .orb-anim { animation: girar 90s linear infinite; transform-origin: 50% 50%; }
+  @keyframes girar { to { transform: rotate(360deg); } }
+
+  .hero-inner { position: relative; z-index: 1; padding: 96px 0; }
+
+  .eyebrow {
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--lavanda);
+    font-weight: 500;
+    margin-bottom: 28px;
+  }
+  .eyebrow .dot { color: var(--ciano); }
+
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: clamp(38px, 6.4vw, 68px);
+    line-height: 1.06;
+    letter-spacing: -0.015em;
+    max-width: 13ch;
+  }
+  h1 em {
+    font-style: italic;
+    color: var(--lavanda);
+  }
+
+  .hero-sub {
+    margin-top: 26px;
+    font-size: clamp(16px, 2vw, 19px);
+    color: var(--text-2);
+    max-width: 46ch;
+  }
+
+  .hero-meta {
+    margin-top: 48px;
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    font-size: 13px;
+    color: var(--text-2);
+  }
+  .hero-meta .tag {
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 6px 16px;
+    color: var(--lavanda);
+  }
+
+  /* ---------- intro ---------- */
+  .intro {
+    border-top: 1px solid var(--line-soft);
+    padding: 88px 0 72px;
+  }
+  .intro p {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: clamp(20px, 2.8vw, 27px);
+    line-height: 1.45;
+    max-width: 30ch;
+    color: var(--text);
+  }
+  .intro p strong { font-weight: 600; color: var(--ciano); }
+  .intro .nota {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    color: var(--text-2);
+    margin-top: 26px;
+    max-width: 52ch;
+    line-height: 1.7;
+  }
+
+  /* ---------- eixos ---------- */
+  .eixo {
+    border-top: 1px solid var(--line-soft);
+    padding: 84px 0 76px;
+  }
+
+  .eixo-head {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 28px;
+    align-items: start;
+    margin-bottom: 40px;
+  }
+
+  .eixo-num {
+    position: relative;
+    width: 84px;
+    height: 84px;
+    flex: none;
+  }
+  .eixo-num svg { position: absolute; inset: 0; }
+  .eixo-num span {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--lavanda);
+  }
+
+  .eixo-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: clamp(26px, 3.6vw, 38px);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    max-width: 22ch;
+  }
+  .eixo-context {
+    margin-top: 14px;
+    font-size: 15.5px;
+    color: var(--text-2);
+    max-width: 52ch;
+  }
+
+  .perguntas { list-style: none; }
+  .perguntas li {
+    display: grid;
+    grid-template-columns: 26px 1fr;
+    gap: 18px;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--line-soft);
+    font-size: 16.5px;
+    line-height: 1.6;
+    max-width: 72ch;
+  }
+  .perguntas li:last-child { border-bottom: 0; }
+  .perguntas .marca {
+    color: var(--ciano);
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    line-height: 1.45;
+  }
+
+  /* ---------- a pergunta que ninguém faz ---------- */
+  .ninguem-faz {
+    margin-top: 40px;
+    position: relative;
+    border: 1px solid rgba(232, 196, 106, 0.35);
+    background: linear-gradient(135deg, var(--ouro-dim), rgba(232, 196, 106, 0.04));
+    border-radius: 18px;
+    padding: 36px 38px 34px;
+    overflow: hidden;
+  }
+  .ninguem-faz::before {
+    content: "";
+    position: absolute;
+    top: -70px;
+    right: -70px;
+    width: 200px;
+    height: 200px;
+    border: 1px solid rgba(232, 196, 106, 0.18);
+    border-radius: 50%;
+  }
+  .ninguem-faz::after {
+    content: "";
+    position: absolute;
+    top: -40px;
+    right: -40px;
+    width: 140px;
+    height: 140px;
+    border: 1px solid rgba(232, 196, 106, 0.28);
+    border-radius: 50%;
+  }
+  .nf-label {
+    font-size: 11.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ouro);
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+  .nf-pergunta {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-style: italic;
+    font-size: clamp(20px, 2.6vw, 26px);
+    line-height: 1.35;
+    color: var(--text);
+    max-width: 34ch;
+  }
+  .nf-nota {
+    margin-top: 16px;
+    font-size: 14.5px;
+    color: var(--text-2);
+    max-width: 56ch;
+    line-height: 1.65;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ---------- ponte / fechamento ---------- */
+  .ponte {
+    border-top: 1px solid var(--line-soft);
+    padding: 96px 0 110px;
+    position: relative;
+    overflow: hidden;
+  }
+  .ponte .orbitas-fim {
+    position: absolute;
+    bottom: -38vmin;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80vmin;
+    height: 80vmin;
+    opacity: 0.55;
+    pointer-events: none;
+  }
+  .ponte p {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(20px, 2.8vw, 27px);
+    line-height: 1.45;
+    max-width: 32ch;
+    position: relative;
+    z-index: 1;
+  }
+  .ponte p em { font-style: italic; color: var(--lavanda); }
+  .ponte .prox {
+    margin-top: 30px;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ciano);
+    font-weight: 500;
+    position: relative;
+    z-index: 1;
+  }
+
+  footer {
+    border-top: 1px solid var(--line-soft);
+    padding: 34px 0 44px;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-size: 13px;
+    color: var(--text-2);
+  }
+  footer .marca-clic { color: var(--lavanda); font-weight: 500; }
+
+  /* ---------- reveal ---------- */
+  .reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.on { opacity: 1; transform: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .orb-anim { animation: none; }
+    .reveal { opacity: 1; transform: none; transition: none; }
+    html { scroll-behavior: auto; }
+  }
+
+  @media (max-width: 640px) {
+    .eixo-head { grid-template-columns: 1fr; gap: 18px; }
+    .eixo-num { width: 64px; height: 64px; }
+    .ninguem-faz { padding: 28px 24px 26px; }
+    .orbitas { right: -55vmin; opacity: 0.6; }
+  }
+
+  /* ---------- voltar à jornada ---------- */
+  .voltar-jornada {
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    z-index: 20;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: var(--lavanda);
+    text-decoration: none;
+    background: rgba(12, 17, 38, 0.72);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 9px 16px;
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+  .voltar-jornada:hover {
+    border-color: var(--lavanda);
+    color: var(--text);
+  }
+</style>
+</head>
+<body>
+
+<a class="voltar-jornada" href="/jornada/">← Voltar à jornada</a>
+
+<!-- hero -->
+<header class="hero">
+  <svg class="orbitas" viewBox="0 0 600 600" aria-hidden="true">
+    <g class="orb-anim">
+      <circle cx="300" cy="300" r="120" stroke="rgba(184,168,240,0.22)" />
+      <circle cx="300" cy="300" r="190" stroke="rgba(111,217,232,0.16)" stroke-dasharray="2 7" />
+      <circle cx="300" cy="300" r="258" stroke="rgba(184,168,240,0.12)" />
+      <circle cx="300" cy="300" r="295" stroke="rgba(232,196,106,0.10)" stroke-dasharray="1 10" />
+      <circle cx="420" cy="300" r="3.5" fill="#b8a8f0" stroke="none" />
+      <circle cx="300" cy="110" r="2.5" fill="#6fd9e8" stroke="none" />
+      <circle cx="558" cy="300" r="2.5" fill="#e8c46a" stroke="none" />
+    </g>
+  </svg>
+  <div class="wrap hero-inner">
+    <p class="eyebrow">CLIC_diversidade <span class="dot">·</span> módulo</p>
+    <h1>contratando soluções de IA: <em>o que perguntar antes de assinar</em></h1>
+    <p class="hero-sub">Um guia crítico para gestoras e gestores públicos. Cinco eixos, as perguntas essenciais de cada um, e a pergunta que quase ninguém faz.</p>
+    <div class="hero-meta">
+      <span class="tag">visão crítica</span>
+      <span class="tag">setor público</span>
+      <span class="tag">5 eixos</span>
+    </div>
+  </div>
+</header>
+
+<!-- intro -->
+<section class="intro">
+  <div class="wrap reveal">
+    <p>IA não se contrata como software comum: <strong>o sistema muda de comportamento depois do contrato assinado.</strong></p>
+    <p class="nota">Por isso este guia não é um checklist técnico. É um conjunto de perguntas sobre o que cada escolha de contratação faz com decisões e com pessoas. Quem pergunta bem antes de assinar não precisa se explicar depois.</p>
+  </div>
+</section>
+
+<!-- eixo 1 -->
+<section class="eixo">
+  <div class="wrap">
+    <div class="eixo-head reveal">
+      <div class="eixo-num" aria-hidden="true">
+        <svg viewBox="0 0 84 84"><circle cx="42" cy="42" r="40" fill="none" stroke="rgba(184,168,240,0.3)" stroke-width="1"/><circle cx="42" cy="42" r="32" fill="none" stroke="rgba(111,217,232,0.18)" stroke-width="1" stroke-dasharray="2 6"/></svg>
+        <span>01</span>
+      </div>
+      <div>
+        <h2 class="eixo-title">antes de comprar: o filtro do tecnossolucionismo</h2>
+        <p class="eixo-context">A primeira pergunta nunca é sobre a tecnologia. É sobre o problema.</p>
+      </div>
+    </div>
+    <ul class="perguntas">
+      <li class="reveal"><span class="marca">¿</span><span>O problema exige mesmo IA, ou um processo redesenhado resolveria com mais segurança e menos custo?</span></li>
+      <li class="reveal"><span class="marca">¿</span><span>Houve estudo de viabilidade ou avaliação de impacto algorítmico antes do edital?</span></li>
+      <li class="reveal"><span class="marca">¿</span><span>Quem vai ser afetado, servidores e cidadãos, foi ouvido no desenho da solução?</span></li>
+      <li class="reveal"><span class="marca">¿</span><span>Qual indicador do serviço esse sistema promete melhorar, e como ele é medido hoje?</span></li>
+    </ul>
+    <div class="ninguem-faz reveal">
+      <p class="nf-label">a pergunta que ninguém faz</p>
+      <p class="nf-pergunta">Se ninguém sabe dizer qual indicador vai melhorar, o que exatamente está sendo comprado?</p>
+      <p class="nf-nota">Sem medição do processo atual, é impossível provar depois que a IA melhorou alguma coisa. A baseline protege o gestor.</p>
+    </div>
+  </div>
+</section>
+
+<!-- eixo 2 -->
+<section class="eixo">
+  <div class="wrap">
+    <div class="eixo-head reveal">
+      <div class="eixo-num" aria-hidden="true">
+        <svg viewBox="0 0 84 84"><circle cx="42" cy="42" r="40" fill="none" stroke="rgba(184,168,240,0.3)" stroke-width="1"/><circle cx="42" cy="42" r="32" fill="none" stroke="rgba(111,217,232,0.18)" stroke-width="1" stroke-dasharray="2 6"/></svg>
+        <span>02</span>
+      </div>
+      <div>
+        <h2 class="eixo-title">dados, privacidade e soberania</h2>
+        <p class="eixo-context">Dados são a matéria-prima. De quem são, onde ficam e quem lucra com eles?</p>
+      </div>
+    </div>
+    <ul class="perguntas">
+      <li class="reveal"><span class="marca">¿</span><span>Onde os dados ficam armazenados e por onde trafegam? Há garantia de permanência em território nacional?</span></li>
+      <li class="reveal"><span class="marca">¿</span><span>Os dados do órgão e das pessoas atendidas serão usados para treinar os modelos comerciais do fornecedor? Isso pode ser desligado em contrato?</span></li>
+      <li class="reveal"><span class="marca">¿</span><span>LGPD: quem é controlador, quem é operador, existe relatório de impacto (RIPD)?</span></li>
+      <li class="reveal"><span class="marca">¿</span><span>Ao fim do contrato, em que formato e prazo os dados voltam, e como são apagados?</span></li>
+    </ul>
+    <div class="ninguem-faz reveal">
+      <p class="nf-label">a pergunta que ninguém faz</p>
+      <p class="nf-pergunta">Quem rotulou os dados que treinaram essa IA, e em que condições de trabalho?</p>
+      <p class="nf-nota">A exigência viável é de transparência: o fornecedor declara como e por quem a rotulagem foi feita? A ausência de resposta já é informação valiosa.</p>
+    </div>
+  </div>
+</section>
+
+<!-- eixo 3 -->
+<section class="eixo">
+  <div class="wrap">
+    <div class="eixo-head reveal">
+      <div class="eixo-num" aria-hidden="true">
+        <svg viewBox="0 0 84 84"><circle cx="42" cy="42" r="40" fill="none" stroke="rgba(184,168,240,0.3)" stroke-width="1"/><circle cx="42" cy="42" r="32" fill="none" stroke="rgba(111,217,232,0.18)" stroke-width="1" stroke-dasharray="2 6"/></svg>
+        <span>03</span>
+      </div>
+      <div>
+        <h2 class="eixo-title">caixa de vidro: transparência e impacto em pessoas</h2>
+        <p class="eixo-context">Um sistema que decide sobre pessoas precisa ser explicável para pessoas.</p>
+      </div>
+    </div>
+    <ul class="perguntas">
+      <li class="reveal"><span class="marca">¿</span><span>Existe documentação do modelo (model card, datasheet): com quais grupos foi treinado, onde costuma falhar?</span></li>
+      <li class="reveal"><span class="marca">¿</span><span>O sistema foi testado com dados que representam a diversidade da população brasileira, ou só com contextos do Norte Global?</span></li>
+      <li class="reveal"><span class="marca">¿</span><span>O fornecedor consegue explicar uma decisão automatizada em linguagem que qualquer pessoa entende?</span></li>
+    </ul>
+    <div class="ninguem-faz reveal">
+      <p class="nf-label">a pergunta que ninguém faz</p>
+      <p class="nf-pergunta">O órgão vai publicar, em linguagem simples, quais decisões daquele serviço passam por sistema automatizado?</p>
+      <p class="nf-nota">Transparência ativa não depende de lei nova nem de registro nacional de algoritmos: depende de uma decisão que o gestor pode tomar hoje.</p>
+    </div>
+  </div>
+</section>
+
+<!-- eixo 4 -->
+<section class="eixo">
+  <div class="wrap">
+    <div class="eixo-head reveal">
+      <div class="eixo-num" aria-hidden="true">
+        <svg viewBox="0 0 84 84"><circle cx="42" cy="42" r="40" fill="none" stroke="rgba(184,168,240,0.3)" stroke-width="1"/><circle cx="42" cy="42" r="32" fill="none" stroke="rgba(111,217,232,0.18)" stroke-width="1" stroke-dasharray="2 6"/></svg>
+        <span>04</span>
+      </div>
+      <div>
+        <h2 class="eixo-title">governança, freios e responsabilização</h2>
+        <p class="eixo-context">Humanos no comando não é princípio decorativo: é desenho de fluxo.</p>
+      </div>
+    </div>
+    <ul class="perguntas">
+      <li class="reveal"><span class="marca">¿</span><span>Onde fica o humano no fluxo? A decisão final crítica é humana, ou a máquina tem a última palavra?</span></li>
+      <li class="reveal"><span class="marca">¿</span><span>Se o sistema errar ou discriminar, quem responde jurídica e financeiramente: o órgão ou o fornecedor? Está explícito no contrato?</span></li>
+      <li class="reveal"><span class="marca">¿</span><span>Existe registro inalterável (logs) das decisões, para auditoria independente e controle: TCU, CGU, ANPD?</span></li>
+      <li class="reveal"><span class="marca">¿</span><span>Qual o canal acessível para a pessoa atendida contestar e obter revisão humana (LGPD, art. 20)?</span></li>
+    </ul>
+    <div class="ninguem-faz reveal">
+      <p class="nf-label">a pergunta que ninguém faz</p>
+      <p class="nf-pergunta">O contrato permite desligar a IA e voltar ao processo humano se ela se provar excludente ou ineficaz?</p>
+      <p class="nf-nota">Reversibilidade se escreve antes de assinar. Depois, a dependência decide por você.</p>
+    </div>
+  </div>
+</section>
+
+<!-- eixo 5 -->
+<section class="eixo">
+  <div class="wrap">
+    <div class="eixo-head reveal">
+      <div class="eixo-num" aria-hidden="true">
+        <svg viewBox="0 0 84 84"><circle cx="42" cy="42" r="40" fill="none" stroke="rgba(184,168,240,0.3)" stroke-width="1"/><circle cx="42" cy="42" r="32" fill="none" stroke="rgba(111,217,232,0.18)" stroke-width="1" stroke-dasharray="2 6"/></svg>
+        <span>05</span>
+      </div>
+      <div>
+        <h2 class="eixo-title">operação real, custos ocultos e saída</h2>
+        <p class="eixo-context">O serviço público real tem internet ruim, orçamento curto e troca de gestão.</p>
+      </div>
+    </div>
+    <ul class="perguntas">
+      <li class="reveal"><span class="marca">¿</span><span>Funciona em locais com conectividade precária? É acessível para pessoas com deficiência?</span></li>
+      <li class="reveal"><span class="marca">¿</span><span>O custo por uso (token, consulta, API) escala de forma previsível, ou estoura o orçamento se a demanda crescer?</span></li>
+      <li class="reveal"><span class="marca">¿</span><span>A capacitação das equipes está incluída? E a recapacitação a cada atualização do sistema?</span></li>
+      <li class="reveal"><span class="marca">¿</span><span>Quem verifica se a IA continua funcionando bem daqui a dois anos, com auditoria periódica e medição de degradação? O contrato paga por isso?</span></li>
+    </ul>
+    <div class="ninguem-faz reveal">
+      <p class="nf-label">a pergunta que ninguém faz</p>
+      <p class="nf-pergunta">Quanto custa sair?</p>
+      <p class="nf-nota">Formatos abertos, devolução estruturada dos dados e plano de transição se o fornecedor for vendido ou descontinuar o produto. Quem não pergunta na entrada, descobre o preço na saída.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ponte -->
+<section class="ponte">
+  <svg class="orbitas-fim" viewBox="0 0 600 600" aria-hidden="true">
+    <circle cx="300" cy="300" r="140" fill="none" stroke="rgba(184,168,240,0.18)" stroke-width="1"/>
+    <circle cx="300" cy="300" r="210" fill="none" stroke="rgba(111,217,232,0.12)" stroke-width="1" stroke-dasharray="2 7"/>
+    <circle cx="300" cy="300" r="280" fill="none" stroke="rgba(232,196,106,0.10)" stroke-width="1"/>
+  </svg>
+  <div class="wrap reveal">
+    <p>Este guia assume que uma decisão já foi tomada: <em>a de que vale a pena contratar.</em> Como chegar bem a essa decisão é o tema do próximo módulo.</p>
+    <p class="prox">→ próximo módulo: estruturando projetos de IA</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap" style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:0 28px;">
+    <span><span class="marca-clic">CLIC_diversidade</span> · letramento crítico em IA para o setor público</span>
+    <span>Carla Figueiredo</span>
+  </div>
+</footer>
+
+<script>
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('on'); obs.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach((el) => obs.observe(el));
+</script>
+
+</body>
+</html>

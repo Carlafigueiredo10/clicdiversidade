@@ -1,0 +1,746 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>estruturando projetos de IA — CLIC_diversidade</title>
+<meta name="description" content="Antes de contratar ou construir: as perguntas internas que estruturam um projeto de IA no setor público. Uma trilha em 7 passos e 3 portões de decisão." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" />
+<style>
+  :root {
+    --navy-0: #070b1a;
+    --navy-1: #0c1126;
+    --navy-2: #141a36;
+    --line: rgba(184, 168, 240, 0.14);
+    --line-soft: rgba(184, 168, 240, 0.08);
+    --trilho: rgba(184, 168, 240, 0.28);
+    --text: #e9e7f4;
+    --text-2: #a7a3c4;
+    --lavanda: #b8a8f0;
+    --ciano: #6fd9e8;
+    --ouro: #e8c46a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--navy-0);
+    color: var(--text);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 28px; }
+
+  /* ---------- hero ---------- */
+  .hero {
+    position: relative;
+    min-height: 92vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
+  .orbitas {
+    position: absolute;
+    top: 50%;
+    right: -22vmin;
+    transform: translateY(-50%);
+    width: 92vmin;
+    height: 92vmin;
+    pointer-events: none;
+    opacity: 0.9;
+  }
+  .orbitas circle { fill: none; stroke-width: 1; }
+  .orb-anim { animation: girar 90s linear infinite; transform-origin: 50% 50%; }
+  @keyframes girar { to { transform: rotate(360deg); } }
+
+  .hero-inner { position: relative; z-index: 1; padding: 96px 0; }
+
+  .eyebrow {
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--lavanda);
+    font-weight: 500;
+    margin-bottom: 28px;
+  }
+  .eyebrow .dot { color: var(--ciano); }
+
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: clamp(38px, 6.4vw, 68px);
+    line-height: 1.06;
+    letter-spacing: -0.015em;
+    max-width: 14ch;
+  }
+  h1 em { font-style: italic; color: var(--ciano); }
+
+  .hero-sub {
+    margin-top: 26px;
+    font-size: clamp(16px, 2vw, 19px);
+    color: var(--text-2);
+    max-width: 48ch;
+  }
+
+  .hero-meta {
+    margin-top: 48px;
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    flex-wrap: wrap;
+    font-size: 13px;
+    color: var(--text-2);
+  }
+  .hero-meta .tag {
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 6px 16px;
+    color: var(--lavanda);
+  }
+  .hero-meta .tag.ciano { color: var(--ciano); border-color: rgba(111, 217, 232, 0.25); }
+
+  /* ---------- intro ---------- */
+  .intro {
+    border-top: 1px solid var(--line-soft);
+    padding: 88px 0 72px;
+  }
+  .intro p {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: clamp(20px, 2.8vw, 27px);
+    line-height: 1.45;
+    max-width: 30ch;
+  }
+  .intro p strong { font-weight: 600; color: var(--ciano); }
+  .intro .nota {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    color: var(--text-2);
+    margin-top: 26px;
+    max-width: 54ch;
+    line-height: 1.7;
+  }
+
+  /* ---------- trilha ---------- */
+  .trilha {
+    position: relative;
+    border-top: 1px solid var(--line-soft);
+    padding: 72px 0 40px;
+  }
+  .trilha-corpo { position: relative; }
+  .trilha-corpo::before {
+    content: "";
+    position: absolute;
+    left: 31px;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, var(--trilho) 4%, var(--trilho) 96%, transparent);
+  }
+
+  .passo {
+    position: relative;
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 34px;
+    padding: 48px 0 56px;
+  }
+
+  .passo-no {
+    position: relative;
+    width: 64px;
+    height: 64px;
+    flex: none;
+    background: var(--navy-0);
+  }
+  .passo-no svg { position: absolute; inset: 0; }
+  .passo-no span {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fraunces', serif;
+    font-size: 19px;
+    font-weight: 500;
+    color: var(--lavanda);
+  }
+
+  .passo h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: clamp(24px, 3.2vw, 33px);
+    line-height: 1.14;
+    letter-spacing: -0.01em;
+    max-width: 24ch;
+  }
+  .passo .contexto {
+    margin-top: 12px;
+    font-size: 15.5px;
+    color: var(--text-2);
+    max-width: 54ch;
+  }
+
+  .internas { list-style: none; margin-top: 26px; max-width: 64ch; }
+  .internas li {
+    display: grid;
+    grid-template-columns: 22px 1fr;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line-soft);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  .internas li:last-child { border-bottom: 0; }
+  .internas .marca {
+    color: var(--ciano);
+    font-family: 'Fraunces', serif;
+    font-size: 17px;
+    line-height: 1.5;
+  }
+
+  .ancora {
+    margin-top: 22px;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 18px;
+    line-height: 1.5;
+    color: var(--ouro);
+    max-width: 44ch;
+  }
+
+  /* ---------- portão ---------- */
+  .portao {
+    position: relative;
+    margin: 24px 0 32px;
+    padding-left: 0;
+  }
+  .portao-card {
+    position: relative;
+    border: 1px solid rgba(111, 217, 232, 0.32);
+    background: linear-gradient(135deg, rgba(111, 217, 232, 0.10), rgba(111, 217, 232, 0.03));
+    border-radius: 18px;
+    padding: 38px 40px 36px;
+    overflow: hidden;
+  }
+  .portao-card::before {
+    content: "";
+    position: absolute;
+    top: -80px;
+    right: -80px;
+    width: 220px;
+    height: 220px;
+    border: 1px solid rgba(111, 217, 232, 0.16);
+    border-radius: 50%;
+  }
+  .portao-marcador {
+    position: absolute;
+    left: 17px;
+    top: 50%;
+    transform: translateY(-50%) rotate(45deg);
+    width: 28px;
+    height: 28px;
+    background: var(--navy-0);
+    border: 1px solid var(--ciano);
+    z-index: 2;
+  }
+  .portao-marcador::after {
+    content: "";
+    position: absolute;
+    inset: 7px;
+    background: var(--ciano);
+    opacity: 0.8;
+  }
+  .portao-inner { margin-left: 64px; }
+
+  .portao-label {
+    font-size: 11.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ciano);
+    font-weight: 600;
+    margin-bottom: 14px;
+  }
+  .portao-pergunta {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-style: italic;
+    font-size: clamp(20px, 2.6vw, 26px);
+    line-height: 1.32;
+    max-width: 32ch;
+  }
+  .saidas {
+    margin-top: 24px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+  }
+  .saida {
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 9px 20px;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--lavanda);
+  }
+  .saida.alt {
+    border-color: rgba(111, 217, 232, 0.4);
+    color: var(--ciano);
+  }
+  .portao-nota {
+    margin-top: 18px;
+    font-size: 14.5px;
+    color: var(--text-2);
+    max-width: 56ch;
+    line-height: 1.65;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ---------- conector entre frentes ---------- */
+  .conector {
+    position: relative;
+    margin: 8px 0 40px;
+  }
+  .conector-card {
+    margin-left: 64px;
+    border: 1px dashed rgba(232, 196, 106, 0.4);
+    border-radius: 18px;
+    padding: 30px 36px;
+    background: rgba(232, 196, 106, 0.05);
+  }
+  .conector-label {
+    font-size: 11.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ouro);
+    font-weight: 600;
+    margin-bottom: 14px;
+  }
+  .frentes { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+  .frente h3 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 19px;
+    margin-bottom: 8px;
+  }
+  .frente p { font-size: 14.5px; color: var(--text-2); line-height: 1.6; }
+  .frente .ref { color: var(--ouro); }
+
+  /* ---------- transversais ---------- */
+  .transversais {
+    border-top: 1px solid var(--line-soft);
+    padding: 80px 0 72px;
+  }
+  .transversais .titulo-secao {
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--lavanda);
+    font-weight: 500;
+    margin-bottom: 34px;
+  }
+  .trans-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+  .trans-item h3 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 1.25;
+    margin-bottom: 10px;
+  }
+  .trans-item p { font-size: 14.5px; color: var(--text-2); line-height: 1.65; }
+
+  /* ---------- ponte ---------- */
+  .ponte {
+    border-top: 1px solid var(--line-soft);
+    padding: 96px 0 110px;
+    position: relative;
+    overflow: hidden;
+  }
+  .ponte .orbitas-fim {
+    position: absolute;
+    bottom: -38vmin;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80vmin;
+    height: 80vmin;
+    opacity: 0.55;
+    pointer-events: none;
+  }
+  .ponte p {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(20px, 2.8vw, 27px);
+    line-height: 1.45;
+    max-width: 32ch;
+    position: relative;
+    z-index: 1;
+  }
+  .ponte p em { font-style: italic; color: var(--ciano); }
+  .ponte .prox {
+    margin-top: 30px;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--lavanda);
+    font-weight: 500;
+    position: relative;
+    z-index: 1;
+  }
+
+  footer {
+    border-top: 1px solid var(--line-soft);
+    padding: 34px 0 44px;
+    font-size: 13px;
+    color: var(--text-2);
+  }
+  footer .marca-clic { color: var(--lavanda); font-weight: 500; }
+
+  /* ---------- reveal ---------- */
+  .reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.on { opacity: 1; transform: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .orb-anim { animation: none; }
+    .reveal { opacity: 1; transform: none; transition: none; }
+    html { scroll-behavior: auto; }
+  }
+
+  @media (max-width: 640px) {
+    .trilha-corpo::before { left: 23px; }
+    .passo { grid-template-columns: 48px 1fr; gap: 22px; }
+    .passo-no { width: 48px; height: 48px; }
+    .passo-no span { font-size: 16px; }
+    .portao-marcador { left: 10px; width: 24px; height: 24px; }
+    .portao-inner { margin-left: 0; }
+    .portao-card { padding: 28px 24px 26px; margin-left: 48px; }
+    .conector-card { margin-left: 48px; padding: 24px 22px; }
+    .frentes { grid-template-columns: 1fr; gap: 20px; }
+    .trans-grid { grid-template-columns: 1fr; gap: 26px; }
+    .orbitas { right: -55vmin; opacity: 0.6; }
+  }
+
+  /* ---------- voltar à jornada ---------- */
+  .voltar-jornada {
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    z-index: 20;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: var(--lavanda);
+    text-decoration: none;
+    background: rgba(12, 17, 38, 0.72);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 9px 16px;
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+  .voltar-jornada:hover {
+    border-color: var(--lavanda);
+    color: var(--text);
+  }
+</style>
+</head>
+<body>
+
+<a class="voltar-jornada" href="/jornada/">← Voltar à jornada</a>
+
+<!-- hero -->
+<header class="hero">
+  <svg class="orbitas" viewBox="0 0 600 600" aria-hidden="true">
+    <g class="orb-anim">
+      <circle cx="300" cy="300" r="120" stroke="rgba(111,217,232,0.20)" />
+      <circle cx="300" cy="300" r="190" stroke="rgba(184,168,240,0.16)" stroke-dasharray="2 7" />
+      <circle cx="300" cy="300" r="258" stroke="rgba(111,217,232,0.12)" />
+      <circle cx="300" cy="300" r="295" stroke="rgba(232,196,106,0.10)" stroke-dasharray="1 10" />
+      <circle cx="420" cy="300" r="3.5" fill="#6fd9e8" stroke="none" />
+      <circle cx="300" cy="110" r="2.5" fill="#b8a8f0" stroke="none" />
+      <circle cx="558" cy="300" r="2.5" fill="#e8c46a" stroke="none" />
+    </g>
+  </svg>
+  <div class="wrap hero-inner">
+    <p class="eyebrow">CLIC_diversidade <span class="dot">·</span> módulo</p>
+    <h1>estruturando projetos de IA: <em>antes de contratar ou construir</em></h1>
+    <p class="hero-sub">As perguntas que o órgão faz a si mesmo, do problema ao projeto. Uma trilha em sete passos, com três portões de decisão onde parar é uma resposta legítima.</p>
+    <div class="hero-meta">
+      <span class="tag">visão crítica</span>
+      <span class="tag">setor público</span>
+      <span class="tag">7 passos</span>
+      <span class="tag ciano">3 portões de decisão</span>
+    </div>
+  </div>
+</header>
+
+<!-- intro -->
+<section class="intro">
+  <div class="wrap reveal">
+    <p>A lógica dominante é <strong>"compramos a IA, agora vamos achar um problema".</strong> Esta trilha inverte a ordem.</p>
+    <p class="nota">Aqui não há nenhuma pergunta para fornecedor. São perguntas internas, e valem para as duas frentes: quem vai contratar uma solução e quem vai construir com as ferramentas que já tem. Definir o problema é uma escolha política: decide o que merece atenção e o que fica de fora.</p>
+  </div>
+</section>
+
+<!-- trilha -->
+<section class="trilha">
+  <div class="wrap">
+    <div class="trilha-corpo">
+
+      <!-- passo 1 -->
+      <article class="passo reveal">
+        <div class="passo-no" aria-hidden="true">
+          <svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="none" stroke="rgba(184,168,240,0.32)" stroke-width="1"/><circle cx="32" cy="32" r="23" fill="none" stroke="rgba(111,217,232,0.18)" stroke-width="1" stroke-dasharray="2 6"/></svg>
+          <span>1</span>
+        </div>
+        <div>
+          <h2>problema público antes da tecnologia</h2>
+          <p class="contexto">Se a conversa começa com "queremos usar IA para...", o projeto já começou errado.</p>
+          <ul class="internas">
+            <li><span class="marca">¿</span><span>Qual problema, de quem, com qual evidência?</span></li>
+            <li><span class="marca">¿</span><span>O problema é do órgão ou da pessoa atendida? Otimizar processo interno não é o mesmo que melhorar serviço.</span></li>
+            <li><span class="marca">¿</span><span>Quem definiu que este problema merece atenção, e que problemas ficaram de fora?</span></li>
+          </ul>
+          <p class="ancora">Um problema mal definido não se corrige com tecnologia: se amplifica.</p>
+        </div>
+      </article>
+
+      <!-- passo 2 -->
+      <article class="passo reveal">
+        <div class="passo-no" aria-hidden="true">
+          <svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="none" stroke="rgba(184,168,240,0.32)" stroke-width="1"/><circle cx="32" cy="32" r="23" fill="none" stroke="rgba(111,217,232,0.18)" stroke-width="1" stroke-dasharray="2 6"/></svg>
+          <span>2</span>
+        </div>
+        <div>
+          <h2>baseline: medir o hoje</h2>
+          <p class="contexto">Como esse trabalho é feito agora, sem IA?</p>
+          <ul class="internas">
+            <li><span class="marca">¿</span><span>Quanto tempo leva, quanto custa, qual a taxa de erro?</span></li>
+            <li><span class="marca">¿</span><span>Quem fica de fora do processo atual? Quem desiste no meio?</span></li>
+            <li><span class="marca">¿</span><span>Esses números estão registrados em algum lugar, ou só na memória da equipe?</span></li>
+          </ul>
+          <p class="ancora">Se você não consegue medir o processo atual, não está pronto para automatizá-lo.</p>
+        </div>
+      </article>
+
+      <!-- passo 3 -->
+      <article class="passo reveal">
+        <div class="passo-no" aria-hidden="true">
+          <svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="none" stroke="rgba(184,168,240,0.32)" stroke-width="1"/><circle cx="32" cy="32" r="23" fill="none" stroke="rgba(111,217,232,0.18)" stroke-width="1" stroke-dasharray="2 6"/></svg>
+          <span>3</span>
+        </div>
+        <div>
+          <h2>a solução mais simples primeiro</h2>
+          <p class="contexto">Muitos "projetos de IA" no governo são problemas de processo mal desenhado.</p>
+          <ul class="internas">
+            <li><span class="marca">¿</span><span>Uma planilha, uma regra de negócio ou um fluxo redesenhado resolveria?</span></li>
+            <li><span class="marca">¿</span><span>O que a IA agrega que a solução simples não agrega, em número?</span></li>
+          </ul>
+          <p class="ancora">IA sobre processo ruim é o processo ruim mais rápido, mais opaco e mais difícil de contestar.</p>
+        </div>
+      </article>
+
+      <!-- portão 1 -->
+      <div class="portao reveal">
+        <div class="portao-marcador" aria-hidden="true"></div>
+        <div class="portao-inner">
+          <div class="portao-card">
+            <p class="portao-label">portão de decisão 1</p>
+            <p class="portao-pergunta">Precisa mesmo de IA?</p>
+            <div class="saidas">
+              <span class="saida">sim: seguir a trilha</span>
+              <span class="saida alt">não: resolver sem IA</span>
+            </div>
+            <p class="portao-nota">Resolver sem IA não é retrocesso: é o projeto dando certo mais cedo, mais barato e mais auditável.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- passo 4 -->
+      <article class="passo reveal">
+        <div class="passo-no" aria-hidden="true">
+          <svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="none" stroke="rgba(184,168,240,0.32)" stroke-width="1"/><circle cx="32" cy="32" r="23" fill="none" stroke="rgba(111,217,232,0.18)" stroke-width="1" stroke-dasharray="2 6"/></svg>
+          <span>4</span>
+        </div>
+        <div>
+          <h2>dados: existem, prestam, representam?</h2>
+          <p class="contexto">Inventário interno, antes de qualquer ferramenta. É na coleta e na seleção dos dados que a exclusão acontece.</p>
+          <ul class="internas">
+            <li><span class="marca">¿</span><span>Os dados necessários existem, estão organizados e podem ser usados (LGPD)?</span></li>
+            <li><span class="marca">¿</span><span>Eles refletem a população que o serviço atende, ou só quem já consegue acessar o serviço?</span></li>
+            <li><span class="marca">¿</span><span>Que desigualdades históricas estão gravadas nessa base?</span></li>
+          </ul>
+          <p class="ancora">A IA é um espelho estatístico: dados de um serviço que exclui ensinam o sistema a excluir.</p>
+        </div>
+      </article>
+
+      <!-- conector: as duas frentes -->
+      <div class="conector reveal">
+        <div class="conector-card">
+          <p class="conector-label">aqui a trilha se divide, e se reencontra no passo 5</p>
+          <div class="frentes">
+            <div class="frente">
+              <h3>vai contratar?</h3>
+              <p>As perguntas para quem vende estão no módulo <span class="ref">contratando soluções de IA</span>: dados, transparência, responsabilização, custo de saída.</p>
+            </div>
+            <div class="frente">
+              <h3>vai construir?</h3>
+              <p>Com ferramentas gratuitas ou já disponíveis no órgão, siga direto para o piloto. As mesmas regras de governança valem para o que se constrói em casa.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- passo 5 -->
+      <article class="passo reveal">
+        <div class="passo-no" aria-hidden="true">
+          <svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="none" stroke="rgba(184,168,240,0.32)" stroke-width="1"/><circle cx="32" cy="32" r="23" fill="none" stroke="rgba(111,217,232,0.18)" stroke-width="1" stroke-dasharray="2 6"/></svg>
+          <span>5</span>
+        </div>
+        <div>
+          <h2>piloto pequeno, humano no comando</h2>
+          <p class="contexto">Escopo restrito, e o desenho do fluxo decidido antes da ferramenta.</p>
+          <ul class="internas">
+            <li><span class="marca">¿</span><span>Quais decisões a máquina sugere e quais permanecem estritamente humanas?</span></li>
+            <li><span class="marca">¿</span><span>A pessoa atendida sabe que está interagindo com um sistema automatizado?</span></li>
+            <li><span class="marca">¿</span><span>O canal de contestação e revisão humana existe desde o dia 1 (LGPD, art. 20)?</span></li>
+            <li><span class="marca">¿</span><span>Tudo está sendo registrado, do jeito que os órgãos de controle vão pedir depois?</span></li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- passo 6 -->
+      <article class="passo reveal">
+        <div class="passo-no" aria-hidden="true">
+          <svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="none" stroke="rgba(184,168,240,0.32)" stroke-width="1"/><circle cx="32" cy="32" r="23" fill="none" stroke="rgba(111,217,232,0.18)" stroke-width="1" stroke-dasharray="2 6"/></svg>
+          <span>6</span>
+        </div>
+        <div>
+          <h2>comparar com a baseline, não com a expectativa</h2>
+          <p class="contexto">Validar não é ver se a IA funciona: é ver se ela não prejudica.</p>
+          <ul class="internas">
+            <li><span class="marca">¿</span><span>O piloto melhorou os números levantados no passo 2?</span></li>
+            <li><span class="marca">¿</span><span>Melhorou para todos os grupos atendidos, ou só na média?</span></li>
+            <li><span class="marca">¿</span><span>Quem está na ponta da distribuição, mulheres, pessoas negras, pessoas com deficiência, foi avaliado separadamente?</span></li>
+          </ul>
+          <p class="ancora">Serviço público não otimiza para a média: quem está na cauda costuma ser quem mais precisa do serviço.</p>
+        </div>
+      </article>
+
+      <!-- portão 2 -->
+      <div class="portao reveal">
+        <div class="portao-marcador" aria-hidden="true"></div>
+        <div class="portao-inner">
+          <div class="portao-card">
+            <p class="portao-label">portão de decisão 2</p>
+            <p class="portao-pergunta">Melhorou para todas as pessoas, ou só na média?</p>
+            <div class="saidas">
+              <span class="saida">para todas: escalar</span>
+              <span class="saida alt">só na média: ajustar e repetir o piloto</span>
+            </div>
+            <p class="portao-nota">Impacto desproporcional sobre um grupo não é detalhe técnico: é critério de reprovação.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- passo 7 -->
+      <article class="passo reveal">
+        <div class="passo-no" aria-hidden="true">
+          <svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="none" stroke="rgba(184,168,240,0.32)" stroke-width="1"/><circle cx="32" cy="32" r="23" fill="none" stroke="rgba(111,217,232,0.18)" stroke-width="1" stroke-dasharray="2 6"/></svg>
+          <span>7</span>
+        </div>
+        <div>
+          <h2>operar com critério de parada</h2>
+          <p class="contexto">A IA muda de comportamento com o tempo. O projeto não termina quando escala: ele passa a ser vigiado.</p>
+          <ul class="internas">
+            <li><span class="marca">¿</span><span>Quem monitora a degradação do desempenho, e com que frequência?</span></li>
+            <li><span class="marca">¿</span><span>A recapacitação das equipes acompanha cada mudança do sistema?</span></li>
+            <li><span class="marca">¿</span><span>O critério para desligar foi definido antes de começar, e está escrito?</span></li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- portão 3 -->
+      <div class="portao reveal">
+        <div class="portao-marcador" aria-hidden="true"></div>
+        <div class="portao-inner">
+          <div class="portao-card">
+            <p class="portao-label">portão de decisão 3 · permanente</p>
+            <p class="portao-pergunta">Continuar, ajustar ou parar?</p>
+            <div class="saidas">
+              <span class="saida">continuar</span>
+              <span class="saida">ajustar</span>
+              <span class="saida alt">parar e voltar ao processo humano</span>
+            </div>
+            <p class="portao-nota">Parar não é fracasso: é governança. Se os riscos superam os benefícios, manter o sistema rodando por pressão tecnológica é a única decisão indefensável. Definir a condição de parada antes protege o gestor, política e juridicamente. Em projeto contratado, esta decisão tem um par: a cláusula de reversibilidade do módulo de contratação.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- transversais -->
+<section class="transversais">
+  <div class="wrap">
+    <p class="titulo-secao reveal">transversais: valem em todos os passos</p>
+    <div class="trans-grid">
+      <div class="trans-item reveal">
+        <h3>continuidade entre gestões</h3>
+        <p>O projeto sobrevive à troca de governo? Documentação, dados e decisões precisam pertencer ao órgão, não a pessoas.</p>
+      </div>
+      <div class="trans-item reveal">
+        <h3>transparência ativa</h3>
+        <p>A sociedade sabe que este projeto existe, o que ele decide e como contestar? Publicar a bula do algoritmo é decisão do gestor, não exigência futura.</p>
+      </div>
+      <div class="trans-item reveal">
+        <h3>capacitação como parte do projeto</h3>
+        <p>Letramento em IA das equipes não é rodapé do cronograma: é o que evita a assimetria de poder frente a quem vende tecnologia.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ponte -->
+<section class="ponte">
+  <svg class="orbitas-fim" viewBox="0 0 600 600" aria-hidden="true">
+    <circle cx="300" cy="300" r="140" fill="none" stroke="rgba(111,217,232,0.16)" stroke-width="1"/>
+    <circle cx="300" cy="300" r="210" fill="none" stroke="rgba(184,168,240,0.12)" stroke-width="1" stroke-dasharray="2 7"/>
+    <circle cx="300" cy="300" r="280" fill="none" stroke="rgba(232,196,106,0.10)" stroke-width="1"/>
+  </svg>
+  <div class="wrap reveal">
+    <p>Passou pelo portão 1 e a resposta foi contratar? <em>As perguntas para quem vende já estão prontas.</em></p>
+    <p class="prox">→ módulo: contratando soluções de IA</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap" style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+    <span><span class="marca-clic">CLIC_diversidade</span> · letramento crítico em IA para o setor público</span>
+    <span>Carla Figueiredo</span>
+  </div>
+</footer>
+
+<script>
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('on'); obs.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach((el) => obs.observe(el));
+</script>
+
+</body>
+</html>

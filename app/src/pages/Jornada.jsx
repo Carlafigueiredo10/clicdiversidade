@@ -6,6 +6,7 @@ import LevelCard from '../components/LevelCard'
 import PillToggle from '../components/PillToggle'
 import ChartLevelLine from '../components/ChartLevelLine'
 import ModulosGrid from '../features/modulos/ModulosGrid'
+import ModuloCard from '../features/modulos/ModuloCard'
 import SugestaoForm from '../features/sugestoes/SugestaoForm'
 import {
   submeterParticipante,
@@ -329,6 +330,47 @@ export default function Jornada() {
 
         <div className="mt-14">
           <ModulosGrid />
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-5xl mt-28 pt-16 border-t border-line">
+        <p className="text-xs tracking-[0.25em] uppercase text-accent-fg font-semibold text-center">
+          Antes de construir ou contratar
+        </p>
+        <h2 className="mt-6 font-display font-semibold text-4xl md:text-5xl text-ink text-center leading-[1.05]">
+          As perguntas que vêm antes
+        </h2>
+        <p className="mt-6 max-w-2xl mx-auto text-center text-ink-soft text-base md:text-lg leading-relaxed">
+          Dois guias críticos para o momento da decisão: como estruturar um
+          projeto antes de tirá-lo do papel — e o que perguntar antes de
+          assinar um contrato de IA.
+        </p>
+
+        <div className="mt-14 grid gap-4 md:grid-cols-2">
+          <ModuloCard
+            icon="🧭"
+            titulo="Estruturando projetos de IA"
+            descricao="As perguntas que o órgão faz a si mesmo, do problema ao projeto. Sete passos e três portões de decisão onde parar é uma resposta legítima."
+            stats={[
+              { value: '7', label: 'Passos' },
+              { value: '3', label: 'Portões' },
+            ]}
+            ctaText="Abrir guia"
+            to="/jornada/modulos/estruturando-projetos-de-ia.html"
+            external
+          />
+          <ModuloCard
+            icon="📋"
+            titulo="Contratando soluções de IA"
+            descricao="As perguntas que o gestor público precisa fazer antes de assinar um contrato de IA. Cinco eixos e a pergunta que quase ninguém faz."
+            stats={[
+              { value: '5', label: 'Eixos' },
+              { value: '24', label: 'Perguntas' },
+            ]}
+            ctaText="Abrir guia"
+            to="/jornada/modulos/contratando-solucoes-de-ia.html"
+            external
+          />
         </div>
       </section>
 
