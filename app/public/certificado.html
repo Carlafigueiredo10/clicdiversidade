@@ -357,6 +357,48 @@
       font-size:9px;color:rgba(240,236,226,.25);
       letter-spacing:.1em;text-transform:uppercase;font-weight:500;
     }
+
+    /* === Carga horária + competências === */
+    .cert-creds{
+      position:absolute;top:548px;left:140px;right:140px;
+      display:flex;gap:46px;align-items:flex-start;justify-content:center;
+    }
+    .cert-creds-label{
+      display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+      color:rgba(184,164,232,.55);margin-bottom:9px;
+    }
+    .cert-carga{text-align:center;flex-shrink:0;}
+    .cert-carga-val{font-family:'Fraunces',serif;font-size:25px;font-weight:600;color:#f0ece2;}
+    .cert-comp{flex:1;max-width:640px;text-align:left;}
+    .cert-comp-list{list-style:none;display:flex;flex-wrap:wrap;gap:7px 20px;}
+    .cert-comp-list li{
+      font-size:14px;color:rgba(240,236,226,.82);
+      position:relative;padding-left:15px;line-height:1.45;
+    }
+    .cert-comp-list li::before{
+      content:'';position:absolute;left:0;top:7px;width:6px;height:6px;border-radius:50%;
+      background:#6dd5e8;opacity:.7;
+    }
+
+    /* === Botão LinkedIn + link de verificação (na página, não no PDF) === */
+    .btn-linkedin{
+      display:flex;align-items:center;justify-content:center;gap:.5rem;
+      margin-top:.75rem;width:100%;padding:.9rem;
+      background:#0a66c2;border-radius:10px;color:#fff;text-decoration:none;
+      font-family:'Inter',sans-serif;font-size:.82rem;font-weight:600;letter-spacing:.04em;
+      transition:opacity .2s,transform .2s;
+    }
+    .btn-linkedin:hover{opacity:.92;transform:translateY(-1px)}
+    .btn-linkedin .in{
+      font-weight:700;background:#fff;color:#0a66c2;border-radius:3px;
+      padding:0 4px;font-size:.78rem;line-height:1.4;
+    }
+    .verifica-info{
+      margin-top:.9rem;font-size:.72rem;line-height:1.6;
+      color:rgba(240,236,226,.4);text-align:center;word-break:break-all;
+    }
+    .verifica-info a{color:#6dd5e8;text-decoration:none;}
+    .verifica-info a:hover{text-decoration:underline;}
   </style>
 </head>
 <body>
@@ -422,6 +464,12 @@
     <div class="preview-actions">
       <button class="btn-download" id="btnDownload">↓ Baixar PDF</button>
       <button class="btn-novo" onclick="resetar()">Gerar novamente</button>
+    </div>
+    <a id="btnLinkedin" class="btn-linkedin" style="display:none" target="_blank" rel="noopener noreferrer">
+      <span class="in">in</span> Adicionar ao LinkedIn
+    </a>
+    <div id="verificaInfo" class="verifica-info" style="display:none">
+      Verificação pública: <a id="verificaLink" href="#" target="_blank" rel="noopener noreferrer"></a>
     </div>
   </div>
 
@@ -496,25 +544,37 @@
   <!-- Body -->
   <div class="cert-body">
     <p class="cert-certifica">
-      Certificamos que a pessoa participante concluiu a<br>
-      <span class="oficina">Oficina Humanos no Comando</span>, desenvolvendo<br>
+      Certificamos que a pessoa abaixo concluiu a<br>
+      <span class="oficina" id="certOficina">Oficina Humanos no Comando</span>, desenvolvendo<br>
       uma solução digital com aplicação de
       <span class="ia">inteligência artificial</span> e <span class="auto">automação</span>.
     </p>
     <span class="cert-nome" id="certNome">Nome</span>
   </div>
 
-  <!-- Signatures -->
+  <!-- Carga horária + competências -->
+  <div class="cert-creds">
+    <div class="cert-carga">
+      <span class="cert-creds-label">Carga horária</span>
+      <span class="cert-carga-val" id="certCarga">—</span>
+    </div>
+    <div class="cert-comp">
+      <span class="cert-creds-label">Competências demonstradas</span>
+      <ul class="cert-comp-list" id="certCompetencias"></ul>
+    </div>
+  </div>
+
+  <!-- Emissor / data de emissão -->
   <div class="cert-sigs">
     <div class="cert-sig">
       <div class="cert-sig-line"></div>
-      <div class="cert-sig-name" id="certNomeAssinatura">Nome</div>
-      <div class="cert-sig-role">Participante</div>
+      <div class="cert-sig-name" id="certEmissor">CLIC_diversidade</div>
+      <div class="cert-sig-role">Emissor · letramento crítico em IA</div>
     </div>
     <div class="cert-sig">
       <div class="cert-sig-line"></div>
       <div class="cert-sig-name" id="certData"></div>
-      <div class="cert-sig-role">Data</div>
+      <div class="cert-sig-role">Data de emissão</div>
     </div>
   </div>
 
@@ -532,12 +592,67 @@
 </div>
 </div>
 
+<!-- Firebase (registro do certificado) — config publica; a seguranca vem das
+     regras do Firestore (allow create validado, read publico em /certificados). -->
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+  import { getFirestore, doc, setDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+  const app = initializeApp({
+    apiKey: 'AIzaSyDYRPSiTa-CnSqj6jfu6T3JBa3e0SQNufY',
+    authDomain: 'clicdiversidade.firebaseapp.com',
+    projectId: 'clicdiversidade',
+    storageBucket: 'clicdiversidade.firebasestorage.app',
+    messagingSenderId: '575473138445',
+    appId: '1:575473138445:web:a0f3ee131aa091e8e00e44',
+  });
+  const db = getFirestore(app);
+  // codigo = id do doc (8 chars, usado no QR). Minimizacao LGPD: payload so com
+  // nome/oficina/carga/competencias/codigo — NUNCA e-mail, orgao ou CPF.
+  window.__registrarCertificado = async (codigo, payload) => {
+    await setDoc(doc(db, 'certificados', codigo), { ...payload, emitido_em: serverTimestamp() });
+  };
+</script>
+
 <script>
-  const NETLIFY_FN = '/.netlify/functions/diagnostico-vote';
+  // Conteudo editavel do certificado. Carla preenche os PENDENTE depois —
+  // a estrutura nao depende das palavras exatas.
+  const CERTIFICADO_CONFIG = {
+    oficina: 'Humanos no Comando',
+    titulo: 'Autoria de Tecnologia',
+    cargaHoraria: '2 horas',
+    competencias: [
+      'Análise crítica de IA generativa e seus vieses',
+      'Engenharia de prompt pelo método PTCFL, com limites éticos',
+      'Criação de um assistente de IA personalizado',
+      'Solução digital no-code, do zero ao deploy',
+      'Avaliação de risco ético de IA no setor público',
+    ],
+    emissor: 'CLIC_diversidade',
+  };
+
   const BASE_URL = window.location.origin;
   const params = new URLSearchParams(window.location.search);
   const nomeParam = params.get('nome') || '';
   if (nomeParam) document.getElementById('nomeInput').value = nomeParam;
+
+  // Aplica a config nas partes estaticas do certificado (oficina, carga, competencias, emissor).
+  (function aplicarConfig() {
+    var of = document.getElementById('certOficina');
+    if (of) of.textContent = 'Oficina ' + CERTIFICADO_CONFIG.oficina;
+    var carga = document.getElementById('certCarga');
+    if (carga) carga.textContent = CERTIFICADO_CONFIG.cargaHoraria;
+    var emis = document.getElementById('certEmissor');
+    if (emis) emis.textContent = CERTIFICADO_CONFIG.emissor;
+    var comp = document.getElementById('certCompetencias');
+    if (comp) {
+      comp.innerHTML = '';
+      CERTIFICADO_CONFIG.competencias.forEach(function (c) {
+        var li = document.createElement('li');
+        li.textContent = c;
+        comp.appendChild(li);
+      });
+    }
+  })();
 
   let pdfBlob = null;
 
@@ -562,23 +677,39 @@
     document.getElementById('loadingMsg').classList.add('visible');
     document.getElementById('previewWrap').classList.remove('visible');
 
-    const codigo = gerarId();
-    const hoje = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+    const id8 = gerarId();
+    const codigoDisplay = 'AUT-IA-2026-' + id8;
+    const agora = new Date();
+    const hoje = agora.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
 
     document.getElementById('certNome').textContent = nome;
-    document.getElementById('certNomeAssinatura').textContent = nome;
     document.getElementById('certData').textContent = hoje;
-    document.getElementById('certCodigoTxt').textContent = 'CÓD. AUT-IA-2026-' + codigo;
+    document.getElementById('certCodigoTxt').textContent = 'CÓD. ' + codigoDisplay;
 
+    const verificaUrl = BASE_URL + '/jornada/verificar.html?id=' + id8;
     const qrContainer = document.getElementById('certQrCode');
     qrContainer.innerHTML = '';
-    const verificaUrl = BASE_URL + '/verificar.html?id=' + codigo;
     new QRCode(qrContainer, {
       text: verificaUrl,
       width: 64, height: 64,
       colorDark: '#090c17', colorLight: '#FFFFFF',
       correctLevel: QRCode.CorrectLevel.M
     });
+
+    // Registra no Firestore (autosservico). doc id = id8; leitura publica p/ verificacao.
+    try {
+      if (window.__registrarCertificado) {
+        await window.__registrarCertificado(id8, {
+          nome: nome,
+          oficina: CERTIFICADO_CONFIG.oficina,
+          carga_horaria: String(CERTIFICADO_CONFIG.cargaHoraria),
+          competencias: CERTIFICADO_CONFIG.competencias,
+          codigo: codigoDisplay,
+        });
+      }
+    } catch (e) {
+      console.warn('Registro do certificado falhou:', e && e.message);
+    }
 
     await document.fonts.ready;
     await new Promise(r => setTimeout(r, 1600));
@@ -601,20 +732,6 @@
       pdf.addImage(canvas.toDataURL('image/jpeg', 0.97), 'JPEG', 0, 0, 297, 210);
       pdfBlob = pdf.output('blob');
 
-      try {
-        await fetch(NETLIFY_FN, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            tipo: 'certificado',
-            codigo, nome,
-            email: params.get('email') || '',
-            orgao: params.get('orgao') || '',
-            url_verificacao: verificaUrl
-          })
-        });
-      } catch(e) { console.warn('Registro falhou:', e.message); }
-
       document.getElementById('previewWrap').classList.add('visible');
       document.getElementById('btnDownload').onclick = () => {
         const url = URL.createObjectURL(pdfBlob);
@@ -624,7 +741,22 @@
         a.click();
         URL.revokeObjectURL(url);
       };
-    } catch(err) {
+
+      // "Adicionar ao LinkedIn" — pre-preenche a secao Licencas e Certificados.
+      const liUrl = 'https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME'
+        + '&name=' + encodeURIComponent('Certificado de ' + CERTIFICADO_CONFIG.titulo + ' — Oficina ' + CERTIFICADO_CONFIG.oficina)
+        + '&organizationName=' + encodeURIComponent(CERTIFICADO_CONFIG.emissor)
+        + '&issueYear=' + agora.getFullYear()
+        + '&issueMonth=' + (agora.getMonth() + 1)
+        + '&certId=' + encodeURIComponent(codigoDisplay)
+        + '&certUrl=' + encodeURIComponent(verificaUrl);
+      const liBtn = document.getElementById('btnLinkedin');
+      if (liBtn) { liBtn.href = liUrl; liBtn.style.display = 'flex'; }
+      const vLink = document.getElementById('verificaLink');
+      if (vLink) { vLink.href = verificaUrl; vLink.textContent = verificaUrl; }
+      const vInfo = document.getElementById('verificaInfo');
+      if (vInfo) vInfo.style.display = 'block';
+    } catch (err) {
       console.error(err);
       alert('Erro ao gerar o certificado. Tente novamente.');
     }

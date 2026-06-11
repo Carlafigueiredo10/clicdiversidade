@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verificação de certificado · CLIC_diversidade</title>
+  <meta name="description" content="Verifique a autenticidade de um certificado da oficina Humanos no Comando — CLIC_diversidade." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#090c17; --text:#f0ece2; --muted:rgba(240,236,226,.62);
+      --line:rgba(184,164,232,.16); --card:rgba(255,255,255,.03);
+      --lavanda:#b8a4e8; --ciano:#6dd5e8; --ouro:#d4a840;
+      --ok:#5fd0a8; --erro:#fb7185;
+    }
+    html,body{min-height:100%}
+    body{
+      background:var(--bg);color:var(--text);
+      font-family:'Inter',system-ui,sans-serif;line-height:1.6;
+      -webkit-font-smoothing:antialiased;
+      display:flex;flex-direction:column;min-height:100vh;
+    }
+    .page-glow{
+      position:fixed;inset:0;pointer-events:none;z-index:0;
+      background:
+        radial-gradient(ellipse 60% 40% at 20% 15%, rgba(184,164,232,.06) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 50% at 85% 85%, rgba(109,213,232,.04) 0%, transparent 60%);
+    }
+    .wrap{position:relative;z-index:1;width:100%;max-width:680px;margin:0 auto;padding:3rem 1.5rem 4rem;flex:1}
+
+    .back-link{
+      display:inline-flex;align-items:center;gap:.45rem;
+      font-size:.78rem;color:var(--muted);text-decoration:none;
+      letter-spacing:.04em;margin-bottom:2.5rem;transition:color .2s;
+    }
+    .back-link:hover,.back-link:focus-visible{color:var(--text)}
+
+    .brand{
+      display:flex;align-items:center;gap:.6rem;margin-bottom:1.6rem;
+      font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(184,164,232,.7);font-weight:500;
+    }
+    .brand svg{flex-shrink:0}
+
+    h1{
+      font-family:'Fraunces',serif;font-weight:600;
+      font-size:clamp(1.7rem,4.5vw,2.3rem);line-height:1.12;margin-bottom:.6rem;
+    }
+    .lead{color:var(--muted);font-size:.95rem;max-width:46ch;margin-bottom:2.5rem}
+
+    .estado{margin-top:.5rem}
+    .estado[hidden]{display:none}
+    .carregando{color:var(--muted);font-size:.95rem}
+
+    .selo{
+      display:inline-flex;align-items:center;gap:.6rem;
+      font-family:'Inter',sans-serif;font-weight:600;font-size:1.05rem;
+      padding:.5rem .95rem;border-radius:999px;margin-bottom:1.5rem;
+    }
+    .selo-ok{color:var(--ok);background:rgba(95,208,168,.1);border:1px solid rgba(95,208,168,.3)}
+    .selo-erro{color:var(--erro);background:rgba(251,113,133,.08);border:1px solid rgba(251,113,133,.28)}
+    .selo .icone{font-size:1.2rem;line-height:1}
+
+    .card{
+      background:var(--card);border:1px solid var(--line);border-radius:16px;
+      padding:1.75rem;
+    }
+    .nome-cert{
+      font-family:'Fraunces',serif;font-style:italic;font-weight:600;
+      font-size:clamp(1.5rem,4vw,2rem);color:var(--text);line-height:1.15;
+      margin-bottom:1.5rem;
+    }
+    dl{display:grid;grid-template-columns:1fr;gap:1.1rem}
+    @media(min-width:520px){ dl{grid-template-columns:1fr 1fr} .full{grid-column:1 / -1} }
+    dt{
+      font-size:.7rem;letter-spacing:.13em;text-transform:uppercase;
+      color:rgba(184,164,232,.7);font-weight:600;margin-bottom:.3rem;
+    }
+    dd{font-size:.98rem;color:var(--text)}
+    .comp-list{list-style:none;display:flex;flex-direction:column;gap:.4rem;margin-top:.1rem}
+    .comp-list li{position:relative;padding-left:1.1rem;color:var(--text);font-size:.95rem}
+    .comp-list li::before{content:'';position:absolute;left:0;top:.6rem;width:6px;height:6px;border-radius:50%;background:var(--ciano);opacity:.8}
+    .codigo{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.04em;color:var(--muted)}
+
+    .erro-msg{color:var(--muted);font-size:.95rem;max-width:48ch}
+    .erro-msg strong{color:var(--text);font-weight:600}
+
+    footer{
+      position:relative;z-index:1;text-align:center;padding:1.5rem;
+      font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:rgba(240,236,226,.28);
+      border-top:1px solid rgba(184,164,232,.08);
+    }
+
+    a:focus-visible,button:focus-visible{outline:2px solid var(--ciano);outline-offset:3px;border-radius:4px}
+  </style>
+</head>
+<body>
+  <div class="page-glow"></div>
+
+  <main class="wrap">
+    <a href="/jornada/" class="back-link">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Voltar à jornada
+    </a>
+
+    <p class="brand">
+      <svg width="22" height="22" viewBox="0 0 30 30" fill="none" aria-hidden="true">
+        <circle cx="15" cy="15" r="13" stroke="rgba(184,164,232,0.3)" stroke-width="1"/>
+        <circle cx="15" cy="15" r="8" stroke="rgba(184,164,232,0.45)" stroke-width="1"/>
+        <circle cx="15" cy="15" r="2.5" fill="#b8a4e8"/>
+      </svg>
+      CLIC_diversidade
+    </p>
+
+    <h1>Verificação de certificado</h1>
+    <p class="lead">Confirme a autenticidade de um certificado emitido pela oficina <strong>Humanos no Comando</strong>.</p>
+
+    <!-- Estado: carregando -->
+    <section class="estado" id="estadoCarregando" aria-live="polite">
+      <p class="carregando">Verificando…</p>
+    </section>
+
+    <!-- Estado: válido -->
+    <section class="estado" id="estadoValido" aria-live="polite" hidden>
+      <p class="selo selo-ok"><span class="icone" aria-hidden="true">✓</span> Certificado válido</p>
+      <div class="card">
+        <p class="nome-cert" id="vNome"></p>
+        <dl>
+          <div class="full">
+            <dt>Oficina</dt>
+            <dd id="vOficina"></dd>
+          </div>
+          <div>
+            <dt>Data de emissão</dt>
+            <dd id="vData"></dd>
+          </div>
+          <div>
+            <dt>Carga horária</dt>
+            <dd id="vCarga"></dd>
+          </div>
+          <div class="full">
+            <dt>Competências demonstradas</dt>
+            <dd><ul class="comp-list" id="vCompetencias"></ul></dd>
+          </div>
+          <div class="full">
+            <dt>Código de verificação</dt>
+            <dd class="codigo" id="vCodigo"></dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- Estado: não encontrado / erro -->
+    <section class="estado" id="estadoInvalido" aria-live="polite" hidden>
+      <p class="selo selo-erro"><span class="icone" aria-hidden="true">✕</span> Certificado não encontrado</p>
+      <p class="erro-msg" id="erroMsg">
+        Não localizamos um certificado com esse código. Confira se o link ou o
+        QR Code estão completos. Em caso de dúvida, fale com o <strong>CLIC_diversidade</strong>.
+      </p>
+    </section>
+  </main>
+
+  <footer>CLIC_diversidade · letramento crítico em IA para o setor público</footer>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+    import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+
+    const app = initializeApp({
+      apiKey: 'AIzaSyDYRPSiTa-CnSqj6jfu6T3JBa3e0SQNufY',
+      authDomain: 'clicdiversidade.firebaseapp.com',
+      projectId: 'clicdiversidade',
+      storageBucket: 'clicdiversidade.firebasestorage.app',
+      messagingSenderId: '575473138445',
+      appId: '1:575473138445:web:a0f3ee131aa091e8e00e44',
+    });
+    const db = getFirestore(app);
+
+    const $ = (id) => document.getElementById(id);
+    const mostrar = (estado) => {
+      ['estadoCarregando', 'estadoValido', 'estadoInvalido'].forEach((e) => {
+        $(e).hidden = e !== estado;
+      });
+    };
+    const mostrarErro = (msg) => {
+      if (msg) $('erroMsg').innerHTML = msg;
+      mostrar('estadoInvalido');
+    };
+
+    function formatarData(emitido) {
+      try {
+        const d = emitido && typeof emitido.toDate === 'function' ? emitido.toDate()
+          : (emitido && emitido.seconds ? new Date(emitido.seconds * 1000) : null);
+        if (!d) return '—';
+        return d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+      } catch (e) { return '—'; }
+    }
+
+    (async function () {
+      const id = (new URLSearchParams(location.search).get('id') || '').trim();
+      if (!id) {
+        mostrarErro('Nenhum código informado. Acesse esta página pelo QR Code ou link do certificado.');
+        return;
+      }
+
+      try {
+        const snap = await getDoc(doc(db, 'certificados', id));
+        if (!snap.exists()) { mostrarErro(); return; }
+
+        const d = snap.data();
+        $('vNome').textContent = d.nome || '—';
+        $('vOficina').textContent = 'Oficina ' + (d.oficina || 'Humanos no Comando');
+        $('vData').textContent = formatarData(d.emitido_em);
+        $('vCarga').textContent = d.carga_horaria || '—';
+        $('vCodigo').textContent = d.codigo || id;
+
+        const ul = $('vCompetencias');
+        ul.innerHTML = '';
+        (Array.isArray(d.competencias) ? d.competencias : []).forEach((c) => {
+          const li = document.createElement('li');
+          li.textContent = c;
+          ul.appendChild(li);
+        });
+
+        document.title = 'Certificado de ' + (d.nome || '') + ' · CLIC_diversidade';
+        mostrar('estadoValido');
+      } catch (e) {
+        console.error(e);
+        mostrarErro('Não foi possível verificar agora. Tente novamente em alguns segundos.');
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -188,5 +188,27 @@ service cloud.firestore {
       allow read: if isAdmin();
       allow update, delete: if false;
     }
+
+    // Certificados da oficina "Humanos no Comando". Autosservico: quem concluiu
+    // a avaliacao gera. Leitura PUBLICA (verificacao via QR / pagina /verificar).
+    // Doc id = codigo; create-only impede sobrescrever um codigo existente.
+    // Minimizacao LGPD: hasOnly rejeita qualquer chave fora da lista — o doc
+    // publico NUNCA carrega e-mail, orgao, CPF ou respostas da avaliacao.
+    function validNewCertificado(data) {
+      return data.keys().hasAll(['nome', 'oficina', 'carga_horaria', 'competencias', 'codigo', 'emitido_em'])
+          && data.keys().hasOnly(['nome', 'oficina', 'carga_horaria', 'competencias', 'codigo', 'emitido_em'])
+          && isShortString(data.nome)
+          && isShortString(data.oficina)
+          && data.carga_horaria is string && data.carga_horaria.size() <= 50
+          && data.codigo is string && data.codigo.size() > 0 && data.codigo.size() <= 60
+          && data.competencias is list && data.competencias.size() <= 12
+          && data.emitido_em == request.time;
+    }
+
+    match /certificados/{codigo} {
+      allow read: if true;
+      allow create: if validNewCertificado(request.resource.data);
+      allow update, delete: if false;
+    }
   }
 }
