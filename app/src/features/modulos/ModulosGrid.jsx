@@ -86,6 +86,20 @@ const MODULOS = [
     to: '/modulos/governanca',
     disponivel: true,
   },
+  {
+    numero: '07',
+    icon: '\u{1F916}',
+    titulo: 'Criando um Assistente',
+    descricao:
+      'Entenda o que é um agente, monte o seu no Microsoft Copilot passo a passo e use templates de prompt prontos.',
+    stats: [
+      { value: '9', label: 'Passos' },
+      { value: '2', label: 'Templates' },
+    ],
+    ctaText: 'Criar meu assistente',
+    to: '/modulos/criando-assistente',
+    disponivel: true,
+  },
 ]
 
 export default function ModulosGrid() {

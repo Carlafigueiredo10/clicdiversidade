@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router-dom'
 import Layout from './Layout'
 import Jornada from '../pages/Jornada'
 import EngenhariaPrompt from '../pages/modulos/EngenhariaPrompt'
+import CriandoAssistente from '../pages/modulos/CriandoAssistente'
 import ConstruindoTecnologia from '../pages/modulos/ConstruindoTecnologia'
 import Trilhas from '../pages/modulos/Trilhas'
 import TrilhaDetalhe from '../pages/modulos/TrilhaDetalhe'
@@ -27,6 +28,10 @@ export const router = createBrowserRouter(
       children: [
         { path: '/', element: <Jornada /> },
         { path: '/modulos/engenharia-prompt', element: <EngenhariaPrompt /> },
+        {
+          path: '/modulos/criando-assistente',
+          element: <CriandoAssistente />,
+        },
         {
           path: '/modulos/construindo-tecnologia',
           element: <ConstruindoTecnologia />,
