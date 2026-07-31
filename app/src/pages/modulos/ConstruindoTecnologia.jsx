@@ -1,11 +1,13 @@
 import Tabs from '../../features/modulos/Tabs'
 import SlideNavigator from '../../features/modulos/construindo-tecnologia/SlideNavigator'
 import MeuAplicativo from '../../features/modulos/construindo-tecnologia/MeuAplicativo'
+import PainelGovernanca from '../../features/modulos/construindo-tecnologia/PainelGovernanca'
 import ConstruindoAplicativos from '../../features/modulos/construindo-tecnologia/ConstruindoAplicativos'
 
 const TABS = [
   { id: 'processo', label: 'O Processo', render: () => <SlideNavigator /> },
-  { id: 'meu-app', label: 'Meu Aplicativo', render: () => <MeuAplicativo /> },
+  { id: 'painel-tarefas', label: 'Painel de Tarefas', render: () => <MeuAplicativo /> },
+  { id: 'painel-governanca', label: 'Painel de Governança', render: () => <PainelGovernanca /> },
   { id: 'construindo', label: 'Construindo Aplicativos', render: () => <ConstruindoAplicativos /> },
 ]
 

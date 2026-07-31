@@ -9,11 +9,11 @@ export default function MeuAplicativo() {
           🚀
         </span>
         <h2 className="mt-4 font-display font-semibold text-3xl md:text-5xl text-ink leading-[1.05]">
-          Crie seu aplicativo agora
+          Painel de tarefas
         </h2>
         <p className="mt-5 max-w-xl mx-auto text-ink-soft leading-relaxed">
-          Use este prompt completo na Lovable para gerar um gerenciador de
-          tarefas profissional em minutos.
+          O primeiro aplicativo da oficina: use este prompt completo na Lovable
+          para gerar um gerenciador de tarefas profissional em minutos.
         </p>
       </div>
 
@@ -23,7 +23,16 @@ export default function MeuAplicativo() {
         </h3>
         <ol className="space-y-2 text-sm text-ink-soft list-decimal list-inside">
           <li>
-            Abra <strong className="text-ink">lovable.dev</strong> e faça login.
+            Abra{' '}
+            <a
+              href="https://lovable.dev"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-accent-fg font-medium underline underline-offset-4 hover:text-ink transition"
+            >
+              lovable.dev
+            </a>{' '}
+            e faça login.
           </li>
           <li>Clique no botão abaixo para copiar o prompt.</li>
           <li>
