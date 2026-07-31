@@ -1,0 +1,551 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>auditando dados e decisões — CLIC_diversidade</title>
+<meta name="description" content="As perguntas técnicas que revelam o viés antes que ele decida por você. Quatro frentes, quatorze perguntas, método CLIC." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" />
+<style>
+  :root {
+    --navy-0: #070b1a;
+    --navy-1: #0c1126;
+    --navy-2: #141a36;
+    --line: rgba(184, 168, 240, 0.14);
+    --line-soft: rgba(184, 168, 240, 0.08);
+    --text: #e9e7f4;
+    --text-2: #a7a3c4;
+    --lavanda: #b8a8f0;
+    --ciano: #6fd9e8;
+    --ouro: #e8c46a;
+    --ouro-dim: rgba(232, 196, 106, 0.12);
+    --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--navy-0);
+    color: var(--text);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 28px; }
+
+  /* ---------- hero ---------- */
+  .hero {
+    position: relative;
+    min-height: 92vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .orbitas {
+    position: absolute;
+    top: 50%;
+    right: -22vmin;
+    transform: translateY(-50%);
+    width: 92vmin;
+    height: 92vmin;
+    pointer-events: none;
+    opacity: 0.9;
+  }
+  .orbitas circle { fill: none; stroke-width: 1; }
+  .orb-anim { animation: girar 90s linear infinite; transform-origin: 50% 50%; }
+  @keyframes girar { to { transform: rotate(360deg); } }
+
+  .hero-inner { position: relative; z-index: 1; padding: 96px 0; }
+
+  .eyebrow {
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--lavanda);
+    font-weight: 500;
+    margin-bottom: 28px;
+  }
+  .eyebrow .dot { color: var(--ciano); }
+
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: clamp(38px, 6.4vw, 68px);
+    line-height: 1.06;
+    letter-spacing: -0.015em;
+    max-width: 13ch;
+  }
+  h1 em {
+    font-style: italic;
+    color: var(--lavanda);
+  }
+
+  .hero-sub {
+    margin-top: 26px;
+    font-size: clamp(16px, 2vw, 19px);
+    color: var(--text-2);
+    max-width: 46ch;
+  }
+
+  .hero-meta {
+    margin-top: 48px;
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    flex-wrap: wrap;
+    font-size: 13px;
+    color: var(--text-2);
+  }
+  .hero-meta .tag {
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 6px 16px;
+    color: var(--lavanda);
+  }
+  .hero-meta .tag-mono {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    color: var(--ciano);
+    border-color: rgba(111, 217, 232, 0.3);
+  }
+
+  /* ---------- intro ---------- */
+  .intro {
+    border-top: 1px solid var(--line-soft);
+    padding: 88px 0 72px;
+  }
+  .intro p {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: clamp(20px, 2.8vw, 27px);
+    line-height: 1.45;
+    max-width: 30ch;
+    color: var(--text);
+  }
+  .intro p strong { font-weight: 600; color: var(--ciano); }
+  .intro .nota {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    color: var(--text-2);
+    margin-top: 26px;
+    max-width: 52ch;
+    line-height: 1.7;
+  }
+  .intro .nota + .nota { margin-top: 18px; }
+  .intro .nota em { font-style: normal; color: var(--ouro); }
+
+  /* ---------- frentes ---------- */
+  .eixo {
+    border-top: 1px solid var(--line-soft);
+    padding: 84px 0 76px;
+  }
+
+  .eixo-head {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 28px;
+    align-items: start;
+    margin-bottom: 40px;
+  }
+
+  .eixo-num {
+    position: relative;
+    width: 84px;
+    height: 84px;
+    flex: none;
+  }
+  .eixo-num svg { position: absolute; inset: 0; }
+  .eixo-num span {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--lavanda);
+  }
+
+  .eixo-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: clamp(26px, 3.6vw, 38px);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    max-width: 22ch;
+  }
+  .eixo-context {
+    margin-top: 14px;
+    font-size: 15.5px;
+    color: var(--text-2);
+    max-width: 52ch;
+  }
+
+  .perguntas { list-style: none; }
+  .perguntas li {
+    display: grid;
+    grid-template-columns: 26px 1fr;
+    gap: 18px;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--line-soft);
+    font-size: 16.5px;
+    line-height: 1.6;
+    max-width: 72ch;
+  }
+  .perguntas li:last-child { border-bottom: 0; }
+  .perguntas .marca {
+    color: var(--ciano);
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    line-height: 1.45;
+  }
+
+  /* ---------- o que a resposta revela ---------- */
+  .ninguem-faz {
+    margin-top: 40px;
+    position: relative;
+    border: 1px solid rgba(232, 196, 106, 0.35);
+    background: linear-gradient(135deg, var(--ouro-dim), rgba(232, 196, 106, 0.04));
+    border-radius: 18px;
+    padding: 36px 38px 34px;
+    overflow: hidden;
+  }
+  .ninguem-faz::before {
+    content: "";
+    position: absolute;
+    top: -70px;
+    right: -70px;
+    width: 200px;
+    height: 200px;
+    border: 1px solid rgba(232, 196, 106, 0.18);
+    border-radius: 50%;
+  }
+  .ninguem-faz::after {
+    content: "";
+    position: absolute;
+    top: -40px;
+    right: -40px;
+    width: 140px;
+    height: 140px;
+    border: 1px solid rgba(232, 196, 106, 0.28);
+    border-radius: 50%;
+  }
+  .nf-label {
+    font-size: 11.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ouro);
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+  .nf-pergunta {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-style: italic;
+    font-size: clamp(20px, 2.6vw, 26px);
+    line-height: 1.35;
+    color: var(--text);
+    max-width: 34ch;
+  }
+  .nf-nota {
+    margin-top: 16px;
+    font-size: 14.5px;
+    color: var(--text-2);
+    max-width: 56ch;
+    line-height: 1.65;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ---------- ponte / fechamento ---------- */
+  .ponte {
+    border-top: 1px solid var(--line-soft);
+    padding: 96px 0 110px;
+    position: relative;
+    overflow: hidden;
+  }
+  .ponte .orbitas-fim {
+    position: absolute;
+    bottom: -38vmin;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80vmin;
+    height: 80vmin;
+    opacity: 0.55;
+    pointer-events: none;
+  }
+  .ponte p {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(20px, 2.8vw, 27px);
+    line-height: 1.45;
+    max-width: 32ch;
+    position: relative;
+    z-index: 1;
+  }
+  .ponte p em { font-style: italic; color: var(--lavanda); }
+  .ponte .prox {
+    margin-top: 30px;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ciano);
+    font-weight: 500;
+    position: relative;
+    z-index: 1;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(111, 217, 232, 0.35);
+    padding-bottom: 4px;
+  }
+  .ponte .prox:hover { color: var(--text); border-color: var(--text); }
+
+  footer {
+    border-top: 1px solid var(--line-soft);
+    padding: 34px 0 44px;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-size: 13px;
+    color: var(--text-2);
+  }
+  footer .marca-clic { color: var(--lavanda); font-weight: 500; }
+
+  /* ---------- reveal ---------- */
+  .reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.on { opacity: 1; transform: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .orb-anim { animation: none; }
+    .reveal { opacity: 1; transform: none; transition: none; }
+    html { scroll-behavior: auto; }
+  }
+
+  @media (max-width: 640px) {
+    .eixo-head { grid-template-columns: 1fr; gap: 18px; }
+    .eixo-num { width: 64px; height: 64px; }
+    .ninguem-faz { padding: 28px 24px 26px; }
+    .orbitas { right: -55vmin; opacity: 0.6; }
+  }
+
+  /* ---------- voltar à jornada ---------- */
+  .voltar-jornada {
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    z-index: 20;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: var(--lavanda);
+    text-decoration: none;
+    background: rgba(12, 17, 38, 0.72);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 9px 16px;
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+  .voltar-jornada:hover {
+    border-color: var(--lavanda);
+    color: var(--text);
+  }
+</style>
+</head>
+<body>
+
+<a class="voltar-jornada" href="/jornada/">← Voltar à jornada</a>
+
+<!-- hero -->
+<header class="hero">
+  <svg class="orbitas" viewBox="0 0 600 600" aria-hidden="true">
+    <g class="orb-anim">
+      <circle cx="300" cy="300" r="120" stroke="rgba(184,168,240,0.22)" />
+      <circle cx="300" cy="300" r="190" stroke="rgba(111,217,232,0.16)" stroke-dasharray="2 7" />
+      <circle cx="300" cy="300" r="258" stroke="rgba(184,168,240,0.12)" />
+      <circle cx="300" cy="300" r="295" stroke="rgba(232,196,106,0.10)" stroke-dasharray="1 10" />
+      <circle cx="420" cy="300" r="3.5" fill="#b8a8f0" stroke="none" />
+      <circle cx="300" cy="110" r="2.5" fill="#6fd9e8" stroke="none" />
+      <circle cx="558" cy="300" r="2.5" fill="#e8c46a" stroke="none" />
+    </g>
+  </svg>
+  <div class="wrap hero-inner">
+    <p class="eyebrow">CLIC_diversidade <span class="dot">·</span> módulo</p>
+    <h1>auditando dados e decisões: <em>achar o viés antes que ele decida</em></h1>
+    <p class="hero-sub">As perguntas técnicas que abrem o processo. Quatro frentes, quatorze perguntas para levar no bolso — para reunião com fornecedor, parecer técnico e reunião interna.</p>
+    <div class="hero-meta">
+      <span class="tag tag-mono">hackear o sistema</span>
+      <span class="tag">setor público</span>
+      <span class="tag">4 frentes</span>
+    </div>
+  </div>
+</header>
+
+<!-- intro -->
+<section class="intro">
+  <div class="wrap reveal">
+    <p>O viés não está na tecnologia: <strong>está na decisão que alguém tomou antes dela.</strong></p>
+    <p class="nota">Todo processo tem pontos de entrada. Critério escolhido, dado coletado, exceção permitida, erro tolerado. Cada um desses pontos foi decidido por alguém — e o que foi decidido pode ser auditado. Hackear aqui não é invadir. É abrir o que já está aberto e ninguém olhou.</p>
+    <p class="nota">A IA é espelho estatístico: devolve o passado com aparência de cálculo. O trabalho não é confiar nem recusar, é <em>saber o que perguntar</em>. As perguntas abaixo servem para qualquer sistema que decide sobre pessoas — comprado, construído ou herdado.</p>
+  </div>
+</section>
+
+<!-- frente 1 -->
+<section class="eixo">
+  <div class="wrap">
+    <div class="eixo-head reveal">
+      <div class="eixo-num" aria-hidden="true">
+        <svg viewBox="0 0 84 84"><circle cx="42" cy="42" r="40" fill="none" stroke="rgba(184,168,240,0.3)" stroke-width="1"/><circle cx="42" cy="42" r="32" fill="none" stroke="rgba(111,217,232,0.18)" stroke-width="1" stroke-dasharray="2 6"/></svg>
+        <span>01</span>
+      </div>
+      <div>
+        <h2 class="eixo-title">origem</h2>
+        <p class="eixo-context">De onde vem o dado, quem ele registrou e quem ficou de fora do registro.</p>
+      </div>
+    </div>
+    <ul class="perguntas">
+      <li class="reveal"><span class="marca">¿</span><span>Qual é a população de referência e qual é a população efetivamente registrada na base?</span></li>
+      <li class="reveal"><span class="marca">¿</span><span>A raça é autodeclarada, heteroatribuída ou inferida pelo sistema?</span></li>
+      <li class="reveal"><span class="marca">¿</span><span>Qual é a taxa de campo em branco por grupo, e como o vazio é tratado no cálculo?</span></li>
+      <li class="reveal"><span class="marca">¿</span><span>De quando é o dado de treino, e qual passado ele reproduz?</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- frente 2 -->
+<section class="eixo">
+  <div class="wrap">
+    <div class="eixo-head reveal">
+      <div class="eixo-num" aria-hidden="true">
+        <svg viewBox="0 0 84 84"><circle cx="42" cy="42" r="40" fill="none" stroke="rgba(184,168,240,0.3)" stroke-width="1"/><circle cx="42" cy="42" r="32" fill="none" stroke="rgba(111,217,232,0.18)" stroke-width="1" stroke-dasharray="2 6"/></svg>
+        <span>02</span>
+      </div>
+      <div>
+        <h2 class="eixo-title">proxy</h2>
+        <p class="eixo-context">Raça, gênero e classe raramente aparecem nomeados. Aparecem por procuração.</p>
+      </div>
+    </div>
+    <ul class="perguntas">
+      <li class="reveal"><span class="marca">¿</span><span>Quais variáveis carregam raça sem nomear raça? CEP, escola de origem, sobrenome, tempo de vínculo, acesso a documento digital, exigência de deslocamento.</span></li>
+      <li class="reveal"><span class="marca">¿</span><span>O que acontece com o resultado se eu remover cada uma delas?</span></li>
+      <li class="reveal"><span class="marca">¿</span><span>Quem escolheu incluir essa variável, e com que justificativa escrita?</span></li>
+    </ul>
+    <div class="ninguem-faz reveal">
+      <p class="nf-label">a pergunta que ninguém faz</p>
+      <p class="nf-pergunta">Se nenhum critério menciona raça, por que o resultado tem cor?</p>
+      <p class="nf-nota">Critério neutro no papel não é critério neutro no efeito. Remover a variável sensível da base não remove a desigualdade do resultado — só a torna mais difícil de provar.</p>
+    </div>
+  </div>
+</section>
+
+<!-- frente 3 -->
+<section class="eixo">
+  <div class="wrap">
+    <div class="eixo-head reveal">
+      <div class="eixo-num" aria-hidden="true">
+        <svg viewBox="0 0 84 84"><circle cx="42" cy="42" r="40" fill="none" stroke="rgba(184,168,240,0.3)" stroke-width="1"/><circle cx="42" cy="42" r="32" fill="none" stroke="rgba(111,217,232,0.18)" stroke-width="1" stroke-dasharray="2 6"/></svg>
+        <span>03</span>
+      </div>
+      <div>
+        <h2 class="eixo-title">erro</h2>
+        <p class="eixo-context">Todo sistema erra. A pergunta é qual erro ele prefere cometer, e sobre quem ele cai.</p>
+      </div>
+    </div>
+    <ul class="perguntas">
+      <li class="reveal"><span class="marca">¿</span><span>O desempenho é reportado agregado ou desagregado por subgrupo?</span></li>
+      <li class="reveal"><span class="marca">¿</span><span>Peço a matriz de confusão por grupo, não a acurácia geral. Ela existe?</span></li>
+      <li class="reveal"><span class="marca">¿</span><span>Qual erro o sistema prefere cometer, e sobre quem ele cai?</span></li>
+      <li class="reveal"><span class="marca">¿</span><span>O limiar de decisão é único para todos? Quem definiu esse número?</span></li>
+    </ul>
+    <div class="ninguem-faz reveal">
+      <p class="nf-label">o que fica desta frente</p>
+      <p class="nf-pergunta">Acurácia geral é a métrica que esconde. Desagregada, ela denuncia.</p>
+      <p class="nf-nota">Um sistema com 95% de acerto pode estar errando sistematicamente sobre 5% das pessoas — e esses 5% não são sorteados. A média é onde a desigualdade se esconde melhor.</p>
+    </div>
+  </div>
+</section>
+
+<!-- frente 4 -->
+<section class="eixo">
+  <div class="wrap">
+    <div class="eixo-head reveal">
+      <div class="eixo-num" aria-hidden="true">
+        <svg viewBox="0 0 84 84"><circle cx="42" cy="42" r="40" fill="none" stroke="rgba(184,168,240,0.3)" stroke-width="1"/><circle cx="42" cy="42" r="32" fill="none" stroke="rgba(111,217,232,0.18)" stroke-width="1" stroke-dasharray="2 6"/></svg>
+        <span>04</span>
+      </div>
+      <div>
+        <h2 class="eixo-title">decisão</h2>
+        <p class="eixo-context">Onde a estatística vira ato administrativo, e alguém passa a responder por ele.</p>
+      </div>
+    </div>
+    <ul class="perguntas">
+      <li class="reveal"><span class="marca">¿</span><span>Contra qual baseline isso foi comparado?</span></li>
+      <li class="reveal"><span class="marca">¿</span><span>Existe caminho de contestação, e quem responde por ele?</span></li>
+      <li class="reveal"><span class="marca">¿</span><span>Com que frequência é reavaliado, e por quem?</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- o que fica -->
+<section class="eixo">
+  <div class="wrap">
+    <div class="eixo-head reveal">
+      <div class="eixo-num" aria-hidden="true">
+        <svg viewBox="0 0 84 84"><circle cx="42" cy="42" r="40" fill="none" stroke="rgba(184,168,240,0.3)" stroke-width="1"/><circle cx="42" cy="42" r="32" fill="none" stroke="rgba(232,196,106,0.22)" stroke-width="1" stroke-dasharray="2 6"/></svg>
+        <span>05</span>
+      </div>
+      <div>
+        <h2 class="eixo-title">parar também é resultado</h2>
+        <p class="eixo-context">Auditar não obriga a consertar.</p>
+      </div>
+    </div>
+    <ul class="perguntas">
+      <li class="reveal"><span class="marca">·</span><span>Um processo pode ser suspenso depois da auditoria. Isso é governança funcionando, não projeto fracassado.</span></li>
+      <li class="reveal"><span class="marca">·</span><span>Quando faltar informação, o produto útil da auditoria é a lista do que falta — não uma estimativa plausível para preencher o vazio.</span></li>
+      <li class="reveal"><span class="marca">·</span><span>A IA entrega rascunho para revisão humana, nunca a palavra final. Quem decide continua sendo pessoa, com nome e responsabilidade.</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ponte -->
+<section class="ponte">
+  <svg class="orbitas-fim" viewBox="0 0 600 600" aria-hidden="true">
+    <circle cx="300" cy="300" r="140" fill="none" stroke="rgba(184,168,240,0.18)" stroke-width="1"/>
+    <circle cx="300" cy="300" r="210" fill="none" stroke="rgba(111,217,232,0.12)" stroke-width="1" stroke-dasharray="2 7"/>
+    <circle cx="300" cy="300" r="280" fill="none" stroke="rgba(232,196,106,0.10)" stroke-width="1"/>
+  </svg>
+  <div class="wrap reveal">
+    <p>Estas perguntas cabem no bolso. <em>Fazer a máquina fazê-las por você</em> é o tema do próximo módulo.</p>
+    <a class="prox" href="/jornada/modulos/criando-assistente">→ módulo 07: criando um assistente</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap" style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:0 28px;">
+    <span><span class="marca-clic">CLIC_diversidade</span> · letramento crítico em IA para o setor público</span>
+    <span>Carla Figueiredo</span>
+  </div>
+</footer>
+
+<script>
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('on'); obs.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach((el) => obs.observe(el));
+</script>
+
+</body>
+</html>

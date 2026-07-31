@@ -13,6 +13,15 @@ export const CATEGORIAS = {
 export const TERMOS = [
   {
     "letter": "A",
+    "name": "Acurácia",
+    "cat": "dados",
+    "mini": "Percentual de acertos de um sistema — e o que ele esconde",
+    "def": "Proporção de decisões corretas que um sistema automatizado toma. Sozinha, é a métrica mais fácil de exibir e a mais fácil de se esconder atrás: um sistema com 95% de acerto pode estar errando sistematicamente sobre um mesmo grupo de pessoas. Peça sempre a acurácia <strong>desagregada por grupo</strong>.",
+    "pronunc": "A-cu-RÁ-ci-a",
+    "example": "O fornecedor apresentou 97% de acurácia geral, mas não soube informar a acurácia para pessoas negras."
+  },
+  {
+    "letter": "A",
     "name": "Agile / Ágil",
     "cat": "neg",
     "mini": "Método de trabalho em ciclos curtos",
@@ -166,6 +175,15 @@ export const TERMOS = [
   },
   {
     "letter": "D",
+    "name": "Dados de Treinamento",
+    "cat": "ia",
+    "mini": "Os exemplos do passado com que a IA aprendeu",
+    "def": "Conjunto de dados usado para ensinar um modelo de IA a reconhecer padrões. O sistema aprende a repetir o que está nesses dados — inclusive as desigualdades que eles registram. <strong>De quando são e qual passado reproduzem</strong> são perguntas de auditoria.",
+    "pronunc": "Da-dos de Trei-na-MEN-to",
+    "example": "Se os dados de treinamento vêm de dez anos de promoções do órgão, a IA aprende quem costumava ser promovido."
+  },
+  {
+    "letter": "D",
     "name": "Deploy",
     "cat": "dev",
     "mini": "Colocar o sistema no ar para o mundo acessar",
@@ -190,6 +208,24 @@ export const TERMOS = [
     "def": "Sinônimo prático de criptografar: converter dados legíveis em formato codificado. Usada em discos, arquivos e comunicações para proteger contra acesso não autorizado.",
     "pronunc": "En-crip-ta-ÇÃO",
     "example": "O notebook institucional tem encriptação de disco completo; se for roubado, os dados não são acessíveis."
+  },
+  {
+    "letter": "E",
+    "name": "Equidade",
+    "cat": "ia",
+    "mini": "Tratar de forma diferente para chegar a resultado justo",
+    "def": "Não é sinônimo de igualdade. Igualdade é aplicar o mesmo critério a todas as pessoas; equidade é reconhecer que pontos de partida diferentes exigem tratamentos diferentes para produzir um resultado justo. Em IA, mede-se comparando o desempenho do sistema <strong>entre subgrupos</strong>, nunca na média.",
+    "pronunc": "E-qui-DA-de",
+    "example": "O critério era igual para todo mundo, mas o resultado não foi equitativo: exigia deslocamento até Brasília."
+  },
+  {
+    "letter": "F",
+    "name": "Falso Positivo / Falso Negativo",
+    "cat": "dados",
+    "mini": "Os dois jeitos de um sistema errar",
+    "def": "<strong>Falso positivo</strong>: o sistema aponta algo que não é o caso — acusa fraude onde não há. <strong>Falso negativo</strong>: o sistema deixa passar o que deveria apontar — nega um benefício a quem tem direito. Todo sistema escolhe qual dos dois erros prefere cometer, e essa escolha recai sobre pessoas diferentes.",
+    "pronunc": "Fal-so Po-si-TI-vo / Ne-ga-TI-vo",
+    "example": "No corte automático de benefício, o falso positivo tira a renda de quem precisa; o falso negativo custa dinheiro ao Estado."
   },
   {
     "letter": "F",
@@ -355,6 +391,15 @@ export const TERMOS = [
   },
   {
     "letter": "M",
+    "name": "Matriz de Confusão",
+    "cat": "dados",
+    "mini": "Tabela que mostra onde e como o sistema erra",
+    "def": "Tabela que cruza o que o sistema previu com o que de fato aconteceu, separando acertos, falsos positivos e falsos negativos. Pedida <strong>por grupo</strong>, revela desigualdades que a acurácia geral esconde.",
+    "pronunc": "Ma-triz de Con-fu-SÃO",
+    "example": "Peça a matriz de confusão por grupo, não a acurácia geral: é nela que o viés aparece."
+  },
+  {
+    "letter": "M",
     "name": "Metadados",
     "cat": "dados",
     "mini": "Dados que descrevem outros dados",
@@ -370,6 +415,15 @@ export const TERMOS = [
     "def": "Arquitetura onde um sistema é composto por pequenos serviços autônomos que se comunicam via API. Cada serviço pode ser desenvolvido, implantado e escalado de forma independente.",
     "pronunc": "Mi-cros-ser-VI-ços",
     "example": "O portal do governo foi reestruturado em microsserviços para que a queda de um módulo não derrube todo o site."
+  },
+  {
+    "letter": "M",
+    "name": "Model Card",
+    "cat": "ia",
+    "mini": "A bula do modelo de IA",
+    "def": "Documento que descreve um modelo de IA: para que serve, com quais dados e quais grupos foi treinado, onde costuma falhar e quais usos são desaconselhados. É o equivalente à bula de um medicamento. <strong>A ausência de model card já é informação</strong> sobre o fornecedor.",
+    "pronunc": "\"mó-del cárd\"",
+    "example": "Antes de assinar o contrato, a equipe pediu o model card e descobriu que o sistema nunca foi testado com dados brasileiros."
   },
   {
     "letter": "N",
@@ -508,12 +562,30 @@ export const TERMOS = [
   },
   {
     "letter": "V",
+    "name": "Variável Proxy",
+    "cat": "dados",
+    "mini": "Um dado que carrega outro sem nomeá-lo",
+    "def": "Variável que funciona como substituta de uma característica sensível sem citá-la. CEP, escola de origem, sobrenome, tempo de vínculo e exigência de deslocamento podem carregar raça, gênero e classe por procuração. Retirar a variável sensível da base não elimina o efeito — só o torna mais difícil de provar.",
+    "pronunc": "Va-ri-Á-vel PRÓ-xi",
+    "example": "O edital não menciona raça em nenhuma linha, mas usa CEP e escola de origem: são variáveis proxy."
+  },
+  {
+    "letter": "V",
     "name": "Vibe Coding",
     "cat": "ia",
     "mini": "Criar software conversando com IA em linguagem natural",
     "def": "Prática emergente onde a pessoa descreve o que quer construir em linguagem natural e uma IA generativa escreve o código. Reduz a barreira técnica para criar soluções digitais.",
     "pronunc": "\"váib có-ding\"",
     "example": "Com vibe coding no Lovable, a servidora criou um formulário de cadastro sem saber programar."
+  },
+  {
+    "letter": "V",
+    "name": "Viés Algorítmico",
+    "cat": "ia",
+    "mini": "Erro sistemático que recai sempre sobre os mesmos grupos",
+    "def": "Quando um sistema automatizado produz resultados consistentemente piores para determinados grupos de pessoas. Raramente vem de má intenção: vem dos dados que registraram desigualdades passadas e dos critérios que alguém escolheu incluir. Por isso é auditável — <strong>o viés está na decisão, não na máquina</strong>.",
+    "pronunc": "Vi-ÉS Al-go-RÍT-mi-co",
+    "example": "O viés algorítmico da triagem só apareceu quando os resultados foram separados por grupo."
   },
   {
     "letter": "V",

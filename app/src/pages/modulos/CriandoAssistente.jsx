@@ -4,6 +4,7 @@ import AgentesConceitos from '../../features/modulos/criando-assistente/AgentesC
 import GuiaCopilot from '../../features/modulos/criando-assistente/GuiaCopilot'
 import TemplateAgenteAdmin from '../../features/modulos/criando-assistente/TemplateAgenteAdmin'
 import TemplateAgenteContraditorio from '../../features/modulos/criando-assistente/TemplateAgenteContraditorio'
+import TemplateAgenteAuditor from '../../features/modulos/criando-assistente/TemplateAgenteAuditor'
 
 const TABS = [
   {
@@ -25,6 +26,11 @@ const TABS = [
     id: 'template-contraditorio',
     label: 'Template Debatedor Crítico',
     render: () => <TemplateAgenteContraditorio />,
+  },
+  {
+    id: 'template-auditor',
+    label: 'Template Auditor de Equidade',
+    render: () => <TemplateAgenteAuditor />,
   },
 ]
 

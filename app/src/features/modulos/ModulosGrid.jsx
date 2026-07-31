@@ -94,7 +94,7 @@ const MODULOS = [
       'Entenda o que é um agente, monte o seu no Microsoft Copilot passo a passo e use templates de prompt prontos.',
     stats: [
       { value: '9', label: 'Passos' },
-      { value: '2', label: 'Templates' },
+      { value: '3', label: 'Templates' },
     ],
     ctaText: 'Criar meu assistente',
     to: '/modulos/criando-assistente',
