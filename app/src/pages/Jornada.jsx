@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import FormField from '../components/FormField'
 import HeadlineCinematic from '../components/HeadlineCinematic'
 import LevelCard from '../components/LevelCard'
-import PillToggle from '../components/PillToggle'
 import ChartLevelLine from '../components/ChartLevelLine'
 import ModulosGrid from '../features/modulos/ModulosGrid'
 import ModuloCard from '../features/modulos/ModuloCard'
@@ -46,7 +45,6 @@ export default function Jornada() {
     orgao: '',
     email: '',
     whatsapp: '',
-    quer_grupo_whatsapp: null,
     nivel: null,
   })
   const [enviando, setEnviando] = useState(false)
@@ -74,11 +72,7 @@ export default function Jornada() {
 
   const dadosOk =
     form.nome.trim() && form.orgao.trim() && form.email.trim()
-  const podeSubmeter =
-    dadosOk &&
-    form.nivel &&
-    form.quer_grupo_whatsapp !== null &&
-    !enviando
+  const podeSubmeter = dadosOk && form.nivel && !enviando
 
   function set(field) {
     return (value) =>
@@ -137,8 +131,8 @@ export default function Jornada() {
         />
 
         <p className="mt-6 max-w-xl mx-auto text-center text-ink-soft text-base md:text-lg leading-relaxed">
-          Informe seus dados abaixo e entre no grupo de WhatsApp para troca de
-          experiências.
+          Informe seus dados abaixo e escolha o nível que mais se parece com o
+          seu momento hoje.
         </p>
 
         <form onSubmit={handleSubmit} className="mt-12 space-y-8">
@@ -175,16 +169,6 @@ export default function Jornada() {
                 type="tel"
                 value={form.whatsapp}
                 onChange={set('whatsapp')}
-              />
-            </div>
-
-            <div className="flex flex-wrap items-center justify-between gap-4 px-2">
-              <span className="text-accent-fg text-sm">
-                Quer entrar no grupo de WhatsApp do programa?
-              </span>
-              <PillToggle
-                value={form.quer_grupo_whatsapp}
-                onChange={set('quer_grupo_whatsapp')}
               />
             </div>
 
@@ -284,16 +268,6 @@ export default function Jornada() {
             </div>
 
             <div className="mt-10 flex flex-wrap justify-center gap-3">
-              {form.quer_grupo_whatsapp === true && (
-                <a
-                  href="https://chat.whatsapp.com/CDv95OwuUag4nTpzzLPvyE"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="rounded-full bg-emerald-600 text-white px-7 py-3 text-sm font-medium hover:bg-emerald-700 transition"
-                >
-                  Entrar no grupo do WhatsApp ↗
-                </a>
-              )}
               <a
                 href="#modulos"
                 className="rounded-full bg-ink text-page px-7 py-3 text-sm font-medium hover:opacity-90 transition"
@@ -341,12 +315,13 @@ export default function Jornada() {
           As perguntas que vêm antes
         </h2>
         <p className="mt-6 max-w-2xl mx-auto text-center text-ink-soft text-base md:text-lg leading-relaxed">
-          Dois guias críticos para o momento da decisão: como estruturar um
-          projeto antes de tirá-lo do papel — e o que perguntar antes de
-          assinar um contrato de IA.
+          Três guias críticos para o momento da decisão: como estruturar um
+          projeto antes de tirá-lo do papel, o que perguntar antes de assinar
+          um contrato de IA — e como auditar os dados e a decisão de um sistema
+          que já existe.
         </p>
 
-        <div className="mt-14 grid gap-4 md:grid-cols-2">
+        <div className="mt-14 grid gap-4 md:grid-cols-3">
           <ModuloCard
             icon="🧭"
             titulo="Estruturando projetos de IA"
@@ -369,6 +344,18 @@ export default function Jornada() {
             ]}
             ctaText="Abrir guia"
             to="/jornada/modulos/contratando-solucoes-de-ia.html"
+            external
+          />
+          <ModuloCard
+            icon="🔍"
+            titulo="Auditando dados e decisões"
+            descricao="As perguntas técnicas que revelam o viés antes que ele decida por você. Quatro frentes — origem, proxy, erro e decisão — para levar no bolso."
+            stats={[
+              { value: '4', label: 'Frentes' },
+              { value: '14', label: 'Perguntas' },
+            ]}
+            ctaText="Abrir guia"
+            to="/jornada/modulos/auditando-dados-e-decisoes.html"
             external
           />
         </div>

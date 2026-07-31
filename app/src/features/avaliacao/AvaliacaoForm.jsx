@@ -143,6 +143,21 @@ export default function AvaliacaoForm() {
         <p className="mt-2 text-sm text-ink-soft">
           Sua resposta ajuda a desenhar as próximas oficinas.
         </p>
+
+        <div className="mt-8 pt-6 border-t border-line">
+          <p className="text-sm text-ink-soft leading-relaxed max-w-sm mx-auto">
+            A conversa continua no grupo do programa — trocas, dúvidas e avisos
+            das próximas oficinas.
+          </p>
+          <a
+            href="https://chat.whatsapp.com/CDv95OwuUag4nTpzzLPvyE"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-4 inline-block rounded-full bg-emerald-600 text-white px-7 py-3 text-sm font-medium hover:bg-emerald-700 transition"
+          >
+            Entrar no grupo do WhatsApp ↗
+          </a>
+        </div>
       </div>
     )
   }
