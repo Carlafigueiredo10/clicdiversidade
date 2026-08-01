@@ -32,6 +32,16 @@
     + '.__lelia-msg--user{align-self:flex-end;background:#1a1715;color:#fffaf0;border-bottom-right-radius:4px}'
     + '.__lelia-msg--assistant{align-self:flex-start;background:#f2e9d8;color:#1a1715;border-bottom-left-radius:4px}'
     + '.__lelia-msg--system{align-self:center;background:transparent;color:#7a6f66;font-size:.78rem;font-style:italic;text-align:center;max-width:100%}'
+    + '.__lelia-md{white-space:normal}'
+    + '.__lelia-md p{margin:0 0 .6em}'
+    + '.__lelia-md p:last-child{margin-bottom:0}'
+    + '.__lelia-md ul{margin:.2em 0 .6em;padding-left:1.15em}'
+    + '.__lelia-md ul:last-child{margin-bottom:0}'
+    + '.__lelia-md li{margin:.18em 0}'
+    + '.__lelia-md strong{font-weight:600}'
+    + '.__lelia-md a{color:#7a4a1f;text-decoration:underline;text-underline-offset:2px;word-break:break-word}'
+    + '.__lelia-md a:hover{color:#1a1715}'
+    + '.__lelia-md code{font:500 .85em/1.4 "JetBrains Mono",ui-monospace,monospace;background:rgba(26,23,21,.07);border-radius:4px;padding:.1em .35em}'
     + '.__lelia-typing{align-self:flex-start;padding:.5rem .85rem;color:#7a6f66;font-style:italic;font-size:.85rem}'
     + '.__lelia-typing__dots{display:inline-block;letter-spacing:2px}'
     + '@keyframes __lelia-bounce{0%,80%,100%{opacity:.3}40%{opacity:1}}'
@@ -230,9 +240,110 @@
       scrollBottom()
     }
 
+    // Markdown minimo da resposta da Lelia. A persona dela emite **negrito**,
+    // *italico*, listas e links em markdown — sem isso tudo aparece cru na tela.
+    // Escapa HTML ANTES de qualquer transformacao: o texto vem do modelo.
+    function escapeHtml(s) {
+      return s
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+    }
+
+    // So http(s), mailto e caminho interno. Barra javascript:, data: etc.
+    function urlSegura(u) {
+      return /^(https?:\/\/|mailto:|\/)/i.test(u.replace(/&amp;/g, '&'))
+    }
+
+    function link(href, texto) {
+      if (!urlSegura(href)) return texto
+      var externo = /^https?:\/\//i.test(href)
+      return (
+        '<a href="' + href + '"' +
+        (externo ? ' target="_blank" rel="noopener noreferrer"' : '') +
+        '>' + texto + '</a>'
+      )
+    }
+
+    function inline(s) {
+      var guardados = []
+      function guardar(html) {
+        guardados.push(html)
+        return '\u0000' + (guardados.length - 1) + '\u0000'
+      }
+
+      // Ordem importa: codigo primeiro (protege asteriscos internos),
+      // depois links (protege URLs do autolink), depois enfase.
+      s = s.replace(/`([^`]+)`/g, function (_, c) {
+        return guardar('<code>' + c + '</code>')
+      })
+      s = s.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, function (_, t, u) {
+        return guardar(link(u, t))
+      })
+      s = s.replace(/(https?:\/\/[^\s<>()]+[^\s<>().,;:!?])/g, function (u) {
+        return guardar(link(u, u))
+      })
+      s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+      s = s.replace(/(^|[\s(])\*([^*\n]+)\*(?=[\s).,;:!?]|$)/g, '$1<em>$2</em>')
+
+      return s.replace(/\u0000(\d+)\u0000/g, function (_, i) {
+        return guardados[Number(i)]
+      })
+    }
+
+    function mdToHtml(texto) {
+      var linhas = escapeHtml(String(texto)).split(/\r?\n/)
+      var out = []
+      var lista = null
+      var paragrafo = []
+
+      function fecharParagrafo() {
+        if (paragrafo.length) {
+          out.push('<p>' + inline(paragrafo.join('<br>')) + '</p>')
+          paragrafo = []
+        }
+      }
+      function fecharLista() {
+        if (lista) {
+          out.push('<ul>' + lista.join('') + '</ul>')
+          lista = null
+        }
+      }
+
+      for (var i = 0; i < linhas.length; i++) {
+        var l = linhas[i]
+        var item = l.match(/^\s*[-*+]\s+(.*)$/)
+        var titulo = l.match(/^\s*#{1,6}\s+(.*)$/)
+
+        if (item) {
+          fecharParagrafo()
+          if (!lista) lista = []
+          lista.push('<li>' + inline(item[1]) + '</li>')
+        } else if (titulo) {
+          fecharParagrafo()
+          fecharLista()
+          out.push('<p><strong>' + inline(titulo[1]) + '</strong></p>')
+        } else if (!l.trim()) {
+          fecharParagrafo()
+          fecharLista()
+        } else {
+          fecharLista()
+          paragrafo.push(l)
+        }
+      }
+      fecharParagrafo()
+      fecharLista()
+      return out.join('')
+    }
+
     function renderMessage(role, text) {
       var cls = '__lelia-msg __lelia-msg--' + role
-      body.appendChild(el('div', { class: cls }, [text]))
+      if (role === 'assistant') {
+        body.appendChild(el('div', { class: cls + ' __lelia-md', html: mdToHtml(text) }))
+      } else {
+        body.appendChild(el('div', { class: cls }, [text]))
+      }
     }
 
     function showTyping() {
