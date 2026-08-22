@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { BLOCOS } from '../../features/modulos/oficina/data'
+import FerramentasSala from '../../features/modulos/oficina/FerramentasSala'
 
 function BlocoCard({ bloco }) {
   const inner = (
@@ -100,6 +101,8 @@ export default function MaterialOficina() {
             <BlocoCard key={b.numero} bloco={b} />
           ))}
         </div>
+
+        <FerramentasSala />
 
         <div className="mt-16 flex justify-center">
           <a
