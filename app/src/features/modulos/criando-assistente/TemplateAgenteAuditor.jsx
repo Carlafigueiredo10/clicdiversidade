@@ -50,13 +50,9 @@ export default function TemplateAgenteAuditor() {
           de um Gem (Gemini) ou de um GPT personalizado.
         </p>
         <p className="mt-4 max-w-2xl mx-auto text-sm text-muted leading-relaxed">
-          Se você já usa o <strong className="text-ink-soft">Template Agente
-          Administrativo</strong>, este aqui faz o trabalho que o bloco{' '}
-          <code className="bg-card border border-line rounded px-1.5 py-0.5">
-            ### ANÁLISE CRÍTICA
-          </code>{' '}
-          daquele prompt tentava fazer — com formato de saída, lista de proxies e
-          limites explícitos.
+          Funciona sozinho e não depende de nenhum outro agente. Você cola o
+          prompt, descreve em texto corrido o processo, a norma ou o critério
+          que quer examinar — e ele devolve a tabela.
         </p>
       </header>
 

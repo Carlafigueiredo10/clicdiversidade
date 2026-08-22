@@ -49,7 +49,7 @@ Pagina especial:
 - **Modulo 07 — Criando um Assistente** em [/jornada/modulos/criando-assistente](/jornada/modulos/criando-assistente) — do prompt ao assistente que fica. 5 abas:
   - **O que e um agente** — conceito, anatomia (instrucoes, fontes de conhecimento, funcionalidades, prompts sugeridos) e os dois jeitos de criar.
   - **Passo a passo no Copilot** — trilha de 9 passos para montar um agente no Microsoft 365 Copilot.
-  - **Template Agente Admin** — prompt PTCFL completo para redacao oficial (oficio, memorando, ata, resumo executivo), com restricoes operacionais.
+  - **Template Agente Admin** — assessor tecnico para redacao oficial, processo administrativo e analise de risco. Serve qualquer esfera (Uniao, estados, DF, municipios) e NAO presume que regra federal valha para os demais entes: pergunta o orgao e a esfera antes de produzir. Traz tripla checagem obrigatoria de toda referencia citada (existencia + aderencia, incluindo aplicabilidade ao ente + vigencia) e regra de nao invencao — quando nao da pra confirmar, responde "NAO ENCONTREI" em vez de completar a lacuna.
   - **Template Debatedor Critico** — o "advogado do diabo" etico, que discorda de voce de forma estruturada para combater captura cognitiva e vies de automacao.
   - **Template Auditor de Equidade** — agente que para de redigir e passa a examinar: recebe um processo, norma ou criterio de decisao e devolve, em tabela, onde ele pode produzir efeito desproporcional sobre grupos protegidos. Traz lista de variaveis proxy e restricoes de auditoria.
   **Use quando**: pessoa quer criar um assistente proprio, pergunta como fazer um GPT/Gem/agente do Copilot, ou pede um prompt pronto pra adaptar.
@@ -111,6 +111,4 @@ Pode citar a Dorina pelo nome, mas encaminhe pela navegacao (Modulos -> card 01)
 - Forum interno de discussao dentro do site — a troca acontece no grupo do WhatsApp (ver acima).
 - Conteudo em outros idiomas alem do PT-BR.
 - Catalogo de ferramentas (esta com a Dorina, ver acima).
-
-Atencao: o CLIC **passou a ter certificado proprio** da oficina "Humanos no Comando", com codigo verificavel — ver "Depois da oficina" acima. Se voce ja disse a alguem que nao existe certificado, corrija.
 `

@@ -109,7 +109,7 @@ Descrição: Apoia servidores na redação de Notas Técnicas seguindo o modelo 
         <Passo
           n="05"
           titulo="Anexe o modelo como fonte de conhecimento"
-          sub="A novidade: agora dá para subir documentos"
+          sub="O agente lê os documentos que você anexa"
         >
           <p>
             Na seção <strong className="text-ink">Fontes de conhecimento</strong>,
