@@ -63,12 +63,12 @@ const MODULOS = [
     icon: '\u{1F393}',
     titulo: 'Material da Oficina',
     descricao:
-      'Roteiro completo da oficina Humanos no Comando. 4 blocos, apresentação cinematográfica de abertura e ponteiros para os módulos.',
+      'Apresentação cinematográfica de abertura da oficina Humanos no Comando: pensamento estruturado, a lógica invisível por trás do código e a virada de chave.',
     stats: [
-      { value: '4', label: 'Blocos' },
-      { value: '80min', label: 'Oficina' },
+      { value: '7', label: 'Slides' },
+      { value: '~15min', label: 'Abertura' },
     ],
-    ctaText: 'Ver roteiro',
+    ctaText: 'Ver material',
     to: '/modulos/oficina',
     disponivel: true,
   },
@@ -98,6 +98,35 @@ const MODULOS = [
     ],
     ctaText: 'Criar meu assistente',
     to: '/modulos/criando-assistente',
+    disponivel: true,
+  },
+  {
+    numero: '08',
+    icon: '\u{1F9ED}',
+    titulo: 'Antes de construir ou contratar',
+    descricao:
+      'Dois guias para o momento da decisão: como estruturar um projeto antes de tirá-lo do papel, e o que perguntar antes de assinar um contrato de IA.',
+    stats: [
+      { value: '2', label: 'Guias' },
+      { value: '31', label: 'Perguntas' },
+    ],
+    ctaText: 'Ver os guias',
+    to: '/modulos/antes-de-construir',
+    disponivel: true,
+  },
+  {
+    numero: '09',
+    icon: '\u{1F50D}',
+    titulo: 'Auditando dados e decisões',
+    descricao:
+      'Para o sistema que já existe: as perguntas técnicas que revelam o viés antes que ele decida por você. Origem, proxy, erro e decisão.',
+    stats: [
+      { value: '4', label: 'Frentes' },
+      { value: '14', label: 'Perguntas' },
+    ],
+    ctaText: 'Abrir guia',
+    to: '/jornada/modulos/auditando-dados-e-decisoes.html',
+    external: true,
     disponivel: true,
   },
 ]

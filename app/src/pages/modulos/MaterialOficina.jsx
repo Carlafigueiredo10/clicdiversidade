@@ -91,12 +91,11 @@ export default function MaterialOficina() {
           <span className="italic text-accent-fg">Comando.</span>
         </h1>
         <p className="mt-6 max-w-2xl mx-auto text-center text-ink-soft text-base md:text-lg leading-relaxed">
-          Roteiro completo da oficina presencial. Cada bloco aponta para o
-          material que você usa em sala: apresentação cinematográfica, conteúdo
-          dos módulos do app e templates prontos.
+          A apresentação de abertura da oficina presencial: o material próprio
+          daqui, para abrir a sala e virar a chave.
         </p>
 
-        <div className="mt-14 grid gap-5 md:grid-cols-2">
+        <div className="mt-14 grid gap-5 max-w-xl mx-auto">
           {BLOCOS.map((b) => (
             <BlocoCard key={b.numero} bloco={b} />
           ))}

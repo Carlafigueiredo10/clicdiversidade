@@ -10,6 +10,7 @@ import Governanca from '../pages/modulos/Governanca'
 import GovernancaAgente from '../pages/modulos/GovernancaAgente'
 import GovernancaAIE from '../pages/modulos/GovernancaAIE'
 import MaterialOficina from '../pages/modulos/MaterialOficina'
+import AntesDeConstruir from '../pages/modulos/AntesDeConstruir'
 import QuebrandoOMito from '../pages/modulos/QuebrandoOMito'
 import Glossario from '../pages/Glossario'
 import BaseTeorica from '../pages/BaseTeorica'
@@ -42,6 +43,7 @@ export const router = createBrowserRouter(
         { path: '/modulos/governanca/agente', element: <GovernancaAgente /> },
         { path: '/modulos/governanca/aie', element: <GovernancaAIE /> },
         { path: '/modulos/oficina', element: <MaterialOficina /> },
+        { path: '/modulos/antes-de-construir', element: <AntesDeConstruir /> },
         {
           path: '/modulos/oficina/quebrando-o-mito',
           element: <QuebrandoOMito />,
