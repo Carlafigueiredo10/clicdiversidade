@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { TRILHAS } from '../../features/modulos/trilhas/data'
 import Diagnostico from '../../features/modulos/trilhas/Diagnostico'
+import CanaisCursos from '../../features/modulos/trilhas/CanaisCursos'
 
 function tituloCurto(titulo) {
   // Cortar na primeira frase ou em ~50 chars
@@ -75,6 +76,8 @@ export default function Trilhas() {
             </Link>
           ))}
         </div>
+
+        <CanaisCursos />
 
         <div className="mt-16 flex justify-center">
           <a

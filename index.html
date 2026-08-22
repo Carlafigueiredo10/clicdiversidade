@@ -151,7 +151,7 @@
           'certificacao': { href: '/jornada/certificado.html' },
           'contato': { href: 'https://wa.me/5561998755013', external: true },
           'linkedin': { href: 'https://www.linkedin.com/in/carlacristinefigueiredo', external: true },
-          'newsletter': { href: 'https://whatsapp.com/channel/0029Vb6DD2AAu3aXBFT6So0R', external: true },
+          'newsletter': { href: 'https://www.whatsapp.com/channel/0029Vb6DD2AAu3aXBFT6So0R', external: true, label: 'Governatech' },
         };
 
         // Links do footer pra remover (item nao existe).
@@ -175,6 +175,10 @@
             el.__footerWired = true;
             try {
               el.setAttribute('href', entry.href);
+              // `label` renomeia o item. Usado quando o rotulo do bundle legacy
+              // descreve o formato ("Newsletter") em vez do destino, o que faria
+              // o mesmo canal ter dois nomes na plataforma.
+              if (entry.label) el.textContent = entry.label;
               if (entry.external) {
                 el.setAttribute('target', '_blank');
                 el.setAttribute('rel', 'noopener noreferrer');
