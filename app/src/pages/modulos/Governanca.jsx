@@ -157,7 +157,7 @@ export default function Governanca() {
 
           <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
             <a
-              href="https://lelia-v2.vercel.app/"
+              href="https://www.lelia.ia.br/"
               target="_blank"
               rel="noopener noreferrer"
               className="rounded-full bg-ink text-page px-6 py-3 text-sm font-medium hover:opacity-90 transition"
@@ -349,7 +349,7 @@ export default function Governanca() {
           </p>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
             <a
-              href="https://lelia-v2.vercel.app/"
+              href="https://www.lelia.ia.br/"
               target="_blank"
               rel="noopener noreferrer"
               className="rounded-full bg-page text-ink px-6 py-3 text-sm font-medium hover:opacity-90 transition"
