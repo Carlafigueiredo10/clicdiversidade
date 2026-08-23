@@ -610,7 +610,7 @@ export const TERMOS = [
     "name": "Vibe Coding",
     "cat": "ia",
     "mini": "Criar software conversando com IA em linguagem natural",
-    "def": "Prática emergente onde a pessoa descreve o que quer construir em linguagem natural e uma IA generativa escreve o código. Reduz a barreira técnica para criar soluções digitais.",
+    "def": "Termo cunhado por Andrej Karpathy em 2025 para o desenvolvimento em que a pessoa entrega a geração do código à IA e <strong>deixa de revisá-lo</strong> — na formulação dele, esquecer que o código existe. Ele mesmo dizia que servia para projeto descartável. No uso corrente virou guarda-chuva para qualquer construção por linguagem natural, mas vale a distinção: descrever o que se quer <strong>e conferir o resultado</strong> não é a mesma coisa que aceitar sem olhar.",
     "pronunc": "\"váib có-ding\"",
     "example": "Com vibe coding no Lovable, a servidora criou um formulário de cadastro sem saber programar."
   },
