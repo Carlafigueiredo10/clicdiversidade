@@ -187,21 +187,15 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(
 .s4-callout-2{padding:1.2rem 1.5rem;border-radius:0 14px 14px 0;border-left:2px solid rgba(110,231,183,.4);background:rgba(110,231,183,.03);border-top:1px solid rgba(110,231,183,.08);border-bottom:1px solid rgba(110,231,183,.08);border-right:1px solid rgba(110,231,183,.06);}
 
 #s5{flex-direction:row;align-items:center;gap:0;padding:0;}
-.s5-left{flex:0 0 50%;height:100%;display:flex;align-items:center;justify-content:center;position:relative;border-right:1px solid var(--border);}
-.s5-orbital{position:relative;width:clamp(260px,36vw,440px);height:clamp(260px,36vw,440px);}
-.s5-ring-o{position:absolute;top:50%;left:50%;border-radius:50%;border:1px solid rgba(236,233,245,.04);transform:translate(-50%,-50%);}
-.s5-ring-1{width:140px;height:140px;}
-.s5-ring-2{width:260px;height:260px;animation:spin-slow 35s linear infinite;}
-.s5-ring-3{width:clamp(260px,36vw,440px);height:clamp(260px,36vw,440px);border-color:rgba(236,233,245,.02);}
-.s5-hub{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:80px;height:80px;border-radius:50%;background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.2);display:flex;align-items:center;justify-content:center;font-family:var(--fm);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(167,139,250,.6);text-align:center;line-height:1.4;box-shadow:0 0 40px rgba(167,139,250,.08);}
-.s5-tool{position:absolute;padding:.65rem 1.1rem;border-radius:11px;font-family:var(--f);font-size:clamp(.82rem,1.1vw,.96rem);font-weight:600;color:var(--text);background:var(--surface-hi);border:1px solid var(--border-hi);animation:drift 8s ease-in-out infinite;white-space:nowrap;}
-.s5-t1{top:4%;left:50%;transform:translateX(-50%);animation-delay:0s;border-color:rgba(125,211,252,.2);}
-.s5-t2{top:50%;right:3%;transform:translateY(-50%);animation-delay:-2s;border-color:rgba(110,231,183,.2);}
-.s5-t3{bottom:4%;left:50%;transform:translateX(-50%);animation-delay:-4s;border-color:rgba(251,191,36,.2);}
-.s5-t4{top:50%;left:3%;transform:translateY(-50%);animation-delay:-6s;border-color:rgba(167,139,250,.2);}
-.s5-right{flex:1;padding:6vh 5vw;display:flex;flex-direction:column;justify-content:center;}
-
-#s6{justify-content:center;gap:2.5vh;}
+.s5-tools{display:flex;gap:18px;justify-content:center;width:100%;max-width:1000px;margin:0 auto;}
+.s5-card{flex:1;padding:26px 20px;border-radius:16px;background:var(--surface-hi);border:1px solid var(--border-hi);text-align:center;display:flex;flex-direction:column;gap:8px;}
+.s5-cico{font-size:30px;line-height:1;}
+.s5-cname{font-family:var(--f);font-size:19px;font-weight:600;color:var(--text);line-height:1.2;}
+.s5-cnote{font-size:13px;color:var(--text-3);line-height:1.5;}
+.s5-hoje{text-align:center;max-width:640px;margin:0 auto;font-size:15px;color:var(--text-2);line-height:1.6;}
+.s5-hoje strong{color:var(--text);}
+.s5b-wrap{max-width:900px;margin:0 auto;text-align:center;}
+.s5b-quote{margin-top:26px;font-size:16px;font-style:italic;color:var(--text-4);line-height:1.6;}
 .s6-path{display:flex;align-items:flex-start;gap:0;position:relative;}
 .s6-step{flex:1;display:flex;flex-direction:column;align-items:center;position:relative;}
 .s6-line{position:absolute;top:22px;left:50%;width:100%;height:1px;background:linear-gradient(to right,rgba(167,139,250,.2),rgba(125,211,252,.1));}
@@ -403,24 +397,25 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(
 
 <!-- S5 ECOSSISTEMA -->
 <div class="slide" id="s5">
-  <div class="s5-left Lscale">
-    <div class="s5-orbital">
-      <div class="s5-ring-o s5-ring-1"></div>
-      <div class="s5-ring-o s5-ring-2"></div>
-      <div class="s5-ring-o s5-ring-3"></div>
-      <div class="s5-hub">No-code<br>&amp; IA</div>
-      <div class="s5-tool s5-t1">⚡ Lovable</div>
-      <div class="s5-tool s5-t2">🧩 Base44</div>
-      <div class="s5-tool s5-t3">🔥 Bolt.new</div>
-      <div class="s5-tool s5-t4">💻 Replit</div>
-    </div>
+  <div class="eyebrow L0"><div class="eyebrow-dot dot-p"></div>05 · O ecossistema</div>
+  <div class="display display-lg L1" style="margin-bottom:1.4vh;">Quatro plataformas,<br>a mesma <em style="font-style:italic;font-weight:300;color:var(--purple)">lógica</em></div>
+  <div class="s5-tools L2">
+    <div class="s5-card"><div class="s5-cico">⚡</div><div class="s5-cname">Lovable</div><div class="s5-cnote">App full-stack por conversa</div></div>
+    <div class="s5-card"><div class="s5-cico">🧩</div><div class="s5-cname">Base44</div><div class="s5-cnote">App interno com dados</div></div>
+    <div class="s5-card"><div class="s5-cico">🔥</div><div class="s5-cname">Bolt.new</div><div class="s5-cnote">Do prompt ao site publicado</div></div>
+    <div class="s5-card"><div class="s5-cico">💻</div><div class="s5-cname">Replit</div><div class="s5-cnote">Construir e hospedar no mesmo lugar</div></div>
   </div>
-  <div class="s5-right">
-    <div class="eyebrow L0"><div class="eyebrow-dot dot-p"></div>05 · O ecossistema</div>
-    <div class="display display-lg L1">Você aprendeu uma <em style="font-style:italic;font-weight:300;color:var(--purple)">competência,</em><br>não uma ferramenta.</div>
-    <div class="rule L2"></div>
-    <div class="body-md L2">A lógica de autoria tecnológica funciona em qualquer plataforma desta lista. <strong style="color:var(--text)">Hoje usamos a Lovable.</strong> Amanhã, você escolhe a ferramenta certa para cada situação.</div>
-    <div class="body-sm L3" style="margin-top:1rem;font-style:italic;color:var(--text-4);">"Aprenda o princípio. A ferramenta é só o instrumento."</div>
+  <div class="s5-hoje L3" style="margin-top:3vh;"><strong>Hoje usamos a Lovable.</strong> A escolha muda conforme o caso — o método que você vai aprender, não.</div>
+</div>
+
+<!-- S5B A COMPETENCIA -->
+<div class="slide" id="s5b">
+  <div class="eyebrow L0"><div class="eyebrow-dot dot-p"></div>05 · O que fica</div>
+  <div class="s5b-wrap L1">
+    <div class="display display-lg">Você aprendeu uma <em style="font-style:italic;font-weight:300;color:var(--purple)">competência,</em><br>não uma ferramenta.</div>
+    <div class="rule L2" style="margin:2.2vh auto;"></div>
+    <div class="body-md L2">A lógica de autoria tecnológica funciona em qualquer uma delas. Amanhã você escolhe a ferramenta certa para cada situação — e o raciocínio continua o mesmo.</div>
+    <div class="s5b-quote L3">"Aprenda o princípio. A ferramenta é só o instrumento."</div>
   </div>
 </div>
 
@@ -615,6 +610,7 @@ const atmos=[
   'radial-gradient(ellipse 70% 55% at 50% 50%,rgba(110,231,183,.07) 0%,transparent 60%)',
   'radial-gradient(ellipse 55% 65% at 35% 50%,rgba(125,211,252,.07) 0%,transparent 60%)',
   'radial-gradient(ellipse 65% 70% at 50% 50%,rgba(167,139,250,.07) 0%,transparent 60%)',
+  'radial-gradient(ellipse 60% 65% at 50% 50%,rgba(167,139,250,.08) 0%,transparent 60%)',
   'radial-gradient(ellipse 75% 50% at 50% 50%,rgba(125,211,252,.06) 0%,transparent 55%)',
   'radial-gradient(ellipse 55% 60% at 28% 50%,rgba(252,165,165,.05) 0%,transparent 55%),radial-gradient(ellipse 55% 60% at 72% 50%,rgba(110,231,183,.05) 0%,transparent 55%)',
   'radial-gradient(ellipse 50% 60% at 50% 60%,rgba(167,139,250,.09) 0%,transparent 60%)',
@@ -625,7 +621,35 @@ const atmos=[
 ];
 const atmoEl=document.getElementById('atmo');
 
-const TOTAL=13; let cur=0,busy=false;
+// --- Verificador de estouro ---------------------------------------------
+// .slide tem overflow:hidden, entao conteudo que passa da altura util some sem
+// aviso — e so se descobre na frente da sala. Abra a apresentacao com ?debug
+// na URL para ver, de uma vez, todos os slides que estao estourando.
+function checarEstouro(){
+  const alvo=[...document.querySelectorAll('.slide')];
+  const estourando=[];
+  alvo.forEach((sl,i)=>{
+    const sobra=Math.max(sl.scrollHeight-sl.clientHeight, sl.scrollWidth-sl.clientWidth);
+    if(sobra>1){
+      estourando.push({n:i+1,id:sl.id,px:Math.round(sobra)});
+      sl.style.outline='2px solid rgba(248,113,113,.9)';
+      sl.style.outlineOffset='-2px';
+    }
+  });
+  const painel=document.createElement('div');
+  painel.style.cssText='position:fixed;top:12px;left:12px;z-index:9999;max-width:340px;padding:14px 16px;border-radius:12px;font:12px/1.6 ui-monospace,monospace;background:rgba(3,3,7,.92);border:1px solid rgba(248,113,113,.4);color:#fca5a5;';
+  painel.innerHTML = estourando.length
+    ? '<strong>'+estourando.length+' de '+alvo.length+' slides estourando</strong><br>'+
+      estourando.map(e=>'slide '+String(e.n).padStart(2,'0')+' (#'+e.id+') — sobra '+e.px+'px').join('<br>')
+    : '<strong style="color:#6ee7b7">Os '+alvo.length+' slides cabem.</strong>';
+  document.body.appendChild(painel);
+  console.table(estourando);
+}
+if(location.search.includes('debug')){
+  window.addEventListener('load',()=>setTimeout(checarEstouro,400));
+}
+
+const TOTAL=14; let cur=0,busy=false;
 const SS=document.querySelectorAll('.slide');
 const DE=document.getElementById('dots');
 const CT=document.getElementById('ctr');
