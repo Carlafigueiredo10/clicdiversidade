@@ -144,7 +144,7 @@ Descrição: Apoia servidores na redação de Notas Técnicas seguindo o modelo 
         <Passo n="07" titulo="Sugira prompts de partida">
           <p>
             Cadastre frases prontas para o usuário começar com um clique —
-            reduzem o “medo da página em branco”.
+            mostram de cara o que dá para pedir.
           </p>
           <Code>{`• "Quero redigir uma NT sobre [tema]"
 • "Quais informações você precisa de mim para começar?"

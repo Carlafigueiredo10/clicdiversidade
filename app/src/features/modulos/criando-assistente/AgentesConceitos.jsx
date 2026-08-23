@@ -28,9 +28,9 @@ const PECAS = [
     papel: 'o cérebro',
     texto: (
       <>
-        O texto que define quem o agente é, o que faz, em que tom e —
-        principalmente — o que <strong className="text-ink">não</strong> deve
-        fazer. É a peça que mais determina a qualidade das respostas.
+        O texto que define quem o agente é, o que faz, em que tom e{' '}
+        <strong className="text-ink">quais limites ele respeita</strong>. É a
+        peça que mais determina a qualidade das respostas.
       </>
     ),
   },
@@ -40,9 +40,10 @@ const PECAS = [
     papel: 'a memória',
     texto: (
       <>
-        Documentos, PDFs, sites ou pastas do SharePoint que o agente consulta.
-        Você decide se ele pode buscar na web aberta ou usar{' '}
-        <strong className="text-ink">somente</strong> o que você anexou.
+        Documentos, PDFs, sites ou pastas compartilhadas do seu órgão que o
+        agente consulta. Você define o alcance:{' '}
+        <strong className="text-ink">só o que você anexou</strong>, ou também a
+        web aberta.
       </>
     ),
   },
@@ -52,9 +53,9 @@ const PECAS = [
     papel: 'as mãos',
     texto: (
       <>
-        O que o agente consegue produzir: arquivos do Word, Excel e PowerPoint,
-        gráficos, trechos de código ou imagens. Você liga apenas o que faz
-        sentido para o caso.
+        O que o agente consegue produzir: documentos, planilhas,
+        apresentações, gráficos, trechos de código ou imagens. Você liga o que
+        faz sentido para o caso.
       </>
     ),
   },
@@ -64,8 +65,8 @@ const PECAS = [
     papel: 'a porta de entrada',
     texto: (
       <>
-        Frases prontas que aparecem no início da conversa. Diminuem o “medo da
-        página em branco” e mostram ao usuário o que dá para pedir.
+        Frases prontas que aparecem no início da conversa. Mostram de cara o
+        que dá para pedir e já abrem o trabalho.
       </>
     ),
   },
@@ -94,7 +95,7 @@ export default function AgentesConceitos() {
           Em uma frase
         </p>
         <p className="mt-4 font-display text-xl md:text-2xl leading-snug">
-          Um agente é uma versão do Copilot{' '}
+          Um agente é uma IA de conversa{' '}
           <strong className="font-semibold">especializada por você</strong>:
           você dá instruções, conecta fontes de confiança e ele passa a
           responder dentro desse escopo — sem precisar de uma linha de código.
@@ -169,9 +170,8 @@ export default function AgentesConceitos() {
           Dois jeitos de criar
         </h3>
         <p className="mt-2 max-w-2xl text-ink-soft leading-relaxed">
-          Ao clicar em <strong className="text-ink">Novo Agente</strong>, você
-          escolhe entre montar conversando ou preencher os campos na mão. Os
-          dois levam ao mesmo resultado.
+          A maioria das plataformas oferece dois caminhos: montar conversando
+          ou preencher os campos na mão. Os dois levam ao mesmo resultado.
         </p>
         <div className="mt-6 grid gap-4 md:grid-cols-2">
           <div className="bg-card border-2 border-accent/40 rounded-2xl p-6">
@@ -182,9 +182,9 @@ export default function AgentesConceitos() {
               Linguagem natural
             </h4>
             <p className="mt-2 text-sm text-ink-soft leading-relaxed">
-              Você descreve o agente em uma conversa e o Copilot preenche nome,
-              descrição e instruções automaticamente. Rápido e intuitivo — ótimo
-              para o primeiro contato.
+              Você descreve o agente em uma conversa e a própria IA preenche
+              nome, descrição e instruções. Rápido e intuitivo — ótimo para o
+              primeiro contato.
             </p>
           </div>
           <div className="bg-card border border-line rounded-2xl p-6">
@@ -196,8 +196,8 @@ export default function AgentesConceitos() {
             </h4>
             <p className="mt-2 text-sm text-ink-soft leading-relaxed">
               Você preenche cada campo: nome, instruções, fontes e
-              funcionalidades. Mais trabalhoso, mas mostra todas as peças — é o
-              caminho que usaremos para aprender.
+              funcionalidades. Leva mais tempo e mostra todas as peças — é o
+              caminho que usamos para aprender.
             </p>
           </div>
         </div>
@@ -210,9 +210,9 @@ export default function AgentesConceitos() {
         </span>
         <p className="text-sm text-ink leading-relaxed">
           <strong className="text-accent-fg">Lembre sempre:</strong> o agente
-          entrega rascunhos para revisão humana, nunca a palavra final. Em uso
-          institucional, prefira limitar as fontes ao que você anexou — assim o
-          agente não improvisa com informação de fora.
+          entrega rascunho para revisão humana — a palavra final é sua. Em uso
+          institucional, mantenha as fontes no que você anexou: assim ele
+          responde a partir do que você já confia.
         </p>
       </aside>
     </div>
