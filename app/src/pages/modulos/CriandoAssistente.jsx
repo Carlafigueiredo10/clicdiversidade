@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import Tabs from '../../features/modulos/Tabs'
 import AgentesConceitos from '../../features/modulos/criando-assistente/AgentesConceitos'
 import GuiaCopilot from '../../features/modulos/criando-assistente/GuiaCopilot'
+import GuiaAgentes from '../../features/modulos/criando-assistente/GuiaAgentes'
 import TemplateAgenteAdmin from '../../features/modulos/criando-assistente/TemplateAgenteAdmin'
 import TemplateAgenteContraditorio from '../../features/modulos/criando-assistente/TemplateAgenteContraditorio'
 import TemplateAgenteAuditor from '../../features/modulos/criando-assistente/TemplateAgenteAuditor'
@@ -13,9 +14,16 @@ const TABS = [
     render: () => <AgentesConceitos />,
   },
   {
-    id: 'copilot',
-    label: 'Passo a passo no Copilot',
-    render: () => <GuiaCopilot />,
+    id: 'agentes',
+    label: 'Passo a passo pra agentes',
+    render: () => (
+      <div className="space-y-16">
+        <GuiaAgentes />
+        <div id="passo-a-passo-copilot" className="scroll-mt-24 pt-12 border-t border-line">
+          <GuiaCopilot />
+        </div>
+      </div>
+    ),
   },
   {
     id: 'template-admin',
