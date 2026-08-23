@@ -151,28 +151,6 @@ export default function GuiaAgentes() {
         ))}
       </div>
 
-      <aside className="bg-page border-2 border-accent/30 rounded-2xl p-6 md:p-8 max-w-3xl mx-auto">
-        <p className="text-xs uppercase tracking-wide text-accent-fg font-semibold">
-          O que o Google ensina, e o que falta
-        </p>
-        <p className="mt-3 text-sm text-ink-soft leading-relaxed">
-          A página oficial de dicas do Gemini recomenda montar a instrução de um
-          Gem com quatro elementos:{' '}
-          <strong className="text-ink">
-            Persona, Tarefa, Contexto e Formato
-          </strong>
-          . É o PTCF — os mesmos quatro pilares que o Módulo 03 ensina.
-        </p>
-        <p className="mt-4 text-sm text-ink-soft leading-relaxed">
-          O quinto não está lá. O{' '}
-          <strong className="text-ink">L de Limites</strong> — não presuma
-          gênero ou raça, sinalize quando os dados não representarem a
-          diversidade, diga o que a IA <em>não</em> deve fazer — é o que
-          transforma um prompt de produtividade em prompt de responsabilidade.
-          É a parte que você acrescenta, em qualquer uma das quatro.
-        </p>
-      </aside>
-
       <p className="text-center text-xs text-muted max-w-2xl mx-auto leading-relaxed">
         Interfaces mudam. Se um botão não estiver onde está escrito aqui,
         procure pelo nome da função — <em>Gem</em>, <em>GPT</em>,{' '}
