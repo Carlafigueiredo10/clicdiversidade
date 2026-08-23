@@ -13,7 +13,7 @@ const CAMINHOS = [
     quando:
       'A planilha segue sendo a fonte de verdade: a equipe alimenta pelo Drive, como já faz hoje, e o aplicativo lê e grava de volta na mesma aba.',
     caminho: 'Connectors → Google Sheets → Add connection',
-    prompt: `Conecte esta aplicação à planilha [NOME DA PLANILHA].
+    prompt: `Conecte esta aplicação à planilha: [COLE AQUI O LINK DA PLANILHA]
 Use a aba "Registros" como fonte de dados.
 Cada linha representa um registro.
 Quero listar, pesquisar, criar e editar registros pela interface.
