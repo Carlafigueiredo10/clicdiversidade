@@ -58,6 +58,7 @@ const PLATAFORMAS = [
     id: 'claude',
     nome: 'Claude',
     chamaSe: 'Project',
+    naoEhAgente: true,
     plano: 'Gratuito, até 5 projetos',
     planoTom: 'bom',
     caminho: 'claude.ai/projects → + New Project',
@@ -67,7 +68,7 @@ const PLATAFORMAS = [
       'Use o + à direita para anexar arquivos',
       'Toda conversa aberta dentro do projeto já nasce com as instruções',
     ],
-    nota: 'As instruções valem para todas as conversas do projeto — você não precisa recolar o prompt a cada vez.',
+    nota: 'Não tem funcionalidades nem prompts sugeridos como os outros três — mas faz o essencial: você cola o template uma vez e não precisa recolar a cada conversa.',
     url: 'https://claude.ai/projects',
     ctaUrl: 'Abrir o Claude',
   },
@@ -117,8 +118,18 @@ export default function GuiaAgentes() {
             </div>
 
             <p className="mt-2 text-sm text-ink-soft">
-              Aqui o agente se chama{' '}
-              <strong className="text-ink">{p.chamaSe}</strong>.
+              {p.naoEhAgente ? (
+                <>
+                  Não chama de agente — chama de{' '}
+                  <strong className="text-ink">{p.chamaSe}</strong>, e faz o
+                  essencial.
+                </>
+              ) : (
+                <>
+                  Aqui o agente se chama{' '}
+                  <strong className="text-ink">{p.chamaSe}</strong>.
+                </>
+              )}
             </p>
 
             <p className="mt-4 font-mono text-xs text-accent-fg bg-page border border-line rounded-lg px-3 py-2 break-words">
