@@ -32,8 +32,8 @@ Toda alteração feita no aplicativo deve ser salva de volta na planilha.`,
 nome, órgão, responsável, status, descrição e data de atualização.
 Crie as telas para listar, criar, editar e excluir registros.`,
     saida: 'É o mais preso: os dados moram dentro da Lovable.',
-    alerta:
-      'A documentação não informa se está incluso no plano ou é cobrado à parte — confira antes de apoiar algo importante nisso.',
+    nota:
+      'O uso do Cloud consome créditos, e há franquia mensal incluída: 20 créditos de Cloud por mês, em todos os planos, inclusive no gratuito. Acima disso, o consumo sai do saldo de créditos do workspace — o que costuma acontecer só quando o app ganha tráfego ou tamanho.',
   },
   {
     id: 'supabase',
@@ -103,9 +103,9 @@ export default function ConectandoBase() {
               {c.caminho}
             </p>
 
-            {c.alerta && (
-              <p className="mt-3 text-xs text-amber-800 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 leading-relaxed">
-                {c.alerta}
+            {c.nota && (
+              <p className="mt-3 text-xs text-ink-soft bg-page border border-line rounded-lg px-3 py-2 leading-relaxed">
+                {c.nota}
               </p>
             )}
 
