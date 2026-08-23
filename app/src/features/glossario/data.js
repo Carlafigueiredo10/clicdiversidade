@@ -61,7 +61,7 @@ export const TERMOS = [
     "name": "Backend",
     "cat": "dev",
     "mini": "A parte invisível que faz o sistema funcionar",
-    "def": "Toda a lógica que roda nos servidores: salvar dados, autenticar pessoas pessoa usuárias, processar regras de negócio. A pessoa usuária nunca vê, mas depende disso o tempo todo.",
+    "def": "Toda a lógica que roda nos servidores: salvar dados, autenticar pessoas usuárias, processar regras de negócio. A pessoa usuária nunca vê, mas depende disso o tempo todo.",
     "pronunc": "\"bék-énd\"",
     "example": "Quando você envia um formulário, é o backend que valida os dados e os salva no banco."
   },
@@ -106,7 +106,7 @@ export const TERMOS = [
     "name": "ChatBot",
     "cat": "ia",
     "mini": "Sistema que simula uma conversa",
-    "def": "Programa que conversa com pessoas pessoa usuárias via texto ou voz. Pode seguir roteiros fixos (chatbot de regras) ou usar IA para entender perguntas livres.",
+    "def": "Programa que conversa com pessoas usuárias via texto ou voz. Pode seguir roteiros fixos (chatbot de regras) ou usar IA para entender perguntas livres.",
     "pronunc": "\"shát-bot\"",
     "example": "O chatbot da ouvidoria responde perguntas frequentes às 3h da manhã, sem precisar de uma pessoa servidora disponível."
   },
@@ -187,7 +187,7 @@ export const TERMOS = [
     "name": "Deploy",
     "cat": "dev",
     "mini": "Colocar o sistema no ar para o mundo acessar",
-    "def": "Processo de publicar uma versão do software no ambiente de produção — o servidor real que as pessoas pessoa usuárias acessam. Antes do deploy, só a equipe de desenvolvimento vê.",
+    "def": "Processo de publicar uma versão do software no ambiente de produção — o servidor real que as pessoas usuárias acessam. Antes do deploy, só a equipe de desenvolvimento vê.",
     "pronunc": "\"di-PLÓI\"",
     "example": "Fizemos o deploy da nova versão do portal na quinta à noite para evitar impacto no horário de pico."
   },
@@ -297,7 +297,7 @@ export const TERMOS = [
     "mini": "Protocolo pelo qual páginas web são transferidas",
     "def": "<strong>HyperText Transfer Protocol</strong>. Regras de comunicação entre navegador e servidor web. O S do HTTPS indica que a conexão é criptografada (segura).",
     "pronunc": "\"a-gá-tê-tê-pê\" / \"a-gá-tê-tê-pê-ésse\"",
-    "example": "Sites que ainda usam HTTP (sem o S) podem expor dados das pessoas pessoa usuárias a interceptações."
+    "example": "Sites que ainda usam HTTP (sem o S) podem expor dados das pessoas usuárias a interceptações."
   },
   {
     "letter": "I",
@@ -385,7 +385,7 @@ export const TERMOS = [
     "name": "Machine Learning",
     "cat": "ia",
     "mini": "IA que aprende com dados sem ser programada regra a regra",
-    "def": "Subcampo da IA onde o sistema aprende padrões a partir de exemplos (dados), sem que cada regra seja programada manualmente. Quanto mais dados, melhor o aprendizado.",
+    "def": "Subcampo da IA onde o sistema aprende padrões a partir de exemplos (dados), sem que cada regra seja programada manualmente. O aprendizado vale o que valem os dados: o sistema repete os padrões que encontrar neles, <strong>inclusive as desigualdades que eles registram</strong>.",
     "pronunc": "\"me-CHÍN ler-ning\"",
     "example": "O sistema de detecção de fraudes usa machine learning para aprender com casos passados."
   },

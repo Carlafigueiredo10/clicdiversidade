@@ -21,6 +21,16 @@ function normalize(s) {
 export default function Glossario() {
   const [search, setSearch] = useState('')
   const [cat, setCat] = useState('all')
+  const [abertos, setAbertos] = useState(() => new Set())
+
+  function alternar(nome) {
+    setAbertos((prev) => {
+      const proximo = new Set(prev)
+      if (proximo.has(nome)) proximo.delete(nome)
+      else proximo.add(nome)
+      return proximo
+    })
+  }
 
   const filtered = useMemo(() => {
     const q = normalize(search.trim())
@@ -31,6 +41,10 @@ export default function Glossario() {
       return hay.includes(q)
     })
   }, [search, cat])
+
+  // Com busca ativa, todo verbete filtrado abre: o filtro varre name+mini+def,
+  // entao o resultado pode ter vindo de um trecho que estaria escondido.
+  const buscando = search.trim().length > 0
 
   const grouped = useMemo(() => {
     const map = new Map()
@@ -179,38 +193,71 @@ export default function Glossario() {
                 <h2 className="font-display font-semibold text-5xl text-accent-fg/30 leading-none">
                   {letter}
                 </h2>
-                <div className="mt-4 grid gap-4 md:grid-cols-2">
-                  {terms.map((t) => (
-                    <article
-                      key={t.name}
-                      className="bg-card border border-line rounded-2xl p-6"
-                    >
-                      <div className="flex items-start justify-between gap-3 mb-2">
-                        <h3 className="font-display font-semibold text-lg text-ink leading-tight">
-                          {t.name}
-                        </h3>
-                        {CATEGORIAS[t.cat] && (
-                          <span className="text-[10px] uppercase tracking-wider bg-page border border-line text-ink-soft rounded px-2 py-0.5 shrink-0 whitespace-nowrap">
-                            {CATEGORIAS[t.cat].icon} {CATEGORIAS[t.cat].label}
-                          </span>
+                {/* Lista de definicao: <dl>/<dt>/<dd> e o par semantico
+                    correto — leitor de tela anuncia termo e definicao como
+                    relacionados, o que <article>/<h3> nao entrega.
+                    A linha fechada ja mostra o resumo (campo `mini`), entao
+                    da pra varrer sem abrir nada. Com busca ativa tudo abre:
+                    o filtro varre a definicao inteira, e o resultado pode ter
+                    vindo justamente do texto escondido. */}
+                <dl className="mt-4 border-t border-line">
+                  {terms.map((t) => {
+                    const aberto = buscando || abertos.has(t.name)
+                    return (
+                      <div key={t.name} className="border-b border-line">
+                        <dt>
+                          <button
+                            type="button"
+                            onClick={() => alternar(t.name)}
+                            aria-expanded={aberto}
+                            className="w-full text-left flex items-baseline gap-3 py-3.5 px-2 -mx-2 rounded-lg hover:bg-card transition group"
+                          >
+                            <span className="font-display font-semibold text-ink shrink-0">
+                              {t.name}
+                            </span>
+                            <span className="text-sm text-ink-soft flex-1 leading-snug">
+                              {t.mini}
+                            </span>
+                            {CATEGORIAS[t.cat] && (
+                              <span className="hidden sm:inline text-[10px] uppercase tracking-wider text-muted shrink-0">
+                                {CATEGORIAS[t.cat].icon}
+                              </span>
+                            )}
+                            <span
+                              aria-hidden
+                              className={
+                                'text-muted text-xs shrink-0 transition-transform ' +
+                                (aberto ? 'rotate-90' : '')
+                              }
+                            >
+                              &#9656;
+                            </span>
+                          </button>
+                        </dt>
+                        {aberto && (
+                          <dd className="pb-5 pl-2 pr-2 -mt-0.5">
+                            <p
+                              className="text-sm text-ink leading-relaxed"
+                              dangerouslySetInnerHTML={{ __html: t.def }}
+                            />
+                            <p className="mt-3 text-sm italic text-ink-soft leading-relaxed">
+                              &ldquo;{t.example}&rdquo;
+                            </p>
+                            <p className="mt-3 text-[11px] text-muted font-mono">
+                              {t.pronunc}
+                              {CATEGORIAS[t.cat] && (
+                                <span className="ml-3">
+                                  {CATEGORIAS[t.cat].icon}{' '}
+                                  {CATEGORIAS[t.cat].label}
+                                </span>
+                              )}
+                            </p>
+                          </dd>
                         )}
                       </div>
-                      <p className="text-sm text-ink-soft mb-3 leading-relaxed">
-                        {t.mini}
-                      </p>
-                      <p
-                        className="text-sm text-ink leading-relaxed mb-3"
-                        dangerouslySetInnerHTML={{ __html: t.def }}
-                      />
-                      <div className="text-[11px] text-muted font-mono">
-                        <span className="not-italic">Pronúncia:</span> {t.pronunc}
-                      </div>
-                      <p className="mt-3 pt-3 border-t border-line text-sm italic text-ink-soft leading-relaxed">
-                        "{t.example}"
-                      </p>
-                    </article>
-                  ))}
-                </div>
+                    )
+                  })}
+                </dl>
               </section>
             ))}
           </div>
