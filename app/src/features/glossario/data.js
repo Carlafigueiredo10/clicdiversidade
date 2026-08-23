@@ -22,6 +22,15 @@ export const TERMOS = [
   },
   {
     "letter": "A",
+    "name": "Agente",
+    "cat": "ia",
+    "mini": "Uma IA de conversa especializada por você, sem código",
+    "def": "Assistente montado a partir de uma IA de conversa: você escreve as instruções, conecta as fontes que ele pode consultar e ele passa a responder dentro desse escopo. Cada plataforma usa um nome — <strong>Gem</strong> no Gemini, <strong>GPT</strong> no ChatGPT, <strong>agente</strong> no Copilot — mas as peças são as mesmas: instruções, fontes de conhecimento, funcionalidades e prompts sugeridos.",
+    "pronunc": "A-GEN-te",
+    "example": "Criei um agente com o modelo de nota técnica do setor: agora ele já devolve o rascunho no formato certo."
+  },
+  {
+    "letter": "A",
     "name": "Agile / Ágil",
     "cat": "neg",
     "mini": "Método de trabalho em ciclos curtos",
@@ -37,6 +46,15 @@ export const TERMOS = [
     "def": "Conjunto de instruções ordenadas que um computador segue para resolver um problema. Todo programa é, na essência, um algoritmo.",
     "pronunc": "Al-go-RÍT-mo",
     "example": "O algoritmo do feed de notícias decide quais publicações aparecem primeiro para cada pessoa usuária."
+  },
+  {
+    "letter": "A",
+    "name": "Alucinação",
+    "cat": "ia",
+    "mini": "Quando a IA inventa informação com aparência de verdade",
+    "def": "Resposta que a IA produz com fluência e confiança, mas que não corresponde a nenhum fato, norma ou fonte real. Não é defeito pontual: o modelo é construído para completar texto de forma <strong>plausível</strong>, e o plausível às vezes é falso. Por isso toda lei, número ou decisão citada precisa ser conferida na fonte antes de entrar num documento.",
+    "pronunc": "A-lu-ci-na-ÇÃO",
+    "example": "O parecer citava um artigo que não existe — alucinação clássica, e só apareceu porque alguém foi conferir."
   },
   {
     "letter": "A",
@@ -118,6 +136,15 @@ export const TERMOS = [
     "def": "Infraestrutura de servidores remotos acessados pela internet. Em vez de ter servidores físicos no prédio, o órgão aluga capacidade de provedores como AWS, Azure ou Google Cloud.",
     "pronunc": "\"claud\" / Nu-vem",
     "example": "Migramos o sistema de folha de pagamento para a nuvem e paramos de perder dados em quedas de energia."
+  },
+  {
+    "letter": "C",
+    "name": "Código Aberto",
+    "cat": "dev",
+    "mini": "Software com o código disponível para qualquer pessoa ver e usar",
+    "def": "Programa cujo código-fonte é publicado sob licença que permite usar, estudar, modificar e redistribuir. Para o setor público significa três coisas práticas: dá para <strong>auditar</strong> o que o sistema faz, dá para adaptar sem pedir autorização, e não se fica preso a um único fornecedor.",
+    "pronunc": "CÓ-di-go a-BER-to",
+    "example": "Escolhemos uma ferramenta de código aberto para poder auditar como as respostas são geradas."
   },
   {
     "letter": "C",
@@ -543,11 +570,20 @@ export const TERMOS = [
     "example": "A analista escreveu uma consulta SQL para extrair todos os contratos com valor acima de R$ 1 milhão."
   },
   {
+    "letter": "S",
+    "name": "Supervisão Humana",
+    "cat": "ia",
+    "mini": "A pessoa que decide, revisa e responde pelo resultado",
+    "def": "Arranjo em que a decisão final cabe a uma pessoa identificável, com poder real de revisar, discordar e reverter o que o sistema propôs. Para ser efetiva exige três condições: <strong>tempo</strong> para analisar, <strong>informação</strong> suficiente para julgar e <strong>autonomia</strong> para contrariar a máquina. Sem as três, vira carimbo.",
+    "pronunc": "Su-per-vi-SÃO Hu-MA-na",
+    "example": "O sistema sugere a triagem, mas a supervisão humana é quem assina — e quem responde."
+  },
+  {
     "letter": "T",
     "name": "Token",
-    "cat": "seg",
-    "mini": "Chave digital temporária que prova identidade",
-    "def": "Sequência de caracteres gerada pelo sistema após autenticação, usada para provar identidade em requisições seguintes sem reenviar a senha a cada vez.",
+    "cat": "ia",
+    "mini": "Duas coisas diferentes usam esse mesmo nome",
+    "def": "<strong>Em IA</strong>: o pedaço de texto que o modelo processa por vez — mais ou menos uma palavra curta, ou parte de uma longa. É a unidade em que se mede consumo e preço: contratos de IA costumam cobrar por token enviado e devolvido, então documento longo custa mais.<br /><br /><strong>Em segurança</strong>: sequência de caracteres gerada após a autenticação, usada para provar identidade nas requisições seguintes sem reenviar a senha a cada vez.",
     "pronunc": "\"tó-ken\"",
     "example": "O token de acesso expira em 24 horas; após isso, a pessoa usuária precisa autenticar novamente."
   },
