@@ -171,7 +171,9 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(
 .s3-main em{font-style:normal;color:var(--purple);}
 .s3-ethic{display:inline-flex;align-items:center;gap:.6rem;padding:.4rem 1rem;border-radius:100px;background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.18);font-family:var(--fm);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:rgba(251,191,36,.75);}
 
-#s4{flex-direction:row;align-items:center;gap:4vw;}
+/* #s4 e coluna como os demais: o markup ja tem um wrapper interno que faz a
+   linha dos cards + texto. A regra antiga de row sobrou de uma reestruturacao
+   e transformava eyebrow, titulo e wrapper em tres colunas irmas. */
 .s4-stack{flex:0 0 auto;width:clamp(220px,32vw,380px);display:flex;flex-direction:column;gap:.7rem;perspective:600px;}
 .s4-layer{padding:1.2rem 1.5rem;border-radius:14px;display:flex;align-items:center;gap:1rem;transition:transform .4s ease;cursor:default;}
 .s4-layer:hover{transform:translateZ(16px) translateY(-2px);}
