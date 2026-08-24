@@ -206,20 +206,20 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(
 .s6-note p{font-size:clamp(.82rem,1.1vw,.96rem);color:var(--text-3);line-height:1.6;}
 .s6-note strong{color:var(--text);font-weight:500;}
 
-#s7{justify-content:center;gap:2vh;padding:4vh 5.5vw;}
+#s7{justify-content:center;gap:1.6vh;padding:7vh 5.5vw 3vh;}
 .s7-cols{display:flex;gap:1.5rem;flex:1;}
-.s7-col{flex:1;display:flex;flex-direction:column;gap:.6rem;}
-.s7-hdr{padding:.9rem 1.2rem;border-radius:12px 12px 0 0;display:flex;align-items:center;gap:.8rem;}
+.s7-col{flex:1;display:flex;flex-direction:column;gap:.45rem;}
+.s7-hdr{padding:.7rem 1.2rem;border-radius:12px 12px 0 0;display:flex;align-items:center;gap:.8rem;}
 .hdr-r{background:rgba(252,165,165,.06);border:1px solid rgba(252,165,165,.14);}
 .hdr-g{background:rgba(110,231,183,.05);border:1px solid rgba(110,231,183,.12);}
 .s7-htitle{font-family:var(--f);font-size:clamp(1rem,1.5vw,1.15rem);font-weight:700;color:var(--text);}
-.s7-row{padding:.85rem 1.1rem;border-radius:11px;font-size:clamp(.82rem,1.1vw,.96rem);line-height:1.6;color:var(--text-2);}
+.s7-row{padding:.6rem 1.1rem;border-radius:11px;font-size:clamp(.82rem,1.1vw,.96rem);line-height:1.6;color:var(--text-2);}
 .r-bad{background:var(--surface);border:1px solid rgba(252,165,165,.1);border-left:2px solid rgba(252,165,165,.3);}
 .r-bad::before{content:'✗  ';color:rgba(252,165,165,.6);}
 .r-good{background:var(--surface);border:1px solid rgba(110,231,183,.1);border-left:2px solid rgba(110,231,183,.4);}
 .r-good::before{content:'✓  ';color:rgba(110,231,183,.7);}
 .s7-row strong{color:var(--text);font-weight:500;}
-.s7-rule{text-align:center;padding:.9rem 1.4rem;border-radius:12px;background:var(--surface-hi);border:1px solid var(--border-hi);font-family:var(--f);font-size:clamp(.88rem,1.2vw,1.02rem);font-weight:500;color:var(--text);}
+.s7-rule{text-align:center;padding:.7rem 1.4rem;margin-bottom:3vh;border-radius:12px;background:var(--surface-hi);border:1px solid var(--border-hi);font-family:var(--f);font-size:clamp(.88rem,1.2vw,1.02rem);font-weight:500;color:var(--text);}
 .s7-rule em{font-style:normal;color:var(--purple);}
 
 #s8{flex-direction:row;gap:3vw;align-items:stretch;}
@@ -419,24 +419,28 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(
 <!-- S7 ERROS -->
 <div class="slide" id="s7">
   <div class="eyebrow L0"><div class="eyebrow-dot dot-r"></div>07 · Antes de começar</div>
-  <div class="display display-md L1" style="margin-bottom:2vh;">Erros que <em style="font-style:italic;font-weight:300;color:rgba(252,165,165,.6)">custam crédito</em></div>
+  <div class="display display-md L1" style="margin-bottom:1.4vh;">Erros que <em style="font-style:italic;font-weight:300;color:rgba(252,165,165,.6)">custam crédito</em></div>
   <div class="s7-cols L2">
     <div class="s7-col">
       <div class="s7-hdr hdr-r"><span style="font-size:1.1rem">✗</span><div><div class="s7-htitle">Não faça</div></div></div>
-      <div class="s7-row r-bad">Prompts longos e <strong>confusos</strong></div>
-      <div class="s7-row r-bad">Construir o app <strong>inteiro de uma vez</strong></div>
-      <div class="s7-row r-bad">Textos genéricos como <strong>"lorem ipsum"</strong></div>
-      <div class="s7-row r-bad">Começar sem <strong>revisar a estrutura</strong></div>
+      <div class="s7-row r-bad">Prompts vagos ou com <strong>muitos objetivos misturados</strong></div>
+      <div class="s7-row r-bad">Tentar construir o app <strong>inteiro de uma vez</strong></div>
+      <div class="s7-row r-bad">Deixar fluxo e comportamento <strong>implícitos</strong></div>
+      <div class="s7-row r-bad">Conteúdo genérico como <strong>"lorem ipsum"</strong></div>
+      <div class="s7-row r-bad">Executar sem <strong>alinhar a estrutura</strong></div>
+      <div class="s7-row r-bad">Pedir <strong>"melhore isso"</strong></div>
     </div>
     <div class="s7-col">
       <div class="s7-hdr hdr-g"><span style="font-size:1.1rem">✓</span><div><div class="s7-htitle">Faça</div></div></div>
-      <div class="s7-row r-good">Seja <strong>direto e específico</strong></div>
-      <div class="s7-row r-good">Quebre em <strong>partes menores</strong></div>
+      <div class="s7-row r-good">Diga <strong>o que quer, para quem</strong> e com qual resultado</div>
+      <div class="s7-row r-good">Construa <strong>por partes</strong> e valide a cada etapa</div>
+      <div class="s7-row r-good">Descreva <strong>a jornada</strong> e o que deve acontecer</div>
       <div class="s7-row r-good">Use <strong>conteúdo real</strong> desde o início</div>
-      <div class="s7-row r-good">Use <strong>Plan Mode</strong> antes de gerar código</div>
+      <div class="s7-row r-good">Use <strong>Plan Mode</strong> antes de construir</div>
+      <div class="s7-row r-good">Diga <strong>o que mudar e o que preservar</strong></div>
     </div>
   </div>
-  <div class="s7-rule L3"><em>3–4 prompts estruturados</em> entregam mais que 20 prompts vagos.</div>
+  <div class="s7-rule L3">Não tente acertar tudo em um prompt. <em>Planeje, construa uma parte, teste e avance.</em></div>
 </div>
 
 <!-- S8 EDITOR -->
