@@ -792,7 +792,32 @@ const gt=idx=>{
   setTimeout(()=>{SS[p].classList.remove('active','exit');cur=idx;SS[cur].classList.add('active');upd();setTimeout(()=>busy=false,600);},130);
 };
 const go=d=>gt(cur+d);
-document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' ')go(1);if(e.key==='ArrowLeft'||e.key==='ArrowUp')go(-1);});
+/* PASSADOR (controle remoto) — passador nao manda seta: avanca com PageDown,
+   volta com PageUp, pede tela preta com "b" ou ponto e dispara F5 no botao de
+   iniciar apresentacao. Sem tratar essas teclas o controle nao anda o slide e
+   o F5 recarrega o deck no meio da fala. */
+const AVANCA=['ArrowRight','ArrowDown','PageDown',' ','Spacebar','Enter'];
+const VOLTA=['ArrowLeft','ArrowUp','PageUp','Backspace'];
+let preto=null;
+function pretoAlterna(){
+  if(preto){preto.remove();preto=null;return;}
+  preto=document.createElement('div');
+  preto.style.cssText='position:fixed;inset:0;background:#000;z-index:9999;cursor:pointer';
+  preto.addEventListener('click',e=>{e.stopPropagation();pretoAlterna();});
+  document.body.appendChild(preto);
+}
+function telaCheia(){
+  if(document.fullscreenElement)document.exitFullscreen();
+  else document.documentElement.requestFullscreen().catch(()=>{});
+}
+document.addEventListener('keydown',e=>{
+  if(e.key==='F5'){e.preventDefault();telaCheia();return;}
+  // Com a tela preta ligada, a proxima tecla devolve o slide.
+  if(preto){e.preventDefault();pretoAlterna();return;}
+  if(e.key==='b'||e.key==='B'||e.key==='.'){e.preventDefault();pretoAlterna();return;}
+  if(AVANCA.includes(e.key)){e.preventDefault();go(1);}
+  if(VOLTA.includes(e.key)){e.preventDefault();go(-1);}
+});
 let tx=0;
 document.addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});
 document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>50)go(dx<0?1:-1);},{passive:true});

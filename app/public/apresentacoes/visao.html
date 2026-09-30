@@ -611,9 +611,31 @@ function go(n){
   },650);
 }
 
+/* PASSADOR (controle remoto) — passador nao manda seta: avanca com PageDown,
+   volta com PageUp, pede tela preta com "b" ou ponto e dispara F5 no botao de
+   iniciar apresentacao. Sem tratar essas teclas o controle nao anda o slide e
+   o F5 recarrega o deck no meio da fala. */
+const AVANCA=['ArrowRight','ArrowDown','PageDown',' ','Spacebar','Enter'];
+const VOLTA=['ArrowLeft','ArrowUp','PageUp','Backspace'];
+let preto=null;
+function pretoAlterna(){
+  if(preto){preto.remove();preto=null;return;}
+  preto=document.createElement('div');
+  preto.style.cssText='position:fixed;inset:0;background:#000;z-index:9999;cursor:pointer';
+  preto.addEventListener('click',e=>{e.stopPropagation();pretoAlterna();});
+  document.body.appendChild(preto);
+}
+function telaCheia(){
+  if(document.fullscreenElement)document.exitFullscreen();
+  else document.documentElement.requestFullscreen().catch(()=>{});
+}
 document.addEventListener('keydown',e=>{
-  if(e.key==='ArrowRight'||e.key==='ArrowDown')go(cur+1);
-  if(e.key==='ArrowLeft'||e.key==='ArrowUp')go(cur-1);
+  if(e.key==='F5'){e.preventDefault();telaCheia();return;}
+  // Com a tela preta ligada, a proxima tecla devolve o slide.
+  if(preto){e.preventDefault();pretoAlterna();return;}
+  if(e.key==='b'||e.key==='B'||e.key==='.'){e.preventDefault();pretoAlterna();return;}
+  if(AVANCA.includes(e.key)){e.preventDefault();go(cur+1);}
+  if(VOLTA.includes(e.key)){e.preventDefault();go(cur-1);}
 });
 document.addEventListener('click',e=>{
   if(e.target.closest('.dot'))return;
