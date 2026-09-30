@@ -150,7 +150,7 @@ export default function AvaliacaoForm() {
             das próximas oficinas.
           </p>
           <a
-            href="https://chat.whatsapp.com/CDv95OwuUag4nTpzzLPvyE"
+            href="https://chat.whatsapp.com/Fto3ZuFagxrEF5EBRfUpIN"
             target="_blank"
             rel="noopener noreferrer"
             className="mt-4 inline-block rounded-full bg-emerald-600 text-white px-7 py-3 text-sm font-medium hover:bg-emerald-700 transition"
