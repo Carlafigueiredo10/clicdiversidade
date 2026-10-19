@@ -1,4 +1,21 @@
-const SINAIS = [
+import { tr } from '../../../i18n'
+
+const T = tr({
+  pt: {
+    eyebrow: 'O Novo Semáforo · Humanos no Comando',
+    titulo: 'Regras de ouro no serviço público',
+    intro:
+      'Use a IA para pensar melhor, não apenas mais rápido. Cada sinal abaixo traduz um princípio ético para o uso responsável da tecnologia no Estado.',
+  },
+  es: {
+    eyebrow: 'El Nuevo Semáforo · Humanos no Comando',
+    titulo: 'Reglas de oro en el servicio público',
+    intro:
+      'Usa la IA para pensar mejor, no solo más rápido. Cada señal traduce un principio ético para el uso responsable de la tecnología en el Estado.',
+  },
+})
+
+const SINAIS_PT = [
   {
     cor: 'red',
     bolinha: 'bg-red-500',
@@ -62,24 +79,88 @@ const SINAIS = [
   },
 ]
 
+const SINAIS_ES = [
+  {
+    cor: 'red',
+    bolinha: 'bg-red-500',
+    borda: 'border-red-500/60',
+    fundoFarol: 'bg-red-500/10',
+    titulo: 'Alto',
+    subtitulo: 'Datos sensibles y decisiones de alto riesgo',
+    texto: (
+      <>
+        Protege identidades y derechos. Además de nunca ingresar{' '}
+        <strong className="text-ink">
+          datos sensibles (documento de identidad, salud, justicia)
+        </strong>{' '}
+        en plataformas abiertas, detente y cuestiona antes de automatizar
+        procesos. La IA no debe usarse para tomar decisiones finales que
+        afecten derechos de la ciudadanía sin una{' '}
+        <strong className="text-ink">Evaluación de Impacto Algorítmico</strong>.
+        Recuerda: los datos reflejan a la sociedad — cuidado con las
+        exclusiones indirectas (por ejemplo, el código postal o el barrio que
+        la máquina asocia con ingresos o raza).
+      </>
+    ),
+  },
+  {
+    cor: 'amber',
+    bolinha: 'bg-amber-400',
+    borda: 'border-amber-400/60',
+    fundoFarol: 'bg-amber-400/10',
+    titulo: 'Atención',
+    subtitulo: 'Alucinaciones, sesgos e invisibilización',
+    texto: (
+      <>
+        La máquina reproduce el pasado. Además de inventar hechos y leyes{' '}
+        <em>(alucinaciones)</em>, los sistemas de IA heredan y automatizan{' '}
+        <strong className="text-ink">prejuicios históricos</strong>, y pueden
+        generar contenidos sesgados o borrar el contexto de grupos
+        minorizados. La responsabilidad ética y jurídica por la firma del
+        documento público es <strong className="text-ink">enteramente tuya</strong>.
+        Ejerce tu criterio y audita el resultado.
+      </>
+    ),
+  },
+  {
+    cor: 'emerald',
+    bolinha: 'bg-emerald-500',
+    borda: 'border-emerald-500/60',
+    fundoFarol: 'bg-emerald-500/10',
+    titulo: 'Sigue',
+    subtitulo: 'Productividad crítica',
+    texto: (
+      <>
+        Autonomía tecnológica. Usa la IA para ganar tiempo al estructurar
+        textos y resúmenes, pero ve más allá: convierte la IA en un{' '}
+        <strong className="text-ink">Agente Crítico de Apoyo</strong>.
+        Usa la tecnología a tu favor para revisar la accesibilidad del
+        lenguaje de tu propio texto, identificar jerga burocrática excluyente
+        y promover una comunicación más democrática y transparente con la
+        sociedad.
+      </>
+    ),
+  },
+]
+
+const SINAIS = tr({ pt: SINAIS_PT, es: SINAIS_ES })
+
 export default function SemaforoHumanosComando() {
   return (
     <section className="mt-16">
       <div className="flex items-center gap-4 justify-center">
         <span className="h-px flex-1 max-w-[120px] bg-line" />
         <p className="text-xs tracking-[0.25em] uppercase text-accent-fg font-semibold text-center">
-          O Novo Semáforo · Humanos no Comando
+          {T.eyebrow}
         </p>
         <span className="h-px flex-1 max-w-[120px] bg-line" />
       </div>
 
       <h2 className="mt-4 text-center font-display font-semibold text-2xl md:text-3xl text-ink leading-tight">
-        Regras de ouro no serviço público
+        {T.titulo}
       </h2>
       <p className="mt-3 text-center text-ink-soft text-sm md:text-base max-w-2xl mx-auto">
-        Use a IA para pensar melhor, não apenas mais rápido. Cada sinal abaixo
-        traduz um princípio ético para o uso responsável da tecnologia no
-        Estado.
+        {T.intro}
       </p>
 
       <div className="mt-10 grid gap-5 md:grid-cols-3">
