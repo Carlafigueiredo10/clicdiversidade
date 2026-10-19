@@ -32,9 +32,15 @@ export default async (req) => {
     return json({ error: 'first_message_must_be_user' }, 400)
   }
 
-  const contextHint = page
-    ? `\n\n## Contexto desta conversa\n\nA pessoa esta na pagina: ${page}`
-    : ''
+  // Idioma escolhido na plataforma (seletor PT | ES). Sobrepoe a regra
+  // "portugues brasileiro" da persona so quando a pessoa navega em espanhol.
+  const langHint =
+    payload.lang === 'es'
+      ? '\n\n## Idioma\n\nA pessoa navega a plataforma em espanhol. Responda SEMPRE em espanhol neutro (latino-americano, com "tu", sem regionalismos), mesmo que a persona diga portugues. Ela pode ser de outro pais da America Latina (ex.: Uruguai): nao presuma instituicoes, leis ou siglas brasileiras; quando citar um exemplo brasileiro, diga que e do Brasil. Mantenha em portugues apenas nomes proprios e citacoes de Lelia Gonzalez (traduzindo-as em seguida).'
+      : ''
+
+  const contextHint =
+    (page ? `\n\n## Contexto desta conversa\n\nA pessoa esta na pagina: ${page}` : '') + langHint
 
   // Tres blocos system com cache_control independentes:
   //   1. PERSONA (raramente muda — cache mais durador)

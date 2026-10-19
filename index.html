@@ -16,6 +16,8 @@
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="pt_BR" />
     <meta name="twitter:card" content="summary" />
+    <!-- Idioma (pt | es): define window.CLIC_LANG antes de tudo. -->
+    <script src="/assets/clic-lang.js"></script>
     <script>
       // Redireciona CTAs com "Comecar jornada" / "Comece a jornada" para /jornada/.
       // Tres camadas de defesa contra o roteador TanStack do legacy:
@@ -26,7 +28,8 @@
       (function () {
         // \S* (nao \w*) pra aceitar cedilha em "Comecar" — \w em JS nao
         // inclui letras acentuadas, entao "Come" + "ç" + "ar" quebrava.
-        var RE = /\bcome\S*\s+(a\s+)?jornada/i;
+        // Segundo ramo: label em espanhol (assets/i18n-landing.js).
+        var RE = /\bcome\S*\s+(a\s+)?jornada|\bcomenzar\s+el\s+recorrido/i;
 
         function matches(el) {
           return el && RE.test(((el.textContent || '') + '').trim());
@@ -227,6 +230,8 @@
         );
       })();
     </script>
+    <!-- Traducao ES + seletor PT|ES. Depois dos patches acima (eles leem o texto em PT). -->
+    <script src="/assets/i18n-landing.js"></script>
     <script type="module" crossorigin src="/assets/index-ddgeai3h.js"></script>
     <link rel="stylesheet" crossorigin href="/assets/index-bwhrzmvu.css" />
   </head>

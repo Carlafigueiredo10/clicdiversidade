@@ -13,6 +13,59 @@
   var MAX_HISTORY = 30
   var AVATAR_SRC = '/assets/lelia.jpg' // troque o arquivo aqui se subir com outro nome
 
+  // Textos da interface por idioma (window.CLIC_LANG vem de /assets/clic-lang.js).
+  var LANG = window.CLIC_LANG === 'es' ? 'es' : 'pt'
+  var T = {
+    pt: {
+      placeholder: 'Escreva sua mensagem...',
+      inputLabel: 'Mensagem para Lelia',
+      send: 'enviar',
+      close: 'Fechar',
+      sub: 'Assistente IA · CLIC',
+      inspired: 'inspirada em Lélia Gonzalez',
+      fabLabel: 'Falar com a Lelia',
+      talk: 'Falar com a Lélia',
+      greeting: 'Oi. Sou a Lélia. Como posso te ajudar?',
+      thinking: 'Lélia está pensando',
+      empty: '(resposta vazia)',
+      error: function (m) { return 'Ops, deu erro: ' + m + '. Tenta de novo daqui a pouco.' },
+      f1: 'Tira dúvidas em tempo real',
+      f1soft: ' — sobre IA, prompts ou seu diagnóstico',
+      f2: 'Refina prompts com o método PTCFL',
+      f2soft: ' — Persona, Tarefa, Contexto, Formato, Limites',
+      f3: 'Aponta vieses e limites',
+      f3soft: ' — IA não é neutra, nem ela finge que é',
+      meet: 'Conheça Lélia Gonzalez →',
+      eyebrow: '§ 03 · A AGENTE LÉLIA',
+      title: 'Conversa <em>com a Lélia.</em>',
+      lead: 'A Lélia é a agente do CLIC. Inspirada em Lélia Gonzalez, ela ajuda você a entender IA, montar prompts e ler seu resultado no diagnóstico — sem jargão, sem promessa milagrosa.',
+    },
+    es: {
+      placeholder: 'Escribe tu mensaje...',
+      inputLabel: 'Mensaje para Lélia',
+      send: 'enviar',
+      close: 'Cerrar',
+      sub: 'Asistente IA · CLIC',
+      inspired: 'inspirada en Lélia Gonzalez',
+      fabLabel: 'Hablar con Lélia',
+      talk: 'Hablar con Lélia',
+      greeting: 'Hola. Soy Lélia. ¿En qué puedo ayudarte?',
+      thinking: 'Lélia está pensando',
+      empty: '(respuesta vacía)',
+      error: function (m) { return 'Ups, hubo un error: ' + m + '. Inténtalo de nuevo en un momento.' },
+      f1: 'Resuelve dudas en tiempo real',
+      f1soft: ' — sobre IA, prompts o tu diagnóstico',
+      f2: 'Refina prompts con el método PTCFL',
+      f2soft: ' — Persona, Tarea, Contexto, Formato, Límites',
+      f3: 'Señala sesgos y límites',
+      f3soft: ' — la IA no es neutral, y ella no finge serlo',
+      meet: 'Conoce a Lélia Gonzalez →',
+      eyebrow: '§ 03 · LA AGENTE LÉLIA',
+      title: 'Conversa <em>con Lélia.</em>',
+      lead: 'Lélia es la agente de CLIC. Inspirada en Lélia Gonzalez, te ayuda a entender la IA, armar prompts y leer el resultado de tu diagnóstico — sin jerga ni promesas milagrosas.',
+    },
+  }[LANG]
+
   var STYLE = ''
     + '.__lelia-fab{position:fixed;right:20px;bottom:20px;z-index:2147483646;display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1rem;border:0;border-radius:9999px;background:#1a1715;color:#fffaf0;font:600 .875rem/1 "Inter",system-ui,sans-serif;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.18);transition:transform .15s ease,box-shadow .15s ease}'
     + '.__lelia-fab:hover{transform:translateY(-1px);box-shadow:0 12px 28px rgba(0,0,0,.22)}'
@@ -149,10 +202,10 @@
     var input = el('input', {
       class: '__lelia-input',
       type: 'text',
-      placeholder: 'Escreva sua mensagem...',
-      'aria-label': 'Mensagem para Lelia',
+      placeholder: T.placeholder,
+      'aria-label': T.inputLabel,
     })
-    var sendBtn = el('button', { class: '__lelia-send', type: 'submit' }, ['enviar'])
+    var sendBtn = el('button', { class: '__lelia-send', type: 'submit' }, [T.send])
 
     var form = el(
       'form',
@@ -168,7 +221,7 @@
 
     var closeBtn = el(
       'button',
-      { class: '__lelia-close', 'aria-label': 'Fechar', onclick: toggle },
+      { class: '__lelia-close', 'aria-label': T.close, onclick: toggle },
       ['×'],
     )
 
@@ -176,13 +229,13 @@
       createAvatar(),
       el('div', { class: '__lelia-title' }, [
         el('div', { class: '__lelia-name' }, ['Lélia']),
-        el('div', { class: '__lelia-sub', html: '<span class="__lelia-sub__dot"></span>Assistente IA · CLIC' }),
+        el('div', { class: '__lelia-sub', html: '<span class="__lelia-sub__dot"></span>' + T.sub }),
       ]),
       closeBtn,
     ])
 
     var footer = el('div', { class: '__lelia-footer' }, [
-      'inspirada em Lélia Gonzalez',
+      T.inspired,
     ])
 
     var panel = el('div', { class: '__lelia-panel' }, [header, body, form, footer])
@@ -190,8 +243,8 @@
     // botao FAB
     var fab = el(
       'button',
-      { class: '__lelia-fab', type: 'button', onclick: toggle, 'aria-label': 'Falar com a Lelia' },
-      [el('span', { class: '__lelia-fab__dot' }), 'Falar com a Lélia'],
+      { class: '__lelia-fab', type: 'button', onclick: toggle, 'aria-label': T.fabLabel },
+      [el('span', { class: '__lelia-fab__dot' }), T.talk],
     )
 
     document.body.appendChild(fab)
@@ -231,7 +284,7 @@
     function render() {
       body.innerHTML = ''
       if (history.length === 0) {
-        renderMessage('system', 'Oi. Sou a Lélia. Como posso te ajudar?')
+        renderMessage('system', T.greeting)
       } else {
         for (var i = 0; i < history.length; i++) {
           renderMessage(history[i].role, history[i].content)
@@ -348,7 +401,7 @@
 
     function showTyping() {
       var t = el('div', { class: '__lelia-typing', id: '__lelia-typing-active' }, [
-        'Lélia está pensando',
+        T.thinking,
         el('span', { class: '__lelia-typing__dots' }, [
           el('span', null, ['.']),
           el('span', null, ['.']),
@@ -391,6 +444,7 @@
             return { role: m.role, content: m.content }
           }),
           page: 'landing',
+          lang: LANG,
         }),
       })
         .then(function (res) {
@@ -408,7 +462,7 @@
         })
         .then(function (data) {
           hideTyping()
-          var reply = data.reply || '(resposta vazia)'
+          var reply = data.reply || T.empty
           history.push({ role: 'assistant', content: reply })
           saveHistory(history)
           renderMessage('assistant', reply)
@@ -416,7 +470,7 @@
         })
         .catch(function (err) {
           hideTyping()
-          renderMessage('system', 'Ops, deu erro: ' + (err.message || err) + '. Tenta de novo daqui a pouco.')
+          renderMessage('system', T.error(err.message || err))
           scrollBottom()
         })
         .then(function () {
@@ -468,7 +522,7 @@
               el('div', { class: '__lelia-section__card-name' }, ['Lélia']),
               el('div', {
                 class: '__lelia-section__card-sub',
-                html: '<span class="__lelia-section__card-dot"></span>Assistente IA · CLIC',
+                html: '<span class="__lelia-section__card-dot"></span>' + T.sub,
               }),
             ]),
           ]),
@@ -476,27 +530,27 @@
             el('li', { class: '__lelia-section__feature' }, [
               el('span', { class: '__lelia-section__feature-bullet' }, ['●']),
               el('span', null, [
-                'Tira dúvidas em tempo real',
-                el('span', { class: '__lelia-section__feature-soft' }, [' — sobre IA, prompts ou seu diagnóstico']),
+                T.f1,
+                el('span', { class: '__lelia-section__feature-soft' }, [T.f1soft]),
               ]),
             ]),
             el('li', { class: '__lelia-section__feature' }, [
               el('span', { class: '__lelia-section__feature-bullet' }, ['●']),
               el('span', null, [
-                'Refina prompts com o método PTCF',
-                el('span', { class: '__lelia-section__feature-soft' }, [' — Pessoa, Tarefa, Contexto, Formato']),
+                T.f2,
+                el('span', { class: '__lelia-section__feature-soft' }, [T.f2soft]),
               ]),
             ]),
             el('li', { class: '__lelia-section__feature' }, [
               el('span', { class: '__lelia-section__feature-bullet' }, ['●']),
               el('span', null, [
-                'Aponta vieses e limites',
-                el('span', { class: '__lelia-section__feature-soft' }, [' — IA não é neutra, nem ela finge que é']),
+                T.f3,
+                el('span', { class: '__lelia-section__feature-soft' }, [T.f3soft]),
               ]),
             ]),
           ]),
           el('div', { class: '__lelia-section__card-footer' }, [
-            'inspirada em Lélia Gonzalez',
+            T.inspired,
           ]),
         ])
 
@@ -509,7 +563,7 @@
               if (typeof window.openLelia === 'function') window.openLelia()
             },
           },
-          ['Falar com a Lélia'],
+          [T.talk],
         )
 
         var conhecaLink = el(
@@ -518,17 +572,17 @@
             class: '__lelia-section__btn __lelia-section__btn--secondary',
             href: '/lelia/',
           },
-          ['Conheça Lélia Gonzalez →'],
+          [T.meet],
         )
 
         var left = el('div', null, [
-          el('div', { class: '__lelia-section__eyebrow' }, ['§ 03 · A AGENTE LÉLIA']),
+          el('div', { class: '__lelia-section__eyebrow' }, [T.eyebrow]),
           el('h2', {
             class: '__lelia-section__title',
-            html: 'Conversa <em>com a Lélia.</em>',
+            html: T.title,
           }),
           el('p', { class: '__lelia-section__lead' }, [
-            'A Lélia é a agente do CLIC. Inspirada em Lélia Gonzalez, ela ajuda você a entender IA, montar prompts e ler seu resultado no diagnóstico — sem jargão, sem promessa milagrosa.',
+            T.lead,
           ]),
           el('div', { class: '__lelia-section__ctas' }, [falarBtn, conhecaLink]),
         ])
