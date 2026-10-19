@@ -147,7 +147,7 @@ h2{font-family:var(--f);font-size:clamp(1.8rem,3.2vw,3rem);font-weight:600;line-
 .s3-divider{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10;width:44px;height:44px;border-radius:50%;background:#04060f;border:2px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-family:var(--m);font-size:9px;font-weight:700;color:var(--muted2);letter-spacing:.06em;}
 
 /* ───────────────────────────────
-   S4 — MÉTODO PTCFL
+   S4 — MÉTODO PTCFSL
 ─────────────────────────────── */
 #s4{justify-content:center;gap:1.5vh;background:linear-gradient(160deg,#04060f 0%,#080318 100%);}
 #s4::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 40%,rgba(124,58,237,.1) 0%,transparent 60%);}
@@ -164,12 +164,14 @@ h2{font-family:var(--f);font-size:clamp(1.8rem,3.2vw,3rem);font-weight:600;line-
 .ptcfl-card.t-card:hover,.ptcfl-card.t-card.open{border-color:rgba(6,182,212,.5);box-shadow:0 8px 40px rgba(6,182,212,.2);background:linear-gradient(160deg,rgba(6,182,212,.15),rgba(6,182,212,.04));}
 .ptcfl-card.c-card:hover,.ptcfl-card.c-card.open{border-color:rgba(245,158,11,.5);box-shadow:0 8px 40px rgba(245,158,11,.2);background:linear-gradient(160deg,rgba(245,158,11,.15),rgba(245,158,11,.04));}
 .ptcfl-card.f-card:hover,.ptcfl-card.f-card.open{border-color:rgba(16,185,129,.5);box-shadow:0 8px 40px rgba(16,185,129,.2);background:linear-gradient(160deg,rgba(16,185,129,.15),rgba(16,185,129,.04));}
+.ptcfl-card.s-card:hover,.ptcfl-card.s-card.open{border-color:rgba(59,130,246,.5);box-shadow:0 8px 40px rgba(59,130,246,.2);background:linear-gradient(160deg,rgba(59,130,246,.16),rgba(59,130,246,.04));}
 .ptcfl-card.l-card:hover,.ptcfl-card.l-card.open{border-color:rgba(225,29,72,.5);box-shadow:0 8px 40px rgba(225,29,72,.2);background:linear-gradient(160deg,rgba(225,29,72,.18),rgba(225,29,72,.04));}
 .ptcfl-letter{font-family:var(--f);font-size:clamp(2.5rem,4vw,4rem);font-weight:700;line-height:1;margin-bottom:.3rem;}
 .p-card .ptcfl-letter{background:linear-gradient(135deg,var(--purple-l),#c4b5fd);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .t-card .ptcfl-letter{background:linear-gradient(135deg,var(--cyan),#67e8f9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .c-card .ptcfl-letter{background:linear-gradient(135deg,var(--amber),#fcd34d);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .f-card .ptcfl-letter{background:linear-gradient(135deg,var(--green),#6ee7b7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.s-card .ptcfl-letter{background:linear-gradient(135deg,var(--blue),#93c5fd);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .l-card .ptcfl-letter{background:linear-gradient(135deg,var(--rose),#fb7185);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .ptcfl-word{font-family:var(--s);font-size:clamp(.75rem,1vw,.9rem);font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:rgba(248,250,252,.5);margin-bottom:.5rem;}
 .ptcfl-desc{font-size:clamp(.72rem,.95vw,.85rem);color:var(--muted);line-height:1.6;opacity:0;max-height:0;overflow:hidden;transition:all .35s;}
@@ -204,6 +206,7 @@ h2{font-family:var(--f);font-size:clamp(1.8rem,3.2vw,3rem);font-weight:600;line-
 .pt{color:var(--cyan);font-weight:600;}
 .pc{color:var(--amber);font-weight:600;}
 .pf{color:var(--green);font-weight:600;}
+.ps{color:#93c5fd;font-weight:600;}
 .pl{color:var(--rose);font-weight:600;}
 .pv{color:rgba(248,250,252,.55);}
 /* Resultado bom */
@@ -302,6 +305,7 @@ h2{font-family:var(--f);font-size:clamp(1.8rem,3.2vw,3rem);font-weight:600;line-
 .st{color:#67e8f9;font-weight:600;}/* TAREFA */
 .sc{color:#fcd34d;font-weight:600;}/* CONTEXTO */
 .sf{color:#6ee7b7;font-weight:600;}/* FORMATO */
+.ss{color:#93c5fd;font-weight:600;}/* SUCESSO */
 .sl{color:#fb7185;font-weight:600;}/* LIMITES */
 .sv{color:rgba(248,250,252,.55);}/* valor normal */
 .sph{color:#f97316;font-weight:700;background:rgba(249,115,22,.15);padding:1px 4px;border-radius:4px;border:1px solid rgba(249,115,22,.25);}/* placeholder */
@@ -367,7 +371,7 @@ h2{font-family:var(--f);font-size:clamp(1.8rem,3.2vw,3rem);font-weight:600;line-
     <h1 class="s1-h1 a2">Engenharia<br>de <em class="grad">prompt</em></h1>
     <p class="s1-sub a3">A arte de programar limites para máquinas que não pensam — mas reproduzem tudo.</p>
     <div class="s1-tags a4">
-      <span class="s1-tag s1-tag-p">Método PTCFL</span>
+      <span class="s1-tag s1-tag-p">Método PTCFSL</span>
       <span class="s1-tag s1-tag-c">Red Teaming</span>
       <span class="s1-tag s1-tag-g">Human-in-the-loop</span>
       <span class="s1-tag" style="background:rgba(225,29,72,.12);color:#fb7185;border:1px solid rgba(225,29,72,.3);">Agente Lélia</span>
@@ -443,11 +447,11 @@ h2{font-family:var(--f);font-size:clamp(1.8rem,3.2vw,3rem);font-weight:600;line-
   </div>
 </div>
 
-<!-- ━━━━━━━━━━━━━━ S4 MÉTODO PTCFL ━━━━━━━━━━━━━━ -->
+<!-- ━━━━━━━━━━━━━━ S4 MÉTODO PTCFSL ━━━━━━━━━━━━━━ -->
 <div class="slide" id="s4">
   <div class="chip a1" style="position:relative;z-index:1"><div class="chip-dot"></div>03 · A estrutura universal</div>
-  <h2 class="a2" style="margin-bottom:.6rem;position:relative;z-index:1">O método <span class="grad">PTCFL</span></h2>
-  <p class="a3" style="color:var(--muted);font-size:clamp(.82rem,1.1vw,.96rem);margin-bottom:1rem;position:relative;z-index:1;">Passe o mouse sobre cada pilar para expandir. Cinco elementos — resultado perfeito.</p>
+  <h2 class="a2" style="margin-bottom:.6rem;position:relative;z-index:1">O método <span class="grad">PTCFSL</span></h2>
+  <p class="a3" style="color:var(--muted);font-size:clamp(.82rem,1.1vw,.96rem);margin-bottom:1rem;position:relative;z-index:1;">Passe o mouse sobre cada pilar para expandir. Seis elementos — e você decide quando está pronto.</p>
   <div class="ptcfl-row a4">
     <div class="ptcfl-card p-card">
       <div class="ptcfl-letter">P</div>
@@ -468,6 +472,11 @@ h2{font-family:var(--f);font-size:clamp(1.8rem,3.2vw,3rem);font-weight:600;line-
       <div class="ptcfl-letter">F</div>
       <div class="ptcfl-word">Formato</div>
       <div class="ptcfl-desc">Como deve ser a entrega. Não aceite paredes de texto.<div class="ptcfl-ex">Ex: "Tabela com 3 colunas", "Lista com bullets", "Ofício formal".</div></div>
+    </div>
+    <div class="ptcfl-card s-card">
+      <div class="ptcfl-letter">S</div>
+      <div class="ptcfl-word">Sucesso</div>
+      <div class="ptcfl-desc">Como você vai saber que a resposta serve? Diga o que precisa estar presente para aceitar o resultado.<div class="ptcfl-ex">Ex: "Cite a norma", "No máximo 1 página", "Linguagem que um cidadão entenda".</div></div>
     </div>
     <div class="ptcfl-card l-card">
       <div class="ptcfl-letter">L</div>
@@ -501,7 +510,7 @@ h2{font-family:var(--f);font-size:clamp(1.8rem,3.2vw,3rem);font-weight:600;line-
     <div class="s5-panel-header a1">
       <div class="s5-mark">✓</div>
       <div>
-        <div class="s5-htitle">Prompt PTCFL</div>
+        <div class="s5-htitle">Prompt PTCFSL</div>
         <div class="s5-hsub">Estruturado · Entrega garantida</div>
       </div>
     </div>
@@ -510,6 +519,7 @@ h2{font-family:var(--f);font-size:clamp(1.8rem,3.2vw,3rem);font-weight:600;line-
       <div class="s5-line"><span class="pt">[Tarefa]</span> <span class="pv">Crie tabela comparativa entre Lei 8.666 e Lei 14.133.</span></div>
       <div class="s5-line"><span class="pc">[Contexto]</span> <span class="pv">Foco em obras de engenharia civil.</span></div>
       <div class="s5-line"><span class="pf">[Formato]</span> <span class="pv">Tabela com 3 colunas: tema, lei antiga, lei nova.</span></div>
+      <div class="s5-line"><span class="ps">[Sucesso]</span> <span class="pv">Cada linha cita o artigo da lei. Cabe em 1 página.</span></div>
       <div class="s5-line"><span class="pl">[Limites]</span> <span class="pv">Use linguagem clara. Não presuma o gênero do gestor. Alerte sobre lacunas.</span></div>
     </div>
     <div class="s5-good-resp a3">
@@ -644,9 +654,12 @@ h2{font-family:var(--f);font-size:clamp(1.8rem,3.2vw,3rem);font-weight:600;line-
       <div class="s8-line"><span class="s8-ln">14</span><span class="sf">[FORMATO]</span></div>
       <div class="s8-line"><span class="s8-ln">15</span><span class="sv">Relatório estruturado: problemas / impacto / sugestão.</span></div>
       <div class="s8-line"><span class="s8-ln">16</span></div>
-      <div class="s8-line"><span class="s8-ln">17</span><span class="sl">[LIMITES]</span></div>
-      <div class="s8-line"><span class="s8-ln">18</span><span class="sv">Use linguagem neutra. Não presuma gênero ou raça.</span></div>
-      <div class="s8-line"><span class="s8-ln">19</span><span class="sv">Alerte se os dados carecerem de diversidade representativa.</span></div>
+      <div class="s8-line"><span class="s8-ln">17</span><span class="ss">[SUCESSO]</span></div>
+      <div class="s8-line"><span class="s8-ln">18</span><span class="sv">Cada problema vem com o trecho citado e uma sugestão aplicável.</span></div>
+      <div class="s8-line"><span class="s8-ln">19</span></div>
+      <div class="s8-line"><span class="s8-ln">20</span><span class="sl">[LIMITES]</span></div>
+      <div class="s8-line"><span class="s8-ln">21</span><span class="sv">Use linguagem neutra. Não presuma gênero ou raça.</span></div>
+      <div class="s8-line"><span class="s8-ln">22</span><span class="sv">Alerte se os dados carecerem de diversidade representativa.</span></div>
     </div>
   </div>
 </div>
@@ -659,7 +672,7 @@ h2{font-family:var(--f);font-size:clamp(1.8rem,3.2vw,3rem);font-weight:600;line-
     <p class="a3" style="font-size:clamp(.82rem,1.1vw,.96rem);color:var(--muted);line-height:1.65;margin-bottom:1rem;">Clique em cada item antes de enviar seu prompt. Todas as caixas precisam estar verdes.</p>
     <div class="s9-progress-wrap a4">
       <div class="s9-progress-label">
-        <span id="prog-label">0 de 7 concluídos</span>
+        <span id="prog-label">0 de 8 concluídos</span>
         <span id="prog-pct">0%</span>
       </div>
       <div class="s9-progress-bar"><div class="s9-progress-fill" id="prog-fill" style="width:0%"></div></div>
@@ -695,6 +708,13 @@ h2{font-family:var(--f);font-size:clamp(1.8rem,3.2vw,3rem);font-weight:600;line-
       <div class="s9-item-content">
         <div class="s9-item-label">Formato</div>
         <div class="s9-item-desc">Especifiquei o tipo de saída esperada?</div>
+      </div>
+    </div>
+    <div class="s9-item" onclick="toggleCheck(this)">
+      <div class="s9-checkbox"></div>
+      <div class="s9-item-content">
+        <div class="s9-item-label">Sucesso</div>
+        <div class="s9-item-desc">Disse o que a resposta precisa ter para eu aceitá-la?</div>
       </div>
     </div>
     <div class="s9-item" onclick="toggleCheck(this)">

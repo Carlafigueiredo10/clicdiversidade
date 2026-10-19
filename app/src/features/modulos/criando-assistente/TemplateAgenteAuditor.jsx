@@ -183,7 +183,7 @@ export default function TemplateAgenteAuditor() {
 
       <aside className="bg-page border-2 border-accent/30 rounded-2xl p-6 md:p-8 max-w-3xl mx-auto">
         <p className="text-xs uppercase tracking-wide text-accent-fg font-semibold">
-          O pilar L do PTCFL em ação · Por que o limite é a peça central
+          O pilar L do PTCFSL em ação · Por que o limite é a peça central
         </p>
         <p className="mt-3 text-sm text-ink-soft leading-relaxed">
           De todas as instruções acima, a que salva a auditoria é{' '}
@@ -197,7 +197,7 @@ export default function TemplateAgenteAuditor() {
         <p className="mt-4 text-sm text-ink-soft leading-relaxed">
           Vale o mesmo para o encerramento obrigatório. Uma auditoria que termina
           sem nome de responsável não produz decisão, produz relatório. É o{' '}
-          <strong className="text-ink">Limites</strong> do método PTCFL fazendo o
+          <strong className="text-ink">Limites</strong> do método PTCFSL fazendo o
           trabalho que a persona sozinha não faz.
         </p>
         <p className="mt-4 text-sm text-ink-soft leading-relaxed">

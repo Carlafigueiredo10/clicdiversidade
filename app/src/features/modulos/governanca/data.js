@@ -133,7 +133,7 @@ export const EIXOS = [
         titulo: 'IA Generativa para Lideranças Públicas: Do Comando à Maestria',
         meta: { Tipo: 'Material base da oficina' },
         descricao:
-          'Guia prático de Engenharia de Prompt para lideranças na gestão pública. Ensina o método PTCF (Persona, Tarefa, Contexto, Formato e Limites) e a criação de "Prompts Mestres".',
+          'Guia prático de Engenharia de Prompt para lideranças na gestão pública. Ensina o método PTCFSL (Persona, Tarefa, Contexto, Formato, Sucesso e Limites) e a criação de "Prompts Mestres".',
       },
       {
         titulo:
