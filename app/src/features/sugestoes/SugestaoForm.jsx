@@ -1,12 +1,47 @@
 import { useState } from 'react'
 import { enviarSugestao } from '../../services/sugestoes'
+import { tr } from '../../i18n'
 
-const CATEGORIAS = [
-  { id: 'conteudo', label: 'Conteúdo / trilhas' },
-  { id: 'erro', label: 'Algo com erro' },
-  { id: 'ideia', label: 'Ideia nova' },
-  { id: 'outro', label: 'Outro' },
-]
+const T = tr({
+  pt: {
+    categorias: [
+      { id: 'conteudo', label: 'Conteúdo / trilhas' },
+      { id: 'erro', label: 'Algo com erro' },
+      { id: 'ideia', label: 'Ideia nova' },
+      { id: 'outro', label: 'Outro' },
+    ],
+    erro: 'Não foi possível enviar agora. Tente novamente em alguns segundos.',
+    enviada: 'Sugestão enviada. Obrigada!',
+    lida: 'Toda sugestão é lida. O CLIC melhora com gente como você.',
+    outra: 'Enviar outra →',
+    placeholder: 'O que você mudaria, adicionaria ou tiraria? Pode ser um detalhe ou uma ideia grande.',
+    mensagemLabel: 'Sua sugestão',
+    contatoPlaceholder: 'Nome, e-mail ou WhatsApp — só se quiser resposta (opcional)',
+    contatoLabel: 'Contato (opcional)',
+    enviando: 'Enviando…',
+    enviar: 'Enviar sugestão',
+  },
+  es: {
+    categorias: [
+      { id: 'conteudo', label: 'Contenido / rutas' },
+      { id: 'erro', label: 'Algo con error' },
+      { id: 'ideia', label: 'Idea nueva' },
+      { id: 'outro', label: 'Otro' },
+    ],
+    erro: 'No fue posible enviar en este momento. Inténtalo de nuevo en unos segundos.',
+    enviada: 'Sugerencia enviada. ¡Gracias!',
+    lida: 'Leemos cada sugerencia. CLIC mejora con personas como tú.',
+    outra: 'Enviar otra →',
+    placeholder: '¿Qué cambiarías, agregarías o quitarías? Puede ser un detalle o una gran idea.',
+    mensagemLabel: 'Tu sugerencia',
+    contatoPlaceholder: 'Nombre, correo o WhatsApp — solo si quieres respuesta (opcional)',
+    contatoLabel: 'Contacto (opcional)',
+    enviando: 'Enviando…',
+    enviar: 'Enviar sugerencia',
+  },
+})
+
+const CATEGORIAS = T.categorias
 
 const MAX = 2000
 
@@ -30,9 +65,7 @@ export default function SugestaoForm() {
       setEnviado(true)
     } catch (err) {
       console.error(err)
-      setErro(
-        'Não foi possível enviar agora. Tente novamente em alguns segundos.',
-      )
+      setErro(T.erro)
     } finally {
       setEnviando(false)
     }
@@ -52,17 +85,17 @@ export default function SugestaoForm() {
           💜
         </span>
         <h3 className="mt-3 font-display font-semibold text-xl text-ink">
-          Sugestão enviada. Obrigada!
+          {T.enviada}
         </h3>
         <p className="mt-2 text-sm text-ink-soft">
-          Toda sugestão é lida. O CLIC melhora com gente como você.
+          {T.lida}
         </p>
         <button
           type="button"
           onClick={novaSugestao}
           className="mt-5 text-sm text-accent-fg font-medium hover:opacity-70"
         >
-          Enviar outra →
+          {T.outra}
         </button>
       </div>
     )
@@ -96,8 +129,8 @@ export default function SugestaoForm() {
         rows={5}
         maxLength={MAX}
         required
-        placeholder="O que você mudaria, adicionaria ou tiraria? Pode ser um detalhe ou uma ideia grande."
-        aria-label="Sua sugestão"
+        placeholder={T.placeholder}
+        aria-label={T.mensagemLabel}
         className="w-full bg-page border border-line rounded-xl px-4 py-3.5 text-ink placeholder:text-muted focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition resize-y"
       />
 
@@ -106,8 +139,8 @@ export default function SugestaoForm() {
         value={contato}
         onChange={(e) => setContato(e.target.value)}
         maxLength={200}
-        placeholder="Nome, e-mail ou WhatsApp — só se quiser resposta (opcional)"
-        aria-label="Contato (opcional)"
+        placeholder={T.contatoPlaceholder}
+        aria-label={T.contatoLabel}
         className="w-full bg-page border border-line rounded-xl px-4 py-3.5 text-ink placeholder:text-muted focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition"
       />
 
@@ -126,7 +159,7 @@ export default function SugestaoForm() {
           disabled={!podeEnviar}
           className="rounded-full bg-ink text-page px-7 py-3 text-sm font-medium hover:opacity-90 transition disabled:opacity-40 disabled:cursor-not-allowed"
         >
-          {enviando ? 'Enviando…' : 'Enviar sugestão'}
+          {enviando ? T.enviando : T.enviar}
         </button>
       </div>
     </form>

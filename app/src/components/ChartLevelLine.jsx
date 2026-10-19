@@ -1,31 +1,47 @@
 // Barra horizontal segmentada — uma linha unica dividida em 4 cores,
 // largura proporcional ao % de votos por nivel. Atualiza em tempo real.
+import { tr } from '../i18n'
+
+const T = tr({
+  pt: {
+    aguardando: 'Aguardando respostas',
+    aria: (n) => `Distribuição de ${n} participantes por nível`,
+    voce: '· você',
+    primeira: 'Aguardando a primeira resposta da oficina.',
+  },
+  es: {
+    aguardando: 'Esperando respuestas',
+    aria: (n) => `Distribución de ${n} participantes por nivel`,
+    voce: '· tú',
+    primeira: 'Esperando la primera respuesta del taller.',
+  },
+})
 
 const LEVELS = [
   {
     id: 'nunca_usei',
-    label: 'Nunca usei IA',
+    label: tr({ pt: 'Nunca usei IA', es: 'Nunca usé IA' }),
     short: 'Nunca usei',
     icon: '\u{1F331}',
     color: 'oklch(72% 0.14 35)', // coral — comeco da jornada
   },
   {
     id: 'perguntas_simples',
-    label: 'Perguntas simples',
+    label: tr({ pt: 'Perguntas simples', es: 'Preguntas simples' }),
     short: 'Perguntas',
     icon: '\u{1F4AC}',
     color: 'oklch(78% 0.14 80)', // ambar
   },
   {
     id: 'produzo_conteudo',
-    label: 'Produzo conteúdo',
+    label: tr({ pt: 'Produzo conteúdo', es: 'Produzco contenido' }),
     short: 'Produz',
     icon: '\u{1F4DD}',
     color: 'oklch(70% 0.13 160)', // verde sage
   },
   {
     id: 'ja_criei',
-    label: 'Já criei algo com IA',
+    label: tr({ pt: 'Já criei algo com IA', es: 'Ya creé algo con IA' }),
     short: 'Criou',
     icon: '\u{1F680}',
     color: 'oklch(60% 0.15 285)', // violeta (accent, dominio)
@@ -46,9 +62,7 @@ export default function ChartLevelLine({ distribuicao, nivelDoUsuario }) {
         className="relative h-4 rounded-full overflow-hidden flex bg-line/40"
         role="img"
         aria-label={
-          vazio
-            ? 'Aguardando respostas'
-            : `Distribuição de ${total} participantes por nível`
+          vazio ? T.aguardando : T.aria(total)
         }
       >
         {!vazio &&
@@ -116,7 +130,7 @@ export default function ChartLevelLine({ distribuicao, nivelDoUsuario }) {
                   </span>
                   {level.label}
                   {isUser && (
-                    <span className="ml-1 text-accent-fg">· você</span>
+                    <span className="ml-1 text-accent-fg">{T.voce}</span>
                   )}
                 </p>
               </div>
@@ -127,7 +141,7 @@ export default function ChartLevelLine({ distribuicao, nivelDoUsuario }) {
 
       {vazio && (
         <p className="text-center text-sm text-ink-soft">
-          Aguardando a primeira resposta da oficina.
+          {T.primeira}
         </p>
       )}
     </div>

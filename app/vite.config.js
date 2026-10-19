@@ -35,9 +35,14 @@ function legacyStaticPlugin() {
     name: 'legacy-static',
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
-        const urlPath = decodeURIComponent((req.url || '/').split('?')[0])
-        // /jornada/* fica com o Vite (SPA do React)
-        if (urlPath === '/jornada' || urlPath.startsWith('/jornada/')) {
+        let urlPath = decodeURIComponent((req.url || '/').split('?')[0])
+        // Em dev o Vite prefixa o base nos <script src="/assets/..."> do
+        // app/index.html (clic-lang.js, lelia-widget.js). No build o caminho
+        // fica /assets/... e o Netlify serve da raiz — aqui espelhamos isso.
+        if (urlPath.startsWith('/jornada/assets/')) {
+          urlPath = urlPath.slice('/jornada'.length)
+        } else if (urlPath === '/jornada' || urlPath.startsWith('/jornada/')) {
+          // /jornada/* fica com o Vite (SPA do React)
           return next()
         }
         let filePath = normalize(join(legacyRoot, urlPath))

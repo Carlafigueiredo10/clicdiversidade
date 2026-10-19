@@ -10,33 +10,155 @@ import {
   submeterParticipante,
   onDistribuicao,
 } from '../services/participantes'
+import { tr } from '../i18n'
 
-const NIVEIS = [
-  {
-    id: 'nunca_usei',
-    title: 'Nunca usei IA',
-    description:
-      'Ouvi falar, mas ainda não experimentei nenhuma ferramenta de inteligência artificial.',
+const NIVEIS = tr({
+  pt: [
+    {
+      id: 'nunca_usei',
+      title: 'Nunca usei IA',
+      description:
+        'Ouvi falar, mas ainda não experimentei nenhuma ferramenta de inteligência artificial.',
+    },
+    {
+      id: 'perguntas_simples',
+      title: 'Perguntas simples',
+      description:
+        'Já usei ChatGPT ou similar para tirar dúvidas básicas ou curiosidades.',
+    },
+    {
+      id: 'produzo_conteudo',
+      title: 'Produzo conteúdo',
+      description:
+        'Uso IA para redigir textos, resumir documentos ou auxiliar em tarefas do trabalho.',
+    },
+    {
+      id: 'ja_criei',
+      title: 'Já criei algo com IA',
+      description:
+        'Construí assistentes, automatizei processos ou desenvolvi soluções com ferramentas de IA.',
+    },
+  ],
+  es: [
+    {
+      id: 'nunca_usei',
+      title: 'Nunca usé IA',
+      description:
+        'Escuché hablar de ella, pero todavía no probé ninguna herramienta de inteligencia artificial.',
+    },
+    {
+      id: 'perguntas_simples',
+      title: 'Preguntas simples',
+      description:
+        'Ya usé ChatGPT o similar para resolver dudas básicas o por curiosidad.',
+    },
+    {
+      id: 'produzo_conteudo',
+      title: 'Produzco contenido',
+      description:
+        'Uso IA para redactar textos, resumir documentos o apoyarme en tareas del trabajo.',
+    },
+    {
+      id: 'ja_criei',
+      title: 'Ya creé algo con IA',
+      description:
+        'Construí asistentes, automaticé procesos o desarrollé soluciones con herramientas de IA.',
+    },
+  ],
+})
+
+const T = tr({
+  pt: {
+    erroTermometro: 'Não foi possível conectar ao termômetro agora.',
+    erroEnvio: 'Não foi possível enviar agora. Tente novamente em alguns segundos.',
+    eyebrow: 'Ponto de partida',
+    headline: ['Onde você está na', 'jornada digital?'],
+    intro: 'Informe seus dados abaixo e escolha o nível que mais se parece com o seu momento hoje.',
+    nome: 'Seu nome',
+    orgao: 'Órgão / Instituição',
+    email: 'E-mail',
+    whatsapp: 'WhatsApp (opcional)',
+    dica: 'Preencha acima e selecione seu nível abaixo.',
+    enviando: 'Enviando…',
+    entrar: 'Entrar na jornada',
+    consentimento:
+      'Ao enviar, você autoriza o uso dos seus dados para contato sobre o programa CLIC_diversidade. Não compartilhamos com terceiros.',
+    registrado: 'Registrado',
+    boasVindas: 'Bem-vinda à jornada',
+    salaTitulo: 'Onde você está nessa sala.',
+    salaTexto:
+      'Você faz parte de uma comunidade plural. O termômetro abaixo atualiza em tempo real conforme outras pessoas respondem.',
+    termometro: 'Termômetro da oficina',
+    distribuicao: 'Distribuição em tempo real',
+    resposta: 'resposta',
+    respostas: 'respostas',
+    comecarModulos: 'Começar pelos módulos ↓',
+    certificado: 'Gerar certificado',
+    trilhaEyebrow: 'Trilha de aprendizado',
+    modulos: 'Módulos',
+    modulosTexto:
+      'Conteúdo prático de IA generativa para gestoras públicas. Cada módulo é independente — comece pelo que fizer mais sentido para você.',
+    oficinaEyebrow: 'Oficina Humanos no Comando',
+    oficinaTitulo: 'Como foi a oficina?',
+    oficinaTexto:
+      'Participou da oficina Humanos no Comando? Sua avaliação leva um minuto e ajuda a desenhar as próximas turmas.',
+    avaliar: 'Avaliar a oficina →',
+    visaoEyebrow: 'A visão do programa',
+    visaoTitulo: 'Desde a origem.',
+    visaoTexto:
+      'Antes dos módulos, a visão que sustenta o CLIC_diversidade: por que IA pública só se faz com diversidade, inclusão e responsabilidade — e por que isso começa na origem, não no ajuste.',
+    abrirApresentacao: 'Abrir apresentação →',
+    sugestaoEyebrow: 'Constrói com a gente',
+    sugestaoTitulo: 'Sugira uma melhoria',
+    sugestaoTexto:
+      'Achou algo confuso, sentiu falta de um conteúdo ou teve uma ideia? Conta pra gente — o CLIC é construído ouvindo quem usa.',
   },
-  {
-    id: 'perguntas_simples',
-    title: 'Perguntas simples',
-    description:
-      'Já usei ChatGPT ou similar para tirar dúvidas básicas ou curiosidades.',
+  es: {
+    erroTermometro: 'No fue posible conectarse al termómetro en este momento.',
+    erroEnvio: 'No fue posible enviar en este momento. Inténtalo de nuevo en unos segundos.',
+    eyebrow: 'Punto de partida',
+    headline: ['¿Dónde estás en el', 'recorrido digital?'],
+    intro: 'Completa tus datos abajo y elige el nivel que más se parece a tu momento actual.',
+    nome: 'Tu nombre',
+    orgao: 'Organismo / Institución',
+    email: 'Correo electrónico',
+    whatsapp: 'WhatsApp (opcional)',
+    dica: 'Completa los datos de arriba y selecciona tu nivel abajo.',
+    enviando: 'Enviando…',
+    entrar: 'Entrar al recorrido',
+    consentimento:
+      'Al enviar, autorizas el uso de tus datos para contactarte sobre el programa CLIC_diversidade. No los compartimos con terceros.',
+    registrado: 'Registrado',
+    boasVindas: 'Te damos la bienvenida al recorrido',
+    salaTitulo: 'Dónde estás en esta sala.',
+    salaTexto:
+      'Formas parte de una comunidad plural. El termómetro de abajo se actualiza en tiempo real a medida que otras personas responden.',
+    termometro: 'Termómetro del taller',
+    distribuicao: 'Distribución en tiempo real',
+    resposta: 'respuesta',
+    respostas: 'respuestas',
+    comecarModulos: 'Empezar por los módulos ↓',
+    certificado: 'Generar certificado',
+    trilhaEyebrow: 'Ruta de aprendizaje',
+    modulos: 'Módulos',
+    modulosTexto:
+      'Contenido práctico de IA generativa para quienes trabajan en la gestión pública. Cada módulo es independiente — empieza por el que tenga más sentido para ti.',
+    oficinaEyebrow: 'Taller Humanos no Comando',
+    oficinaTitulo: '¿Cómo te fue en el taller?',
+    oficinaTexto:
+      '¿Participaste en el taller Humanos no Comando? Tu evaluación lleva un minuto y ayuda a diseñar los próximos grupos.',
+    avaliar: 'Evaluar el taller →',
+    visaoEyebrow: 'La visión del programa',
+    visaoTitulo: 'Desde el origen.',
+    visaoTexto:
+      'Antes de los módulos, la visión que sostiene CLIC_diversidade: por qué la IA pública solo se construye con diversidad, inclusión y responsabilidad — y por qué eso empieza en el origen, no en el ajuste.',
+    abrirApresentacao: 'Abrir presentación →',
+    sugestaoEyebrow: 'Construyamos en conjunto',
+    sugestaoTitulo: 'Sugiere una mejora',
+    sugestaoTexto:
+      '¿Encontraste algo confuso, echaste en falta un contenido o tuviste una idea? Cuéntanos — CLIC se construye escuchando a quienes lo usan.',
   },
-  {
-    id: 'produzo_conteudo',
-    title: 'Produzo conteúdo',
-    description:
-      'Uso IA para redigir textos, resumir documentos ou auxiliar em tarefas do trabalho.',
-  },
-  {
-    id: 'ja_criei',
-    title: 'Já criei algo com IA',
-    description:
-      'Construí assistentes, automatizei processos ou desenvolvi soluções com ferramentas de IA.',
-  },
-]
+})
 
 export default function Jornada() {
   const [form, setForm] = useState({
@@ -63,7 +185,7 @@ export default function Jornada() {
       },
       (err) => {
         console.error(err)
-        setDistErro('Não foi possível conectar ao termômetro agora.')
+        setDistErro(T.erroTermometro)
       },
     )
     return unsub
@@ -112,9 +234,7 @@ export default function Jornada() {
       })
     } catch (err) {
       console.error(err)
-      setErro(
-        'Não foi possível enviar agora. Tente novamente em alguns segundos.',
-      )
+      setErro(T.erroEnvio)
       setEnviando(false)
     }
   }
@@ -125,13 +245,12 @@ export default function Jornada() {
     <main className="px-5 py-16 md:py-24">
       <section className="mx-auto max-w-3xl">
         <HeadlineCinematic
-          eyebrow="Ponto de partida"
-          lines={['Onde você está na', 'jornada digital?']}
+          eyebrow={T.eyebrow}
+          lines={T.headline}
         />
 
         <p className="mt-6 max-w-xl mx-auto text-center text-ink-soft text-base md:text-lg leading-relaxed">
-          Informe seus dados abaixo e escolha o nível que mais se parece com o
-          seu momento hoje.
+          {T.intro}
         </p>
 
         <form onSubmit={handleSubmit} className="mt-12 space-y-8">
@@ -142,21 +261,21 @@ export default function Jornada() {
             <div className="grid gap-3 md:grid-cols-2">
               <FormField
                 id="nome"
-                label="Seu nome"
+                label={T.nome}
                 value={form.nome}
                 onChange={set('nome')}
                 required
               />
               <FormField
                 id="orgao"
-                label="Órgão / Instituição"
+                label={T.orgao}
                 value={form.orgao}
                 onChange={set('orgao')}
                 required
               />
               <FormField
                 id="email"
-                label="E-mail"
+                label={T.email}
                 type="email"
                 value={form.email}
                 onChange={set('email')}
@@ -164,7 +283,7 @@ export default function Jornada() {
               />
               <FormField
                 id="whatsapp"
-                label="WhatsApp (opcional)"
+                label={T.whatsapp}
                 type="tel"
                 value={form.whatsapp}
                 onChange={set('whatsapp')}
@@ -172,7 +291,7 @@ export default function Jornada() {
             </div>
 
             <p className="text-center text-muted text-sm">
-              Preencha acima e selecione seu nível abaixo.
+              {T.dica}
             </p>
 
             <div className="grid gap-4 md:grid-cols-2">
@@ -202,17 +321,16 @@ export default function Jornada() {
                 disabled={!podeSubmeter}
                 className="rounded-full bg-ink text-page px-8 py-3.5 font-medium hover:opacity-90 transition disabled:opacity-40 disabled:cursor-not-allowed"
               >
-                {enviando ? 'Enviando…' : 'Entrar na jornada'}
+                {enviando ? T.enviando : T.entrar}
               </button>
               <p className="text-xs text-muted max-w-md text-center leading-relaxed">
-                Ao enviar, você autoriza o uso dos seus dados para contato sobre
-                o programa CLIC_diversidade. Não compartilhamos com terceiros.
+                {T.consentimento}
               </p>
             </div>
           ) : (
             <div className="flex justify-center pt-4">
               <span className="inline-flex items-center gap-2 rounded-full border border-success bg-success/10 text-success-fg px-5 py-2 text-sm font-medium">
-                <span aria-hidden>✓</span> Registrado
+                <span aria-hidden>✓</span> {T.registrado}
               </span>
             </div>
           )}
@@ -227,24 +345,23 @@ export default function Jornada() {
             aria-live="polite"
           >
             <p className="text-xs tracking-[0.25em] uppercase text-accent-fg font-semibold text-center">
-              Bem-vinda à jornada
+              {T.boasVindas}
             </p>
             <h2 className="mt-6 font-display font-semibold text-3xl md:text-5xl text-ink text-center leading-[1.05]">
-              Onde você está nessa sala.
+              {T.salaTitulo}
             </h2>
             <p className="mt-6 max-w-xl mx-auto text-center text-ink-soft text-base md:text-lg leading-relaxed">
-              Você faz parte de uma comunidade plural. O termômetro abaixo
-              atualiza em tempo real conforme outras pessoas respondem.
+              {T.salaTexto}
             </p>
 
             <div className="mt-12 bg-card rounded-2xl border border-line p-6 md:p-8 shadow-sm">
               <div className="flex items-baseline justify-between mb-5">
                 <div>
                   <p className="text-xs tracking-[0.2em] uppercase text-accent-fg font-semibold">
-                    Termômetro da oficina
+                    {T.termometro}
                   </p>
                   <h3 className="mt-1.5 font-display font-semibold text-lg text-ink">
-                    Distribuição em tempo real
+                    {T.distribuicao}
                   </h3>
                 </div>
                 <div className="text-right">
@@ -252,7 +369,7 @@ export default function Jornada() {
                     {total}
                   </span>
                   <p className="text-[10px] uppercase tracking-wider text-muted">
-                    {total === 1 ? 'resposta' : 'respostas'}
+                    {total === 1 ? T.resposta : T.respostas}
                   </p>
                 </div>
               </div>
@@ -271,13 +388,13 @@ export default function Jornada() {
                 href="#modulos"
                 className="rounded-full bg-ink text-page px-7 py-3 text-sm font-medium hover:opacity-90 transition"
               >
-                Começar pelos módulos ↓
+                {T.comecarModulos}
               </a>
               <a
                 href="/jornada/certificado.html"
                 className="rounded-full border border-line bg-card text-ink px-7 py-3 text-sm font-medium hover:border-accent/40 transition"
               >
-                Gerar certificado
+                {T.certificado}
               </a>
             </div>
           </div>
@@ -289,16 +406,15 @@ export default function Jornada() {
         className="mx-auto max-w-5xl mt-28 pt-16 border-t border-line scroll-mt-8"
       >
         <p className="text-xs tracking-[0.25em] uppercase text-accent-fg font-semibold text-center">
-          Trilha de aprendizado
+          {T.trilhaEyebrow}
         </p>
 
         <h2 className="mt-6 font-display font-semibold text-4xl md:text-5xl text-ink text-center leading-[1.05]">
-          Módulos
+          {T.modulos}
         </h2>
 
         <p className="mt-6 max-w-2xl mx-auto text-center text-ink-soft text-base md:text-lg leading-relaxed">
-          Conteúdo prático de IA generativa para gestoras públicas. Cada módulo
-          é independente — comece pelo que fizer mais sentido para você.
+          {T.modulosTexto}
         </p>
 
         <div className="mt-14">
@@ -308,57 +424,53 @@ export default function Jornada() {
 
       <section className="mx-auto max-w-3xl mt-28 pt-16 border-t border-line">
         <p className="text-xs tracking-[0.25em] uppercase text-accent-fg font-semibold text-center">
-          Oficina Humanos no Comando
+          {T.oficinaEyebrow}
         </p>
         <h2 className="mt-6 font-display font-semibold text-3xl md:text-5xl text-ink text-center leading-[1.05]">
-          Como foi a oficina?
+          {T.oficinaTitulo}
         </h2>
         <p className="mt-6 max-w-xl mx-auto text-center text-ink-soft text-base md:text-lg leading-relaxed">
-          Participou da oficina Humanos no Comando? Sua avaliação leva um minuto
-          e ajuda a desenhar as próximas turmas.
+          {T.oficinaTexto}
         </p>
         <div className="mt-10 flex justify-center">
           <Link
             to="/avaliacao"
             className="rounded-full bg-ink text-page px-7 py-3 text-sm font-medium hover:opacity-90 transition"
           >
-            Avaliar a oficina →
+            {T.avaliar}
           </Link>
         </div>
       </section>
 
       <section className="mx-auto max-w-3xl mt-28 pt-16 border-t border-line">
         <p className="text-xs tracking-[0.25em] uppercase text-accent-fg font-semibold text-center">
-          A visão do programa
+          {T.visaoEyebrow}
         </p>
         <h2 className="mt-6 font-display font-semibold text-3xl md:text-5xl text-ink text-center leading-[1.05]">
-          Desde a origem.
+          {T.visaoTitulo}
         </h2>
         <p className="mt-6 max-w-xl mx-auto text-center text-ink-soft text-base md:text-lg leading-relaxed">
-          Antes dos módulos, a visão que sustenta o CLIC_diversidade: por que IA
-          pública só se faz com diversidade, inclusão e responsabilidade — e por
-          que isso começa na origem, não no ajuste.
+          {T.visaoTexto}
         </p>
         <div className="mt-10 flex justify-center">
           <Link
             to="/visao"
             className="rounded-full bg-ink text-page px-7 py-3 text-sm font-medium hover:opacity-90 transition"
           >
-            Abrir apresentação →
+            {T.abrirApresentacao}
           </Link>
         </div>
       </section>
 
       <section className="mx-auto max-w-3xl mt-28 pt-16 border-t border-line">
         <p className="text-xs tracking-[0.25em] uppercase text-accent-fg font-semibold text-center">
-          Constrói com a gente
+          {T.sugestaoEyebrow}
         </p>
         <h2 className="mt-6 font-display font-semibold text-3xl md:text-5xl text-ink text-center leading-[1.05]">
-          Sugira uma melhoria
+          {T.sugestaoTitulo}
         </h2>
         <p className="mt-6 max-w-xl mx-auto text-center text-ink-soft text-base md:text-lg leading-relaxed">
-          Achou algo confuso, sentiu falta de um conteúdo ou teve uma ideia? Conta
-          pra gente — o CLIC é construído ouvindo quem usa.
+          {T.sugestaoTexto}
         </p>
         <div className="mt-10">
           <SugestaoForm />

@@ -16,8 +16,14 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@500&display=swap"
     />
-      <!-- Idioma (pt | es) compartilhado com a landing: define window.CLIC_LANG. -->
+    <!-- Idioma (pt | es) compartilhado com a landing: define window.CLIC_LANG. -->
     <script src="/assets/clic-lang.js"></script>
+    <script>
+      if (window.CLIC_LANG === 'es') {
+        document.title = '¿Dónde estás en el recorrido digital? — CLIC_diversidade'
+        document.querySelector('meta[name="description"]').setAttribute('content', 'Punto de partida — completa tus datos y cuéntanos dónde estás en el recorrido de la IA.')
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

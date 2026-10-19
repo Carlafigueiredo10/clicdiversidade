@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { tr } from '../../i18n'
 
 export default function ModuloCard({
   to,
@@ -52,7 +53,7 @@ export default function ModuloCard({
         </p>
       ) : (
         <p className="mt-7 text-xs uppercase tracking-wider text-muted">
-          Em breve
+          {tr({ pt: 'Em breve', es: 'Próximamente' })}
         </p>
       )}
     </div>

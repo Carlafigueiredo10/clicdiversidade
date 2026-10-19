@@ -6,6 +6,30 @@ import {
   signOutUser,
   useAuthUser,
 } from '../services/auth'
+import { tr } from '../i18n'
+
+const T = tr({
+  pt: {
+    popup: 'O navegador bloqueou o popup. Permita popups e tente de novo.',
+    falha: 'Não foi possível entrar agora.',
+    eyebrow: 'Entrar',
+    titulo: 'Acesse com sua conta Google',
+    texto: 'Hoje o login é opcional. Em breve será necessário para acessar os conteúdos pós-oficina.',
+    entrando: 'Entrando…',
+    entrar: 'Entrar com Google',
+    sairDe: 'Sair de',
+  },
+  es: {
+    popup: 'El navegador bloqueó la ventana emergente. Permite las ventanas emergentes e inténtalo de nuevo.',
+    falha: 'No fue posible ingresar en este momento.',
+    eyebrow: 'Ingresar',
+    titulo: 'Ingresa con tu cuenta de Google',
+    texto: 'Por ahora el inicio de sesión es opcional. Pronto será necesario para acceder a los contenidos posteriores al taller.',
+    entrando: 'Ingresando…',
+    entrar: 'Ingresar con Google',
+    sairDe: 'Cerrar sesión de',
+  },
+})
 
 function GoogleIcon() {
   return (
@@ -74,9 +98,9 @@ export default function Login() {
           'Este domínio não está autorizado. Adicione em Authentication → Settings → Authorized domains.',
         )
       } else if (e.code === 'auth/popup-blocked') {
-        setErro('O navegador bloqueou o popup. Permita popups e tente de novo.')
+        setErro(T.popup)
       } else {
-        setErro(e.message || 'Não foi possível entrar agora.')
+        setErro(e.message || T.falha)
       }
     } finally {
       setEntrando(false)
@@ -87,14 +111,13 @@ export default function Login() {
     <main className="px-5 py-16 md:py-24">
       <div className="mx-auto max-w-md text-center">
         <p className="text-xs tracking-[0.25em] uppercase text-accent-fg font-semibold">
-          Entrar
+          {T.eyebrow}
         </p>
         <h1 className="mt-4 font-display font-semibold text-3xl md:text-4xl text-ink">
-          Acesse com sua conta Google
+          {T.titulo}
         </h1>
         <p className="mt-4 text-ink-soft text-sm leading-relaxed">
-          Hoje o login é opcional. Em breve será necessário para acessar os
-          conteúdos pós-oficina.
+          {T.texto}
         </p>
 
         {erro && (
@@ -113,7 +136,7 @@ export default function Login() {
             <span className="bg-page rounded-full p-1.5">
               <GoogleIcon />
             </span>
-            {entrando ? 'Entrando…' : 'Entrar com Google'}
+            {entrando ? T.entrando : T.entrar}
           </button>
 
           {user && (
@@ -122,7 +145,7 @@ export default function Login() {
               onClick={() => signOutUser()}
               className="text-xs text-ink-soft hover:text-ink underline"
             >
-              Sair de {user.email}
+              {T.sairDe} {user.email}
             </button>
           )}
         </div>
