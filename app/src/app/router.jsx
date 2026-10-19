@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom'
+import { createBrowserRouter, Navigate } from 'react-router-dom'
 import Layout from './Layout'
 import Jornada from '../pages/Jornada'
 import EngenhariaPrompt from '../pages/modulos/EngenhariaPrompt'
@@ -44,6 +44,7 @@ export const router = createBrowserRouter(
         { path: '/modulos/governanca/aie', element: <GovernancaAIE /> },
         { path: '/modulos/oficina', element: <MaterialOficina /> },
         { path: '/modulos/antes-de-construir', element: <AntesDeConstruir /> },
+        { path: '/modulos/oficina/desde-a-origem', element: <Visao /> },
         {
           path: '/modulos/oficina/quebrando-o-mito',
           element: <QuebrandoOMito />,
@@ -52,7 +53,8 @@ export const router = createBrowserRouter(
         { path: '/base-teorica', element: <BaseTeorica /> },
         { path: '/equipe', element: <Equipe /> },
         { path: '/manifesto', element: <Manifesto /> },
-        { path: '/visao', element: <Visao /> },
+        // /visao era a rota antiga (fora dos modulos); mantida pra links ja compartilhados.
+        { path: '/visao', element: <Navigate to="/modulos/oficina/desde-a-origem" replace /> },
         { path: '/avaliacao', element: <Avaliacao /> },
         { path: '/lelia-test', element: <LeliaTest /> },
         { path: '/admin', element: <Admin /> },

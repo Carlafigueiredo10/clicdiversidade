@@ -103,11 +103,6 @@ const T = tr({
     oficinaTexto:
       'Participou da oficina Humanos no Comando? Sua avaliação leva um minuto e ajuda a desenhar as próximas turmas.',
     avaliar: 'Avaliar a oficina →',
-    visaoEyebrow: 'A visão do programa',
-    visaoTitulo: 'Desde a origem.',
-    visaoTexto:
-      'Antes dos módulos, a visão que sustenta o CLIC_diversidade: por que IA pública só se faz com diversidade, inclusão e responsabilidade — e por que isso começa na origem, não no ajuste.',
-    abrirApresentacao: 'Abrir apresentação →',
     sugestaoEyebrow: 'Constrói com a gente',
     sugestaoTitulo: 'Sugira uma melhoria',
     sugestaoTexto:
@@ -148,11 +143,6 @@ const T = tr({
     oficinaTexto:
       '¿Participaste en el taller Humanos al Mando? Tu evaluación lleva un minuto y ayuda a diseñar los próximos grupos.',
     avaliar: 'Evaluar el taller →',
-    visaoEyebrow: 'La visión del programa',
-    visaoTitulo: 'Desde el origen.',
-    visaoTexto:
-      'Antes de los módulos, la visión que sostiene CLIC_diversidade: por qué la IA pública solo se construye con diversidad, inclusión y responsabilidad — y por qué eso empieza en el origen, no en el ajuste.',
-    abrirApresentacao: 'Abrir presentación →',
     sugestaoEyebrow: 'Construyamos en conjunto',
     sugestaoTitulo: 'Sugiere una mejora',
     sugestaoTexto:
@@ -438,26 +428,6 @@ export default function Jornada() {
             className="rounded-full bg-ink text-page px-7 py-3 text-sm font-medium hover:opacity-90 transition"
           >
             {T.avaliar}
-          </Link>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-3xl mt-28 pt-16 border-t border-line">
-        <p className="text-xs tracking-[0.25em] uppercase text-accent-fg font-semibold text-center">
-          {T.visaoEyebrow}
-        </p>
-        <h2 className="mt-6 font-display font-semibold text-3xl md:text-5xl text-ink text-center leading-[1.05]">
-          {T.visaoTitulo}
-        </h2>
-        <p className="mt-6 max-w-xl mx-auto text-center text-ink-soft text-base md:text-lg leading-relaxed">
-          {T.visaoTexto}
-        </p>
-        <div className="mt-10 flex justify-center">
-          <Link
-            to="/visao"
-            className="rounded-full bg-ink text-page px-7 py-3 text-sm font-medium hover:opacity-90 transition"
-          >
-            {T.abrirApresentacao}
           </Link>
         </div>
       </section>

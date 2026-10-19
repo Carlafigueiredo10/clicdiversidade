@@ -7,7 +7,7 @@ function BlocoCard({ bloco }) {
     <>
       <div className="flex items-baseline justify-between">
         <span className="font-mono text-xs tracking-widest text-accent-fg font-semibold">
-          BLOCO {bloco.numero}
+          {bloco.rotulo ?? `BLOCO ${bloco.numero}`}
         </span>
         <span className="text-[11px] uppercase tracking-wider text-muted">
           {bloco.duracao}
@@ -92,8 +92,9 @@ export default function MaterialOficina() {
           <span className="italic text-accent-fg">Comando.</span>
         </h1>
         <p className="mt-6 max-w-2xl mx-auto text-center text-ink-soft text-base md:text-lg leading-relaxed">
-          A apresentação de abertura da oficina presencial: o material próprio
-          daqui, para abrir a sala e virar a chave.
+          As apresentações de abertura da oficina presencial: a visão do
+          programa e o material próprio daqui, para abrir a sala e virar a
+          chave.
         </p>
 
         <div className="mt-14 grid gap-5 max-w-xl mx-auto">
