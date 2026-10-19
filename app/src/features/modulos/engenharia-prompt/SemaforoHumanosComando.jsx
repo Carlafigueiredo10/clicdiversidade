@@ -8,7 +8,7 @@ const T = tr({
       'Use a IA para pensar melhor, não apenas mais rápido. Cada sinal abaixo traduz um princípio ético para o uso responsável da tecnologia no Estado.',
   },
   es: {
-    eyebrow: 'El Nuevo Semáforo · Humanos no Comando',
+    eyebrow: 'El Nuevo Semáforo · Humanos al Mando',
     titulo: 'Reglas de oro en el servicio público',
     intro:
       'Usa la IA para pensar mejor, no solo más rápido. Cada señal traduce un principio ético para el uso responsable de la tecnología en el Estado.',

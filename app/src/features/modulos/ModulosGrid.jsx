@@ -73,7 +73,7 @@ const MODULOS = [
     titulo: tr({ pt: 'Material da Oficina', es: 'Material del Taller' }),
     descricao: tr({
       pt: 'Apresentação cinematográfica de abertura da oficina Humanos no Comando: pensamento estruturado, a lógica invisível por trás do código e a virada de chave.',
-      es: 'Presentación cinematográfica de apertura del taller Humanos no Comando: pensamiento estructurado, la lógica invisible detrás del código y el cambio de mirada.',
+      es: 'Presentación cinematográfica de apertura del taller Humanos al Mando: pensamiento estructurado, la lógica invisible detrás del código y el cambio de mirada.',
     }),
     stats: [
       { value: '7', label: tr({ pt: 'Slides', es: 'Diapositivas' }) },

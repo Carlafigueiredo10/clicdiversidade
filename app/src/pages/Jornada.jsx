@@ -143,10 +143,10 @@ const T = tr({
     modulos: 'Módulos',
     modulosTexto:
       'Contenido práctico de IA generativa para quienes trabajan en la gestión pública. Cada módulo es independiente — empieza por el que tenga más sentido para ti.',
-    oficinaEyebrow: 'Taller Humanos no Comando',
+    oficinaEyebrow: 'Taller Humanos al Mando',
     oficinaTitulo: '¿Cómo te fue en el taller?',
     oficinaTexto:
-      '¿Participaste en el taller Humanos no Comando? Tu evaluación lleva un minuto y ayuda a diseñar los próximos grupos.',
+      '¿Participaste en el taller Humanos al Mando? Tu evaluación lleva un minuto y ayuda a diseñar los próximos grupos.',
     avaliar: 'Evaluar el taller →',
     visaoEyebrow: 'La visión del programa',
     visaoTitulo: 'Desde el origen.',
