@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Construyendo Tecnología · Humanos al Mando</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#030307;
+  --surface:rgba(10,10,18,.90);
+  --surface-hi:rgba(16,14,26,.92);
+  --border:rgba(236,233,245,.08);
+  --border-hi:rgba(236,233,245,.14);
+  --text:#ece9f5;
+  --text-2:rgba(236,233,245,.72);
+  --text-3:rgba(236,233,245,.48);
+  --text-4:rgba(236,233,245,.28);
+  --purple:#a78bfa;
+  --blue:#7dd3fc;
+  --amber:#fbbf24;
+  --green:#6ee7b7;
+  --red:#fca5a5;
+  --f:'Space Grotesk',sans-serif;
+  --fi:'Inter',sans-serif;
+  --fm:'JetBrains Mono',monospace;
+}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--fi);}
+
+#bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
+
+#grain{
+  position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.45;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:160px 160px;mix-blend-mode:overlay;
+}
+
+#clight{
+  position:fixed;z-index:2;pointer-events:none;
+  width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle,rgba(167,139,250,.055) 0%,transparent 70%);
+  transform:translate(-50%,-50%);
+  transition:left .15s ease,top .15s ease;
+  left:50%;top:50%;
+}
+
+#atmo{
+  position:fixed;inset:0;z-index:2;pointer-events:none;
+  transition:background 1.4s cubic-bezier(.16,1,.3,1);
+}
+
+#deck{position:fixed;inset:0;z-index:3;}
+
+.slide{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  padding:5.5vh 6vw;
+  opacity:0;pointer-events:none;
+  will-change:opacity,transform;overflow:hidden;
+}
+.slide.active{opacity:1;pointer-events:all;}
+
+.eyebrow{
+  font-family:var(--fm);font-size:12px;font-weight:400;
+  letter-spacing:.16em;text-transform:uppercase;
+  color:var(--text-3);display:flex;align-items:center;gap:10px;
+  margin-bottom:.7rem;
+}
+.eyebrow-dot{
+  width:6px;height:6px;border-radius:50%;flex-shrink:0;
+}
+.dot-p{background:var(--purple);box-shadow:0 0 8px rgba(167,139,250,.7);}
+.dot-b{background:var(--blue);box-shadow:0 0 8px rgba(125,211,252,.6);}
+.dot-a{background:var(--amber);box-shadow:0 0 8px rgba(251,191,36,.6);}
+.dot-g{background:var(--green);box-shadow:0 0 8px rgba(110,231,183,.6);}
+.dot-r{background:var(--red);box-shadow:0 0 8px rgba(252,165,165,.5);}
+
+.display{font-family:var(--f);font-weight:700;line-height:.95;letter-spacing:-.03em;color:var(--text);}
+.display-xl{font-size:clamp(4rem,9vw,8rem);}
+.display-lg{font-size:clamp(2rem,3.5vw,3.2rem);}
+.display-md{font-size:clamp(1.4rem,2.2vw,2rem);}
+
+.grad-p{background:linear-gradient(135deg,var(--text) 0%,rgba(167,139,250,.85));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.grad-g{background:linear-gradient(135deg,var(--green),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+
+.body-lg{font-size:clamp(1rem,1.5vw,1.2rem);font-weight:300;color:var(--text-2);line-height:1.7;}
+.body-md{font-size:clamp(.88rem,1.2vw,1.05rem);color:var(--text-2);line-height:1.7;}
+.body-sm{font-size:clamp(.8rem,1.05vw,.94rem);color:var(--text-3);line-height:1.65;}
+.mono-sm{font-family:var(--fm);font-size:11px;letter-spacing:.1em;color:var(--text-3);}
+
+.panel{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:16px;
+  position:relative;overflow:hidden;
+}
+.panel-hi{background:var(--surface-hi);border-color:var(--border-hi);}
+.panel::after{
+  content:'';position:absolute;inset:0;border-radius:inherit;
+  background:linear-gradient(135deg,rgba(255,255,255,.025) 0%,transparent 50%);
+  pointer-events:none;
+}
+.rule{width:44px;height:1px;background:rgba(236,233,245,.14);margin:1.4rem 0;}
+
+@keyframes breath{0%,100%{opacity:.5}50%{opacity:1}}
+@keyframes drift{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+@keyframes spin-slow{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@keyframes scan{0%{top:-100%}100%{top:200%}}
+
+.L0{opacity:0;transform:translateY(0);transition:opacity .5s .05s ease,transform .5s .05s ease;}
+.L1{opacity:0;transform:translateY(18px);transition:opacity .7s .12s cubic-bezier(.16,1,.3,1),transform .7s .12s cubic-bezier(.16,1,.3,1);}
+.L2{opacity:0;transform:translateY(18px);transition:opacity .7s .24s cubic-bezier(.16,1,.3,1),transform .7s .24s cubic-bezier(.16,1,.3,1);}
+.L3{opacity:0;transform:translateY(18px);transition:opacity .7s .38s cubic-bezier(.16,1,.3,1),transform .7s .38s cubic-bezier(.16,1,.3,1);}
+.L4{opacity:0;transform:translateY(18px);transition:opacity .7s .52s cubic-bezier(.16,1,.3,1),transform .7s .52s cubic-bezier(.16,1,.3,1);}
+.L5{opacity:0;transform:translateY(18px);transition:opacity .7s .66s cubic-bezier(.16,1,.3,1),transform .7s .66s cubic-bezier(.16,1,.3,1);}
+.L6{opacity:0;transform:translateY(18px);transition:opacity .7s .80s cubic-bezier(.16,1,.3,1),transform .7s .80s cubic-bezier(.16,1,.3,1);}
+.Lscale{opacity:0;transform:scale(.92);transition:opacity .65s .1s cubic-bezier(.16,1,.3,1),transform .65s .1s cubic-bezier(.16,1,.3,1);}
+.slide.active .L0,.slide.active .L1,.slide.active .L2,.slide.active .L3,
+.slide.active .L4,.slide.active .L5,.slide.active .L6,.slide.active .Lscale{
+  opacity:1;transform:none;
+}
+
+#prog{position:fixed;top:0;left:0;height:1px;z-index:200;background:linear-gradient(90deg,rgba(167,139,250,.8),rgba(125,211,252,.5));box-shadow:0 0 6px rgba(167,139,250,.4);transition:width .55s cubic-bezier(.16,1,.3,1);}
+#logo{position:fixed;top:1.6rem;left:2rem;z-index:100;font-family:var(--fm);font-size:11px;letter-spacing:.1em;color:var(--text-4);display:flex;align-items:center;gap:8px;}
+#logo-dot{width:5px;height:5px;border-radius:50%;background:var(--purple);box-shadow:0 0 8px rgba(167,139,250,.7);animation:breath 2.5s ease-in-out infinite;}
+#ctr{position:fixed;top:1.6rem;right:2rem;z-index:100;font-family:var(--fm);font-size:11px;letter-spacing:.08em;color:var(--text-4);}
+.nav-wrap{position:fixed;bottom:1.8rem;left:50%;transform:translateX(-50%);z-index:100;display:flex;align-items:center;gap:1rem;}
+.nb{width:34px;height:34px;border-radius:50%;border:1px solid var(--border-hi);background:var(--surface);color:var(--text-3);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;transition:all .3s;}
+.nb:hover:not(:disabled){border-color:rgba(167,139,250,.4);color:var(--purple);box-shadow:0 0 16px rgba(167,139,250,.15);}
+.nb:disabled{opacity:.15;cursor:not-allowed;}
+.dots-row{display:flex;gap:5px;}
+.dot{width:4px;height:4px;border-radius:50%;background:rgba(236,233,245,.2);cursor:pointer;transition:all .35s;}
+.dot.on{width:22px;border-radius:2px;background:var(--purple);box-shadow:0 0 8px rgba(167,139,250,.5);}
+
+#s1{justify-content:flex-end;padding-bottom:11vh;}
+.s1-deco{position:absolute;right:5vw;top:50%;transform:translateY(-50%);width:36%;display:flex;align-items:center;justify-content:center;pointer-events:none;}
+.s1-orb{width:clamp(180px,26vw,360px);height:clamp(180px,26vw,360px);border-radius:50%;border:1px solid rgba(236,233,245,.04);position:relative;animation:drift 9s ease-in-out infinite;}
+.s1-ring{position:absolute;inset:-2px;border-radius:50%;padding:2px;background:conic-gradient(rgba(167,139,250,.25),rgba(125,211,252,.1),rgba(167,139,250,.05),rgba(167,139,250,.25));-webkit-mask:linear-gradient(white,white) content-box,linear-gradient(white,white);mask:linear-gradient(white,white) content-box,linear-gradient(white,white);-webkit-mask-composite:destination-out;mask-composite:exclude;animation:spin-slow 22s linear infinite;}
+.s1-inner{position:absolute;inset:14px;border-radius:50%;background:radial-gradient(circle,rgba(167,139,250,.08) 0%,transparent 70%);display:flex;align-items:center;justify-content:center;font-family:var(--f);font-size:clamp(2rem,4vw,4rem);font-weight:700;color:rgba(167,139,250,.3);}
+.s1-orbit{position:absolute;width:7px;height:7px;border-radius:50%;background:rgba(167,139,250,.7);box-shadow:0 0 10px rgba(167,139,250,.5);top:8%;left:50%;}
+
+#s2{flex-direction:row;padding:0;}
+.s2-h{flex:1;height:100%;display:flex;flex-direction:column;justify-content:center;padding:6vh 5.5vw;position:relative;}
+.s2-h-before{background:rgba(5,5,10,.5);border-right:1px solid var(--border);}
+.s2-h-after{background:rgba(12,8,22,.6);}
+.s2-badge{font-family:var(--fm);font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:4px 12px;border-radius:100px;display:inline-block;margin-bottom:1.5rem;}
+.b-before{background:rgba(236,233,245,.05);color:var(--text-3);border:1px solid var(--border);}
+.b-after{background:rgba(167,139,250,.1);color:rgba(167,139,250,.85);border:1px solid rgba(167,139,250,.2);}
+.s2-prompt{font-family:var(--fm);font-size:clamp(1rem,1.5vw,1.2rem);color:var(--text-3);line-height:1.7;margin-bottom:1.5rem;}
+.s2-prompt-hi{color:var(--text);}
+.s2-vs{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10;font-family:var(--fm);font-size:10px;letter-spacing:.1em;color:var(--text-4);width:36px;height:36px;border-radius:50%;background:var(--bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;}
+.s2-pull{margin-top:1.5rem;padding:1.1rem 1.4rem;background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.18);border-left:2px solid rgba(167,139,250,.6);border-radius:0 14px 14px 0;font-family:var(--f);font-size:clamp(.9rem,1.3vw,1.1rem);font-weight:500;color:var(--text);line-height:1.5;}
+
+#s3{justify-content:center;gap:3vh;align-items:center;}
+.s3-flow{display:flex;align-items:center;gap:1.5vw;width:100%;max-width:960px;margin:0 auto;}
+.s3-node{flex:1;padding:2rem 1.6rem;border-radius:18px;display:flex;flex-direction:column;gap:.6rem;text-align:center;animation:drift 7s ease-in-out infinite;}
+.sn-a{background:rgba(125,211,252,.05);border:1px solid rgba(125,211,252,.12);animation-delay:0s;}
+.sn-b{background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.18);box-shadow:0 0 50px rgba(167,139,250,.06);animation-delay:-2s;}
+.sn-c{background:rgba(110,231,183,.05);border:1px solid rgba(110,231,183,.12);animation-delay:-4s;}
+.s3-nicon{font-size:2.2rem;margin-bottom:.3rem;}
+.s3-nlabel{font-family:var(--fm);font-size:11px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.2rem;}
+.nl-b{color:rgba(125,211,252,.7);}
+.nl-p{color:rgba(167,139,250,.8);}
+.nl-g{color:rgba(110,231,183,.7);}
+.s3-nmain{font-family:var(--f);font-size:clamp(1rem,1.5vw,1.2rem);font-weight:600;color:var(--text);line-height:1.2;}
+.s3-nsub{font-size:clamp(.78rem,.95vw,.88rem);color:var(--text-3);line-height:1.55;}
+.s3-arrow{font-size:1.2rem;color:var(--text-4);flex-shrink:0;}
+.s3-tagline{text-align:center;max-width:680px;margin:0 auto;}
+.s3-main{font-family:var(--f);font-size:clamp(1.1rem,1.7vw,1.4rem);font-weight:600;color:var(--text);line-height:1.35;margin-bottom:.7rem;}
+.s3-main em{font-style:normal;color:var(--purple);}
+.s3-ethic{display:inline-flex;align-items:center;gap:.6rem;padding:.4rem 1rem;border-radius:100px;background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.18);font-family:var(--fm);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:rgba(251,191,36,.75);}
+
+/* #s4 e coluna como os demais: o markup ja tem um wrapper interno que faz a
+   linha dos cards + texto. A regra antiga de row sobrou de uma reestruturacao
+   e transformava eyebrow, titulo e wrapper em tres colunas irmas. */
+.s4-stack{flex:0 0 auto;width:clamp(220px,32vw,380px);display:flex;flex-direction:column;gap:.7rem;perspective:600px;}
+.s4-layer{padding:1.2rem 1.5rem;border-radius:14px;display:flex;align-items:center;gap:1rem;transition:transform .4s ease;cursor:default;}
+.s4-layer:hover{transform:translateZ(16px) translateY(-2px);}
+.sl-top{background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.2);box-shadow:0 0 30px rgba(167,139,250,.06);}
+.sl-mid{background:var(--surface);border:1px solid var(--border);}
+.sl-bot{background:rgba(110,231,183,.05);border:1px solid rgba(110,231,183,.12);}
+.sl-icon{font-size:1.6rem;flex-shrink:0;}
+.sl-lbl{font-family:var(--fm);font-size:11px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.2rem;}
+.sl-desc{font-size:clamp(.78rem,1vw,.88rem);color:var(--text-3);line-height:1.5;}
+.s4-info{flex:1;display:flex;flex-direction:column;gap:1rem;}
+.s4-callout{padding:1.2rem 1.5rem;border-radius:0 14px 14px 0;border-left:2px solid rgba(251,191,36,.5);background:rgba(251,191,36,.04);border-top:1px solid rgba(251,191,36,.1);border-bottom:1px solid rgba(251,191,36,.1);border-right:1px solid rgba(251,191,36,.08);}
+.s4-clbl{font-family:var(--fm);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(251,191,36,.6);margin-bottom:.4rem;}
+.s4-callout-2{padding:1.2rem 1.5rem;border-radius:0 14px 14px 0;border-left:2px solid rgba(110,231,183,.4);background:rgba(110,231,183,.03);border-top:1px solid rgba(110,231,183,.08);border-bottom:1px solid rgba(110,231,183,.08);border-right:1px solid rgba(110,231,183,.06);}
+
+#s5{justify-content:center;}
+#s6{justify-content:center;}
+/* Gatilho discreto do QR de avaliacao, no rodape do slide de fecho. */
+.qr-trigger{cursor:pointer;border-bottom:1px dotted rgba(236,233,245,.25);transition:color .25s;}
+.qr-trigger:hover{color:var(--text);border-bottom-color:var(--text);}
+/* Overlay do QR. Fica FORA de .slide de proposito: nao entra na contagem nem
+   na navegacao do deck — so aparece quando alguem clica no gatilho. */
+#qr-overlay{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;background:rgba(3,3,7,.96);cursor:pointer;}
+#qr-overlay.on{display:flex;}
+.qr-card{text-align:center;}
+.qr-eyebrow{font-family:var(--fm);font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:rgba(167,139,250,.75);margin-bottom:2.2vh;}
+.qr-box{background:#fff;padding:22px;border-radius:20px;display:inline-block;line-height:0;box-shadow:0 0 80px rgba(167,139,250,.18);}
+.qr-box svg{width:min(42vh,340px);height:min(42vh,340px);display:block;}
+.qr-url{margin-top:2.4vh;font-family:var(--fm);font-size:clamp(14px,1.5vw,19px);color:var(--text);letter-spacing:.02em;}
+.qr-hint{margin-top:1.4vh;font-size:12px;color:var(--text-4);}
+.s5-pills{display:flex;flex-wrap:wrap;gap:12px;margin-top:2rem;}
+.s5-pill{padding:10px 20px;border-radius:100px;background:var(--surface-hi);border:1px solid var(--border-hi);font-size:16px;font-weight:500;color:var(--text);white-space:nowrap;}
+.s6-path{display:flex;align-items:flex-start;gap:0;position:relative;}
+.s6-step{flex:1;display:flex;flex-direction:column;align-items:center;position:relative;}
+.s6-line{position:absolute;top:22px;left:50%;width:100%;height:1px;background:linear-gradient(to right,rgba(167,139,250,.2),rgba(125,211,252,.1));}
+.s6-step:last-child .s6-line{display:none;}
+.s6-num{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--fm);font-size:12px;font-weight:500;position:relative;z-index:1;margin-bottom:.9rem;}
+.n-std{background:var(--surface);border:1px solid var(--border);color:var(--text-3);}
+.n-key{background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.28);color:rgba(251,191,36,.9);box-shadow:0 0 20px rgba(251,191,36,.12);}
+.s6-title{font-family:var(--f);font-size:clamp(.85rem,1.2vw,1rem);font-weight:600;color:var(--text);text-align:center;margin-bottom:.3rem;}
+.s6-sub{font-size:clamp(.72rem,.9vw,.82rem);color:var(--text-3);text-align:center;line-height:1.55;padding:0 .5rem;}
+.s6-badge{margin-top:.5rem;font-family:var(--fm);font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:2px 9px;border-radius:100px;background:rgba(251,191,36,.08);color:rgba(251,191,36,.7);border:1px solid rgba(251,191,36,.18);}
+.s6-note{max-width:640px;margin:0 auto;text-align:center;padding:.9rem 1.4rem;border-radius:12px;background:rgba(251,191,36,.04);border:1px solid rgba(251,191,36,.1);}
+.s6-note p{font-size:clamp(.82rem,1.1vw,.96rem);color:var(--text-3);line-height:1.6;}
+.s6-note strong{color:var(--text);font-weight:500;}
+
+#s7{justify-content:center;gap:1.6vh;padding:7vh 5.5vw 3vh;}
+.s7-cols{display:flex;gap:1.5rem;flex:1;}
+.s7-col{flex:1;display:flex;flex-direction:column;gap:.45rem;}
+.s7-hdr{padding:.7rem 1.2rem;border-radius:12px 12px 0 0;display:flex;align-items:center;gap:.8rem;}
+.hdr-r{background:rgba(252,165,165,.06);border:1px solid rgba(252,165,165,.14);}
+.hdr-g{background:rgba(110,231,183,.05);border:1px solid rgba(110,231,183,.12);}
+.s7-htitle{font-family:var(--f);font-size:clamp(1rem,1.5vw,1.15rem);font-weight:700;color:var(--text);}
+.s7-row{padding:.6rem 1.1rem;border-radius:11px;font-size:clamp(.82rem,1.1vw,.96rem);line-height:1.6;color:var(--text-2);}
+.r-bad{background:var(--surface);border:1px solid rgba(252,165,165,.1);border-left:2px solid rgba(252,165,165,.3);}
+.r-bad::before{content:'✗  ';color:rgba(252,165,165,.6);}
+.r-good{background:var(--surface);border:1px solid rgba(110,231,183,.1);border-left:2px solid rgba(110,231,183,.4);}
+.r-good::before{content:'✓  ';color:rgba(110,231,183,.7);}
+.s7-row strong{color:var(--text);font-weight:500;}
+.s7-rule{text-align:center;padding:.7rem 1.4rem;margin-bottom:3vh;border-radius:12px;background:var(--surface-hi);border:1px solid var(--border-hi);font-family:var(--f);font-size:clamp(.88rem,1.2vw,1.02rem);font-weight:500;color:var(--text);}
+.s7-rule em{font-style:normal;color:var(--purple);}
+
+#s8{flex-direction:row;gap:3vw;align-items:stretch;}
+.s8-terminal{flex:1.2;background:#020407;border:1px solid rgba(167,139,250,.18);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 0 60px rgba(167,139,250,.06),inset 0 1px 0 rgba(255,255,255,.03);}
+.s8-bar{background:rgba(0,0,0,.5);padding:.55rem 1rem;display:flex;align-items:center;gap:.4rem;border-bottom:1px solid rgba(255,255,255,.04);}
+.s8-bd{width:10px;height:10px;border-radius:50%;}
+.s8-bname{font-family:var(--fm);font-size:10px;color:rgba(236,233,245,.2);margin-left:.6rem;letter-spacing:.04em;}
+.s8-body{padding:1.2rem 1.4rem;font-family:var(--fm);font-size:clamp(.78rem,1.1vw,.9rem);line-height:2.05;flex:1;position:relative;overflow:hidden;}
+.s8-scan{position:absolute;top:0;left:0;right:0;height:40px;background:linear-gradient(to bottom,rgba(167,139,250,.025),transparent);animation:scan 5s linear infinite;pointer-events:none;}
+.cl{display:flex;gap:.9rem;}
+.cln{color:rgba(236,233,245,.12);font-size:.78em;min-width:1.8em;text-align:right;user-select:none;margin-top:.15em;}
+.ck{color:var(--purple);font-weight:600;}
+.cv{color:rgba(236,233,245,.72);}
+.cph{color:var(--amber);font-weight:600;background:rgba(251,191,36,.1);padding:1px 5px;border-radius:3px;border:1px solid rgba(251,191,36,.2);}
+.cmt{color:rgba(236,233,245,.2);}
+.s8-panel{flex:1;display:flex;flex-direction:column;justify-content:center;gap:1.1rem;}
+.s8-card{padding:1.1rem 1.3rem;border-radius:14px;background:var(--surface);border:1px solid var(--border);}
+.s8-c-accent{background:rgba(252,165,165,.05);border-color:rgba(252,165,165,.18);}
+.s8-clabel{font-family:var(--fm);font-size:11px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.4rem;}
+.cl-r{color:rgba(252,165,165,.65);}
+.cl-p{color:rgba(167,139,250,.6);}
+.s8-ctext{font-size:clamp(.82rem,1.1vw,.96rem);color:var(--text-2);line-height:1.65;}
+.s8-ctext strong{color:var(--text);font-weight:500;}
+
+#s9{flex-direction:row;padding:0;}
+.s9-h{flex:1;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:5vh 5vw;position:relative;}
+.s9-l{background:rgba(252,165,165,.015);border-right:1px solid var(--border);}
+.s9-r{background:rgba(110,231,183,.015);}
+.s9-num{font-family:var(--f);font-size:clamp(5.5rem,12vw,11rem);font-weight:700;line-height:.9;letter-spacing:-.04em;margin-bottom:.7rem;}
+.n-bad{color:rgba(252,165,165,.2);}
+.n-good{background:linear-gradient(135deg,var(--green),rgba(125,211,252,.7));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.s9-unit{font-family:var(--fm);font-size:clamp(.9rem,1.4vw,1.2rem);letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.2rem;}
+.u-bad{color:rgba(252,165,165,.4);}
+.u-good{color:rgba(110,231,183,.65);}
+.s9-label{font-family:var(--f);font-size:clamp(1.1rem,1.8vw,1.45rem);font-weight:600;color:var(--text);margin-bottom:.5rem;}
+.s9-sub{font-size:clamp(.8rem,1.05vw,.95rem);color:var(--text-3);line-height:1.65;max-width:260px;}
+.s9-sub strong{color:var(--text-2);font-weight:500;}
+.s9-footer{position:absolute;bottom:3vh;left:50%;transform:translateX(-50%);white-space:nowrap;font-family:var(--fm);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(251,191,36,.55);padding:4px 14px;border-radius:100px;background:rgba(251,191,36,.05);border:1px solid rgba(251,191,36,.12);}
+
+#s10{flex-direction:row;gap:4vw;align-items:center;}
+.s10-steps{flex:1;display:flex;flex-direction:column;gap:.75rem;}
+.s10-row{display:flex;align-items:center;gap:1.2rem;padding:.95rem 1.3rem;border-radius:13px;background:var(--surface);border:1px solid var(--border);transition:all .3s;cursor:default;}
+.s10-row:hover{border-color:rgba(167,139,250,.25);background:var(--surface-hi);transform:translateX(6px);}
+.s10-n{font-family:var(--f);font-size:clamp(1.5rem,2.5vw,2rem);font-weight:700;color:rgba(167,139,250,.22);flex-shrink:0;line-height:1;min-width:1.8rem;}
+.s10-title{font-family:var(--f);font-size:clamp(.88rem,1.3vw,1.05rem);font-weight:600;color:var(--text);margin-bottom:.15rem;}
+.s10-sub{font-size:clamp(.75rem,.95vw,.86rem);color:var(--text-3);line-height:1.5;}
+.s10-qr{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:.9rem;}
+.s10-qr-box{width:clamp(120px,14vw,180px);height:clamp(120px,14vw,180px);border-radius:16px;background:var(--surface-hi);border:1px solid var(--border-hi);display:flex;align-items:center;justify-content:center;font-size:3rem;}
+.s10-url{font-family:var(--fm);font-size:11px;letter-spacing:.06em;color:var(--purple);text-align:center;}
+
+#s11{justify-content:center;align-items:center;text-align:center;}
+.s11-sub strong{color:var(--text-2);font-weight:500;}
+
+#s12{justify-content:center;padding:6vh 10vw;}
+.mline{font-family:var(--f);font-size:clamp(1.6rem,3vw,2.8rem);font-weight:600;line-height:1.12;color:var(--text-4);margin-bottom:.25rem;}
+.mline.on{color:var(--text);}
+.mline.green{background:linear-gradient(90deg,var(--green),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.m-attr{font-family:var(--fm);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-4);}
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+<div id="grain"></div>
+<div id="clight"></div>
+<div id="atmo"></div>
+<div id="prog"></div>
+<div id="logo"><div id="logo-dot"></div>CLIC_diversidade</div>
+<div id="ctr">01 / 12</div>
+
+<div id="deck">
+
+<!-- S1 CAPA -->
+<div class="slide active" id="s1">
+  <div class="s1-deco Lscale">
+    <div class="s1-orb">
+      <div class="s1-ring"></div>
+      <div class="s1-inner">&lt;/&gt;</div>
+      <div class="s1-orbit"></div>
+    </div>
+  </div>
+  <div class="eyebrow L0"><div class="eyebrow-dot dot-p"></div>Bloque 04 · Humanos al Mando</div>
+  <div class="display display-xl L1">Construyendo<br><span class="grad-p">Tecnología</span></div>
+  <div class="body-lg L2" style="margin-top:1.2rem;max-width:52%;">De la idea a un sistema publicado en internet — sin escribir una línea de código.</div>
+  <div class="rule L3"></div>
+  <div style="display:flex;gap:2.5rem;" class="L3">
+    <div><div class="mono-sm" style="margin-bottom:3px;">Duración</div><div class="body-md">~20 minutos</div></div>
+    <div><div class="mono-sm" style="margin-bottom:3px;">Entregable</div><div class="body-md">App publicada · enlace público</div></div>
+    <div><div class="mono-sm" style="margin-bottom:3px;">Facilitadora</div><div class="body-md">Carla Figueiredo</div></div>
+  </div>
+</div>
+
+<!-- S2 A VIRADA -->
+<div class="slide" id="s2">
+  <div class="s2-vs">VS</div>
+  <div class="s2-h s2-h-before">
+    <span class="s2-badge b-before L1">Antes · Comunicación</span>
+    <div class="s2-prompt L2">"IA, escríbeme un resumen."</div>
+    <div class="display display-md L3" style="color:var(--text-4);font-weight:300;">Tú pides.<br>La IA entrega texto.</div>
+  </div>
+  <div class="s2-h s2-h-after">
+    <span class="s2-badge b-after L1">Ahora · Construcción</span>
+    <div class="s2-prompt s2-prompt-hi L2">"IA, construye un sistema donde pueda leer y organizar resúmenes."</div>
+    <div class="display display-md L3">Tú describes.<br>La IA <em style="font-style:normal;color:var(--purple)">construye</em> software.</div>
+    <div class="s2-pull L4">La barrera técnica cayó. Si sabes explicar el problema, sabes crear la solución.</div>
+  </div>
+</div>
+
+<!-- S3 VIBE CODING -->
+<div class="slide" id="s3">
+  <div class="eyebrow L0"><div class="eyebrow-dot dot-g"></div>03 · El concepto</div>
+  <div class="display display-lg L1" style="margin-bottom:1.2vh;">Qué es el <em style="font-style:italic;font-weight:300;color:var(--purple)">vibe coding</em></div>
+  <div class="body-sm L1" style="max-width:700px;margin:0 auto 2vh;text-align:center;color:var(--text-4);">Término acuñado por Andrej Karpathy, 2025.</div>
+  <div class="s3-flow L2">
+    <div class="s3-node sn-a"><div class="s3-nicon">💬</div><div class="s3-nlabel nl-b">Intención</div><div class="s3-nmain">Describes lo que quieres</div><div class="s3-nsub">Objetivo, comportamiento, tono y límites</div></div>
+    <div class="s3-arrow">→</div>
+    <div class="s3-node sn-b"><div class="s3-nicon">⚖️</div><div class="s3-nlabel nl-p">Traducción por IA</div><div class="s3-nmain">La IA escribe el código</div><div class="s3-nsub">Sintaxis, base de datos, seguridad</div></div>
+    <div class="s3-arrow">→</div>
+    <div class="s3-node sn-c"><div class="s3-nicon">📱</div><div class="s3-nlabel nl-g">Software</div><div class="s3-nmain">Aplicación funcional</div><div class="s3-nsub">Interfaz, diseño, funcionalidades</div></div>
+  </div>
+  <div class="s3-tagline L3">
+    <div class="s3-main">No dices <em>CÓMO</em> — dices <em>QUÉ</em> y <em>CUÁLES SON LOS LÍMITES</em>.</div>
+    <div><span class="s3-ethic">⚠ sin límites, la IA incorporará sesgos · Ethics by Design</span></div>
+  </div>
+</div>
+
+<!-- S3B ESPECTRO -->
+<div class="slide" id="s3b">
+  <div class="eyebrow L0"><div class="eyebrow-dot dot-g"></div>03 · El espectro</div>
+  <div class="display display-lg L1" style="margin-bottom:1.2vh;">Tres formas de construir con <em style="font-style:italic;font-weight:300;color:var(--purple)">IA</em></div>
+  <div class="body-sm L1" style="max-width:700px;margin:0 auto 2vh;text-align:center;color:var(--text-4);">El vibe coding es la tercera. La misma herramienta puede operar en más de una franja.</div>
+  <div class="s3-flow L2">
+    <div class="s3-node sn-a"><div class="s3-nicon">✍️</div><div class="s3-nlabel nl-b">Asistido</div><div class="s3-nmain">Tú escribes el código</div><div class="s3-nsub">La IA sugiere, completa y corrige mientras escribes</div></div>
+    <div class="s3-arrow">→</div>
+    <div class="s3-node sn-b"><div class="s3-nicon">🤖</div><div class="s3-nlabel nl-p">Agentes</div><div class="s3-nmain">Delegas la tarea</div><div class="s3-nsub">La IA modifica archivos, ejecuta y prueba la solución</div></div>
+    <div class="s3-arrow">→</div>
+    <div class="s3-node sn-c"><div class="s3-nicon">📱</div><div class="s3-nlabel nl-g">Constructores</div><div class="s3-nmain">Describes el producto</div><div class="s3-nsub">La plataforma genera interfaz, lógica y base de datos</div></div>
+  </div>
+  <div class="s3-tagline L3">
+    <div class="s3-main">Lo que cambia es <em>dónde está la iniciativa</em>.</div>
+    <div><span class="s3-ethic">⚠ en cualquiera de ellas, tú describes y revisas</span></div>
+  </div>
+</div>
+
+<!-- S4 ARQUITETURA -->
+<div class="slide" id="s4">
+  <div class="eyebrow L0"><div class="eyebrow-dot dot-b"></div>04 · Lo que hay debajo</div>
+  <div class="display display-lg L1" style="margin-bottom:3vh;">La arquitectura <em style="font-style:italic;font-weight:300;color:rgba(125,211,252,.7)">invisible</em></div>
+  <div style="display:flex;align-items:center;gap:4vw;flex:1;">
+    <div class="s4-stack L2">
+      <div class="s4-layer sl-top"><div class="sl-icon">📱</div><div><div class="sl-lbl" style="color:rgba(167,139,250,.65)">Lo que ves</div><div class="sl-desc">Front-end · Interfaz · App</div></div></div>
+      <div class="s4-layer sl-mid"><div class="sl-icon">🔐</div><div><div class="sl-lbl" style="color:var(--text-3)">Autenticación</div><div class="sl-desc">Inicio de sesión · Permisos</div></div></div>
+      <div class="s4-layer sl-bot"><div class="sl-icon">🗄️</div><div><div class="sl-lbl" style="color:rgba(110,231,183,.6)">Lo que hizo la IA</div><div class="sl-desc">Base de datos · Servidor</div></div></div>
+    </div>
+    <div class="s4-info L3">
+      <div class="s4-callout">
+        <div class="s4-clbl">Caja de cristal, no caja negra</div>
+        <div class="body-sm" style="color:var(--text-2);">Como funcionaria o funcionario público, respondes por la <strong style="color:var(--text)">protección de datos personales</strong>. La arquitectura invisible no puede ser opaca — sabe adónde van los datos de la ciudadanía.</div>
+      </div>
+      <div class="s4-callout-2">
+        <div class="s4-clbl" style="color:rgba(110,231,183,.6);">Mientras describías</div>
+        <div class="body-sm" style="color:var(--text-2);">La IA escribió la base de datos, configuró la seguridad y armó la estructura técnica. <strong style="color:var(--text)">En minutos.</strong></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- S5 ECOSSISTEMA -->
+<div class="slide" id="s5">
+  <div class="eyebrow L0"><div class="eyebrow-dot dot-p"></div>05 · El ecosistema</div>
+  <div class="display display-lg L1">Aprendiste una <em style="font-style:italic;font-weight:300;color:var(--purple)">competencia,</em><br>no una herramienta.</div>
+  <div class="rule L2"></div>
+  <div class="body-md L2" style="max-width:70ch;">La lógica de autoría tecnológica funciona en cualquier plataforma de esta lista. <strong style="color:var(--text)">Hoy usamos Lovable.</strong> Mañana, eliges la herramienta adecuada para cada situación.</div>
+  <div class="s5-pills L3">
+    <span class="s5-pill">⚡ Lovable</span>
+    <span class="s5-pill">🧩 Base44</span>
+    <span class="s5-pill">🔥 Bolt.new</span>
+    <span class="s5-pill">💻 Replit</span>
+  </div>
+  <div class="body-sm L3" style="margin-top:1.4rem;font-style:italic;color:var(--text-4);">"Aprende el principio. La herramienta es solo el instrumento."</div>
+</div>
+
+<!-- S6 5 PASSOS -->
+<div class="slide" id="s6">
+  <div class="eyebrow L0"><div class="eyebrow-dot dot-b"></div>06 · El proceso</div>
+  <div class="display display-lg L1" style="margin-bottom:3vh;">De cero a la <em style="font-style:italic;font-weight:300;color:rgba(125,211,252,.7)">publicación</em></div>
+  <div class="s6-path L2">
+    <div class="s6-step"><div class="s6-line"></div><div class="s6-num n-std">01</div><div class="s6-title">Planificar</div><div class="s6-sub">¿Qué es? ¿Para quién? ¿Qué problema resuelve?</div></div>
+    <div class="s6-step"><div class="s6-line"></div><div class="s6-num n-std">02</div><div class="s6-title">Diseñar</div><div class="s6-sub">Plan Mode: estructura antes de generar código</div></div>
+    <div class="s6-step"><div class="s6-line"></div><div class="s6-num n-std">03</div><div class="s6-title">Construir</div><div class="s6-sub">Agent Mode: la app toma forma</div></div>
+    <div class="s6-step"><div class="s6-line"></div><div class="s6-num n-key">04</div><div class="s6-title">Auditar</div><div class="s6-sub">¿La app excluye a alguien? Prueba impacto y accesibilidad</div><div class="s6-badge">Human-in-the-loop</div></div>
+    <div class="s6-step"><div class="s6-num n-std">05</div><div class="s6-title">Publicar</div><div class="s6-sub">Un clic. Enlace público. Software en línea.</div></div>
+  </div>
+  <div class="s6-note L3"><p>La etapa 04 no es "¿funcionó el botón?" — es <strong>"¿este sistema sirve a todas las personas que lo necesitan?"</strong></p></div>
+</div>
+
+<!-- S7 ERROS -->
+<div class="slide" id="s7">
+  <div class="eyebrow L0"><div class="eyebrow-dot dot-r"></div>07 · Antes de empezar</div>
+  <div class="display display-md L1" style="margin-bottom:1.4vh;">Errores que <em style="font-style:italic;font-weight:300;color:rgba(252,165,165,.6)">cuestan créditos</em></div>
+  <div class="s7-cols L2">
+    <div class="s7-col">
+      <div class="s7-hdr hdr-r"><span style="font-size:1.1rem">✗</span><div><div class="s7-htitle">No hagas</div></div></div>
+      <div class="s7-row r-bad">Prompts vagos o con <strong>muchos objetivos mezclados</strong></div>
+      <div class="s7-row r-bad">Intentar construir la app <strong>entera de una vez</strong></div>
+      <div class="s7-row r-bad">Dejar el flujo y el comportamiento <strong>implícitos</strong></div>
+      <div class="s7-row r-bad">Contenido genérico como <strong>"lorem ipsum"</strong></div>
+      <div class="s7-row r-bad">Ejecutar sin <strong>acordar la estructura</strong></div>
+      <div class="s7-row r-bad">Pedir <strong>"mejora esto"</strong></div>
+    </div>
+    <div class="s7-col">
+      <div class="s7-hdr hdr-g"><span style="font-size:1.1rem">✓</span><div><div class="s7-htitle">Haz</div></div></div>
+      <div class="s7-row r-good">Di <strong>qué quieres, para quién</strong> y con qué resultado</div>
+      <div class="s7-row r-good">Construye <strong>por partes</strong> y valida en cada etapa</div>
+      <div class="s7-row r-good">Describe <strong>el recorrido</strong> y lo que debe pasar</div>
+      <div class="s7-row r-good">Usa <strong>contenido real</strong> desde el inicio</div>
+      <div class="s7-row r-good">Usa el <strong>Plan Mode</strong> antes de construir</div>
+      <div class="s7-row r-good">Di <strong>qué cambiar y qué conservar</strong></div>
+    </div>
+  </div>
+  <div class="s7-rule L3">No intentes acertar todo en un solo prompt. <em>Planifica, construye una parte, prueba y avanza.</em></div>
+</div>
+
+<!-- S8 EDITOR -->
+<div class="slide" id="s8">
+  <div class="s8-terminal L2">
+    <div class="s8-bar">
+      <div class="s8-bd" style="background:#ef4444"></div>
+      <div class="s8-bd" style="background:#f59e0b"></div>
+      <div class="s8-bd" style="background:#10b981"></div>
+      <div class="s8-bname">prompt_software.ptcfsl</div>
+    </div>
+    <div class="s8-body">
+      <div class="s8-scan"></div>
+      <div class="cl"><span class="cln">1</span><span><span class="ck">[PERSONA]</span> <span class="cv">Desarrollador UX de innovación en el sector público.</span></span></div>
+      <div class="cl"><span class="cln">2</span><span class="cmt">// define tono y especialización</span></div>
+      <div class="cl"><span class="cln">3</span></div>
+      <div class="cl"><span class="cln">4</span><span><span class="ck">[TAREA]</span> <span class="cv">Crea un "Panel Inteligente de Plazos".</span></span></div>
+      <div class="cl"><span class="cln">5</span></div>
+      <div class="cl"><span class="cln">6</span><span><span class="ck">[CONTEXTO]</span> <span class="cv">Diseño limpio (azul y blanco). Mobile-first.</span></span></div>
+      <div class="cl"><span class="cln">7</span></div>
+      <div class="cl"><span class="cln">8</span><span><span class="ck">[FORMATO]</span> <span class="cv">4 tarjetas (Total, Al día, Atrasados).</span></span></div>
+      <div class="cl"><span class="cln">9</span><span class="cv">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tabla: Expediente, Asunto, Plazo.</span></div>
+      <div class="cl"><span class="cln">10</span></div>
+      <div class="cl"><span class="cln">11</span><span><span class="ck">[SUCESSO]</span> <span class="cv">Lista cuando pueda filtrar los atrasados en el celular.</span></span></div>
+      <div class="cl"><span class="cln">12</span></div>
+      <div class="cl"><span class="cln">13</span><span><span class="ck">[LÍMITES]</span> <span class="cv">Accesibilidad WCAG. Sin datos sensibles.</span></span></div>
+      <div class="cl"><span class="cln">14</span><span class="cv">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Solo datos ficticios (fake data).</span></div>
+    </div>
+  </div>
+  <div class="s8-panel L1">
+    <div class="eyebrow"><div class="eyebrow-dot dot-p"></div>08 · El prompt de software</div>
+    <div class="display display-md">PTCFSL aplicado a <em style="font-style:italic;font-weight:300;color:var(--purple)">crear apps</em></div>
+    <div class="s8-card s8-c-accent">
+      <div class="s8-clabel cl-r">L — Límites · El pilar crítico</div>
+      <div class="s8-ctext">Una app sin <strong>Límites</strong> puede ser inaccesible o violar la protección de datos personales. La L es donde programas <strong>barreras de equidad.</strong></div>
+    </div>
+    <div class="s8-card">
+      <div class="s8-clabel cl-p">2 colores en el editor — intencionales</div>
+      <div class="s8-ctext">Violeta para las etiquetas PTCFSL. Blanco para los valores. Sin ruido visual — solo jerarquía.</div>
+    </div>
+  </div>
+</div>
+
+<!-- S9 RESULTADO -->
+<div class="slide" id="s9">
+  <div class="s9-h s9-l">
+    <div class="s9-num n-bad L2">1</div>
+    <div class="s9-unit u-bad L3">año</div>
+    <div class="s9-label L3">Método tradicional</div>
+    <div class="s9-sub L4">Pliego de TI, presupuesto, licitación, adjudicación, capacitación.</div>
+  </div>
+  <div class="s9-h s9-r">
+    <div class="s9-num n-good L2">10</div>
+    <div class="s9-unit u-good L3">días</div>
+    <div class="s9-label L3">Autoría tecnológica</div>
+    <div class="s9-sub L4">Prompt estructurado, probar, corregir, revisar con quienes la usan. <strong>Bien hecho.</strong></div>
+  </div>
+  <div class="s9-footer L5">⚠ la velocidad no elimina la responsabilidad — la firma es tuya</div>
+</div>
+
+<!-- S10 MÃO NA MASSA -->
+<div class="slide" id="s10">
+  <div class="eyebrow L0"><div class="eyebrow-dot dot-a"></div>10 · Es tu turno</div>
+  <div class="display display-lg L1" style="margin-bottom:2.5vh;">Manos a la <em style="font-style:italic;font-weight:300;color:rgba(251,191,36,.8)">obra</em></div>
+  <div style="display:flex;gap:4vw;align-items:center;flex:1;">
+    <div class="s10-steps L2">
+      <div class="s10-row"><div class="s10-n">1</div><div><div class="s10-title">Abre Lovable y crea un proyecto</div><div class="s10-sub">Entra a lovable.dev y haz clic en nuevo proyecto.</div></div></div>
+      <div class="s10-row"><div class="s10-n">2</div><div><div class="s10-title">Copia el prompt modelo PTCFSL</div><div class="s10-sub">Usa la plantilla disponible en el módulo.</div></div></div>
+      <div class="s10-row"><div class="s10-n">3</div><div><div class="s10-title">Adáptalo a tu realidad</div><div class="s10-sub">Cambia "Plazos" por el problema real de tu área.</div></div></div>
+      <div class="s10-row"><div class="s10-n">4</div><div><div class="s10-title">Audita antes de publicar</div><div class="s10-sub">¿La app es accesible? ¿Excluye a alguien? ¿Vulnera la protección de datos?</div></div></div>
+      <div class="s10-row"><div class="s10-n">5</div><div><div class="s10-title">Haz clic en Publicar</div><div class="s10-sub">En 20 minutos: un sistema funcional en línea.</div></div></div>
+    </div>
+    <div class="s10-qr L3">
+      <div class="s10-qr-box">📱</div>
+      <div class="s10-url">clicdiversidade.netlify.app<br>módulo 04</div>
+    </div>
+  </div>
+</div>
+
+<div class="slide" id="s12">
+  <div style="max-width:900px;">
+    <div class="mline on L1">Quien conoce el problema</div>
+    <div class="mline on L2">también puede participar en la construcción de la solución.</div>
+    <div class="rule L3"></div>
+    <div class="mline on L3">Así ampliamos la capacidad de transformar.</div>
+    <div class="rule L4"></div>
+    <div class="mline green L5">La diversidad es arquitectura.</div>
+    <div class="mline L5">La tecnología amplía posibilidades.</div>
+    <div class="mline on L6">Las personas dan la dirección.</div>
+    <div class="rule L6"></div>
+    <div class="m-attr L6">CLIC_diversidade · Humanos al Mando · <span class="qr-trigger" id="qr-open">evaluar el taller</span></div>
+  </div>
+</div>
+
+</div><!-- /deck -->
+
+<nav class="nav-wrap">
+  <button class="nb" id="pb" onclick="go(-1)" disabled>←</button>
+  <div class="dots-row" id="dots"></div>
+  <button class="nb" id="nb2" onclick="go(1)">→</button>
+</nav>
+
+<div id="qr-overlay" aria-hidden="true">
+  <div class="qr-card">
+    <div class="qr-eyebrow">Evalúa el taller</div>
+    <div class="qr-box"><svg xmlns="http://www.w3.org/2000/svg" width="520" height="520" viewBox="0 0 35 35" shape-rendering="crispEdges"><path fill="#ffffff" d="M0 0h35v35H0z"/><path stroke="#000000" d="M1 1.5h7m2 0h1m1 0h2m3 0h6m1 0h1m2 0h7M1 2.5h1m5 0h1m2 0h1m1 0h1m3 0h3m2 0h2m2 0h1m1 0h1m5 0h1M1 3.5h1m1 0h3m1 0h1m1 0h1m5 0h2m5 0h2m3 0h1m1 0h3m1 0h1M1 4.5h1m1 0h3m1 0h1m1 0h1m9 0h1m3 0h1m1 0h1m1 0h1m1 0h3m1 0h1M1 5.5h1m1 0h3m1 0h1m1 0h2m1 0h2m1 0h3m1 0h3m1 0h2m2 0h1m1 0h3m1 0h1M1 6.5h1m5 0h1m1 0h1m2 0h1m1 0h2m5 0h2m4 0h1m5 0h1M1 7.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M9 8.5h2m2 0h1m3 0h1m1 0h1m2 0h3M1 9.5h1m1 0h5m2 0h1m2 0h3m2 0h1m4 0h3m1 0h5M2 10.5h1m1 0h2m2 0h1m1 0h3m1 0h2m1 0h8m2 0h2m1 0h4M1 11.5h1m2 0h5m1 0h1m2 0h4m1 0h1m4 0h1m5 0h1m1 0h2M1 12.5h2m1 0h2m2 0h2m1 0h1m2 0h1m1 0h4m1 0h2m1 0h2m1 0h1m1 0h4M2 13.5h1m2 0h3m3 0h3m1 0h1m1 0h1m5 0h1m1 0h2m2 0h2M2 14.5h2m6 0h4m2 0h1m2 0h4m1 0h2m1 0h1m3 0h3M1 15.5h2m2 0h1m1 0h1m1 0h1m1 0h3m2 0h2m3 0h1m1 0h1m2 0h2m1 0h1m1 0h2M1 16.5h2m3 0h1m2 0h3m4 0h1m3 0h1m1 0h1m2 0h3m1 0h3M2 17.5h3m1 0h2m2 0h1m1 0h1m3 0h1m1 0h2m3 0h1m1 0h2m1 0h3m2 0h1M6 18.5h1m2 0h1m1 0h2m1 0h1m2 0h1m1 0h4m1 0h1m2 0h2m1 0h2m1 0h1M1 19.5h2m4 0h1m3 0h2m2 0h2m2 0h1m1 0h2m3 0h4m1 0h2M1 20.5h3m1 0h1m2 0h1m1 0h1m2 0h1m1 0h3m4 0h2m1 0h1m1 0h5m1 0h1M1 21.5h1m5 0h3m6 0h1m2 0h2m2 0h4m1 0h3m1 0h2M1 22.5h2m1 0h1m3 0h2m1 0h1m1 0h6m1 0h3m1 0h1m2 0h1m3 0h1m1 0h1M1 23.5h1m1 0h1m1 0h3m4 0h1m2 0h1m2 0h1m2 0h3m1 0h1m2 0h2m1 0h2M1 24.5h1m2 0h1m5 0h1m1 0h4m1 0h1m1 0h1m2 0h2m2 0h4m1 0h2M1 25.5h1m1 0h6m2 0h2m2 0h1m1 0h2m4 0h1m1 0h5m2 0h1M9 26.5h2m2 0h1m3 0h5m1 0h1m1 0h1m3 0h1m1 0h1m1 0h1M1 27.5h7m3 0h1m1 0h2m1 0h3m2 0h5m1 0h1m1 0h1m1 0h1M1 28.5h1m5 0h1m1 0h3m2 0h7m1 0h1m1 0h2m3 0h4M1 29.5h1m1 0h3m1 0h1m1 0h1m1 0h2m3 0h2m5 0h1m1 0h6m2 0h1M1 30.5h1m1 0h3m1 0h1m1 0h1m3 0h4m1 0h5m2 0h2m2 0h2m1 0h2M1 31.5h1m1 0h3m1 0h1m1 0h1m4 0h1m1 0h3m2 0h1m2 0h1m2 0h2m1 0h1M1 32.5h1m5 0h1m2 0h1m2 0h1m2 0h1m2 0h1m2 0h1m6 0h3M1 33.5h7m1 0h1m2 0h1m3 0h1m1 0h1m1 0h2m1 0h4m1 0h1m3 0h1"/></svg></div>
+    <div class="qr-url">clicdiversidade.netlify.app/jornada/avaliacao</div>
+    <div class="qr-hint">haz clic en cualquier lugar para cerrar</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const c=document.getElementById('bg-canvas');
+  const x=c.getContext('2d');
+  let W,H,P=[];
+  const rs=()=>{W=c.width=innerWidth;H=c.height=innerHeight;};
+  const Pt=()=>({
+    x:Math.random()*W, y:Math.random()*H,
+    vx:(Math.random()-.5)*.15, vy:(Math.random()-.5)*.15,
+    r:Math.random()*.8+.15,
+    a:Math.random()*.14+.03,
+    h:[270,220,210][Math.floor(Math.random()*3)],
+    lf:Math.random()*Math.PI*2
+  });
+  const init=()=>{rs();P=Array.from({length:50},Pt);};
+  const draw=()=>{
+    x.fillStyle='rgba(3,3,7,.22)'; x.fillRect(0,0,W,H);
+    x.strokeStyle='rgba(167,139,250,.03)'; x.lineWidth=1;
+    for(let i=0;i<W;i+=80){x.beginPath();x.moveTo(i,0);x.lineTo(i,H);x.stroke();}
+    for(let i=0;i<H;i+=80){x.beginPath();x.moveTo(0,i);x.lineTo(W,i);x.stroke();}
+    P.forEach((p,i)=>{
+      p.x+=p.vx; p.y+=p.vy; p.lf+=.006;
+      const a=p.a*(0.5+Math.sin(p.lf)*.5);
+      if(p.x<0)p.x=W; if(p.x>W)p.x=0; if(p.y<0)p.y=H; if(p.y>H)p.y=0;
+      x.beginPath(); x.arc(p.x,p.y,p.r,0,Math.PI*2);
+      x.fillStyle=`hsla(${p.h},60%,75%,${a})`; x.fill();
+      for(let j=i+1;j<P.length;j++){
+        const q=P[j],d=Math.hypot(p.x-q.x,p.y-q.y);
+        if(d<90){x.beginPath();x.moveTo(p.x,p.y);x.lineTo(q.x,q.y);x.strokeStyle=`hsla(${p.h},50%,70%,${.035*(1-d/90)})`;x.lineWidth=.5;x.stroke();}
+      }
+    });
+    requestAnimationFrame(draw);
+  };
+  addEventListener('resize',rs); init(); draw();
+})();
+
+const cl=document.getElementById('clight');
+document.addEventListener('mousemove',e=>{cl.style.left=e.clientX+'px';cl.style.top=e.clientY+'px';});
+
+const atmos=[
+  'radial-gradient(ellipse 65% 60% at 28% 50%,rgba(167,139,250,.1) 0%,transparent 65%)',
+  'radial-gradient(ellipse 55% 70% at 75% 40%,rgba(125,211,252,.07) 0%,transparent 60%)',
+  'radial-gradient(ellipse 75% 50% at 50% 65%,rgba(110,231,183,.06) 0%,transparent 55%)',
+  'radial-gradient(ellipse 70% 55% at 50% 50%,rgba(110,231,183,.07) 0%,transparent 60%)',
+  'radial-gradient(ellipse 55% 65% at 35% 50%,rgba(125,211,252,.07) 0%,transparent 60%)',
+  'radial-gradient(ellipse 65% 70% at 50% 50%,rgba(167,139,250,.07) 0%,transparent 60%)',
+  'radial-gradient(ellipse 75% 50% at 50% 50%,rgba(125,211,252,.06) 0%,transparent 55%)',
+  'radial-gradient(ellipse 55% 60% at 28% 50%,rgba(252,165,165,.05) 0%,transparent 55%),radial-gradient(ellipse 55% 60% at 72% 50%,rgba(110,231,183,.05) 0%,transparent 55%)',
+  'radial-gradient(ellipse 50% 60% at 50% 60%,rgba(167,139,250,.09) 0%,transparent 60%)',
+  'radial-gradient(ellipse 45% 70% at 25% 50%,rgba(252,165,165,.05) 0%,transparent 55%),radial-gradient(ellipse 45% 70% at 75% 50%,rgba(110,231,183,.05) 0%,transparent 55%)',
+  'radial-gradient(ellipse 60% 60% at 50% 40%,rgba(251,191,36,.06) 0%,transparent 55%)',
+  'radial-gradient(ellipse 70% 70% at 50% 55%,rgba(110,231,183,.07) 0%,transparent 60%)',
+];
+const atmoEl=document.getElementById('atmo');
+
+// --- Verificador de estouro ---------------------------------------------
+// .slide tem overflow:hidden, entao conteudo que passa da altura util some sem
+// aviso — e so se descobre na frente da sala. Abra a apresentacao com ?debug
+// na URL para ver, de uma vez, todos os slides que estao estourando.
+function checarEstouro(){
+  const alvo=[...document.querySelectorAll('.slide')];
+  const estourando=[];
+  alvo.forEach((sl,i)=>{
+    const sobra=Math.max(sl.scrollHeight-sl.clientHeight, sl.scrollWidth-sl.clientWidth);
+    if(sobra>1){
+      estourando.push({n:i+1,id:sl.id,px:Math.round(sobra)});
+      sl.style.outline='2px solid rgba(248,113,113,.9)';
+      sl.style.outlineOffset='-2px';
+    }
+  });
+  const painel=document.createElement('div');
+  painel.style.cssText='position:fixed;top:12px;left:12px;z-index:9999;max-width:340px;padding:14px 16px;border-radius:12px;font:12px/1.6 ui-monospace,monospace;background:rgba(3,3,7,.92);border:1px solid rgba(248,113,113,.4);color:#fca5a5;';
+  painel.innerHTML = estourando.length
+    ? '<strong>'+estourando.length+' de '+alvo.length+' slides estourando</strong><br>'+
+      estourando.map(e=>'slide '+String(e.n).padStart(2,'0')+' (#'+e.id+') — sobra '+e.px+'px').join('<br>')
+    : '<strong style="color:#6ee7b7">Os '+alvo.length+' slides cabem.</strong>';
+  document.body.appendChild(painel);
+  console.table(estourando);
+}
+if(location.search.includes('debug')){
+  window.addEventListener('load',()=>setTimeout(checarEstouro,400));
+}
+
+const TOTAL=12; let cur=0,busy=false;
+const SS=document.querySelectorAll('.slide');
+const DE=document.getElementById('dots');
+const CT=document.getElementById('ctr');
+const PG=document.getElementById('prog');
+const PB=document.getElementById('pb');
+const NB=document.getElementById('nb2');
+
+for(let i=0;i<TOTAL;i++){
+  const d=document.createElement('div');
+  d.className='dot'+(i===0?' on':'');
+  d.onclick=()=>gt(i);
+  DE.appendChild(d);
+}
+
+function upd(){
+  CT.textContent=`${String(cur+1).padStart(2,'0')} / ${String(TOTAL).padStart(2,'0')}`;
+  PG.style.width=`${(cur+1)/TOTAL*100}%`;
+  PB.disabled=cur===0; NB.disabled=cur===TOTAL-1;
+  document.querySelectorAll('.dot').forEach((d,i)=>d.className='dot'+(i===cur?' on':''));
+  atmoEl.style.background=atmos[cur]||'none';
+}
+
+function gt(idx){
+  if(busy||idx===cur||idx<0||idx>=TOTAL)return;
+  busy=true;
+  const prev=SS[cur], next=SS[idx], dir=idx>cur?1:-1;
+
+  prev.style.transition='opacity .45s cubic-bezier(.4,0,1,1),transform .45s cubic-bezier(.4,0,1,1)';
+  prev.style.opacity='0';
+  prev.style.transform=`translateY(${dir*-16}px) scale(.985)`;
+
+  setTimeout(()=>{
+    prev.classList.remove('active');
+    prev.style.cssText='';
+    cur=idx;
+
+    next.style.opacity='0';
+    next.style.transform=`translateY(${dir*16}px) scale(1.008)`;
+    next.classList.add('active');
+    next.getBoundingClientRect();
+
+    next.style.transition='opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)';
+    next.style.opacity='1';
+    next.style.transform='none';
+
+    upd();
+    setTimeout(()=>{next.style.cssText='';busy=false;},750);
+  },280);
+}
+
+function go(d){gt(cur+d);}
+const qrOv=document.getElementById('qr-overlay');
+const qrBt=document.getElementById('qr-open');
+const qrAberto=()=>qrOv.classList.contains('on');
+function qrMostrar(){qrOv.classList.add('on');qrOv.setAttribute('aria-hidden','false');}
+function qrFechar(){qrOv.classList.remove('on');qrOv.setAttribute('aria-hidden','true');}
+if(qrBt)qrBt.addEventListener('click',e=>{e.stopPropagation();qrMostrar();});
+qrOv.addEventListener('click',qrFechar);
+
+/* PASSADOR (controle remoto) — passador nao manda seta: avanca com PageDown,
+   volta com PageUp, pede tela preta com "b" ou ponto e dispara F5 no botao de
+   iniciar apresentacao. Sem tratar essas teclas o controle nao anda o slide e
+   o F5 recarrega o deck no meio da fala. */
+const AVANCA=['ArrowRight','ArrowDown','PageDown',' ','Spacebar','Enter'];
+const VOLTA=['ArrowLeft','ArrowUp','PageUp','Backspace'];
+let preto=null;
+function pretoAlterna(){
+  if(preto){preto.remove();preto=null;return;}
+  preto=document.createElement('div');
+  preto.style.cssText='position:fixed;inset:0;background:#000;z-index:9999;cursor:pointer';
+  preto.addEventListener('click',e=>{e.stopPropagation();pretoAlterna();});
+  document.body.appendChild(preto);
+}
+function telaCheia(){
+  if(document.fullscreenElement)document.exitFullscreen();
+  else document.documentElement.requestFullscreen().catch(()=>{});
+}
+document.addEventListener('keydown',e=>{
+  if(e.key==='F5'){e.preventDefault();telaCheia();return;}
+  // Com a tela preta ligada, a proxima tecla devolve o slide.
+  if(preto){e.preventDefault();pretoAlterna();return;}
+  // Com o QR aberto, nada navega — senao a pessoa troca de slide sem
+  // perceber e o codigo some da tela. Qualquer tecla do passador fecha o QR.
+  if(qrAberto()){ e.preventDefault(); qrFechar(); return; }
+  if(e.key==='b'||e.key==='B'||e.key==='.'){e.preventDefault();pretoAlterna();return;}
+  if(AVANCA.includes(e.key)){e.preventDefault();go(1);}
+  if(VOLTA.includes(e.key)){e.preventDefault();go(-1);}
+});
+let tx=0;
+document.addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});
+document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>50)go(dx<0?1:-1);},{passive:true});
+
+document.addEventListener('mousemove',e=>{
+  const cx=(e.clientX/innerWidth-.5)*.6;
+  const cy=(e.clientY/innerHeight-.5)*.4;
+  document.querySelectorAll('.s1-deco,.s5-left,.s11-pulse').forEach(el=>{
+    el.style.transform=`translate(${cx*-14}px,${cy*-10}px)`;
+  });
+});
+
+upd();
+</script>
+
+</body>
+</html>

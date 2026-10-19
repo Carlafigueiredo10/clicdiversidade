@@ -1,6 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
+import { tr } from '../../../i18n'
 
+// O deck PT redireciona sozinho pra versao .es.html quando o idioma e ES.
 const SRC = `${import.meta.env.BASE_URL}apresentacoes/bloco4-construindo-tecnologia.html`
+
+const T = tr({
+  pt: { titulo: 'Bloco 4 — Construindo Tecnologia', apresentarTitle: 'Apresentar em tela cheia', apresentar: '▶ Apresentar', sairTitle: 'Sair (ESC)', sair: '⤬ Sair', dica: 'Clique em ▶ Apresentar para tela cheia' },
+  es: { titulo: 'Bloque 4 — Construyendo Tecnología', apresentarTitle: 'Presentar en pantalla completa', apresentar: '▶ Presentar', sairTitle: 'Salir (ESC)', sair: '⤬ Salir', dica: 'Haz clic en ▶ Presentar para pantalla completa' },
+})
 
 // O deck foi desenhado para tela cheia: usa vh/vw em 73 lugares e cada slide
 // tem overflow:hidden, entao o que nao cabe some sem aviso. Em vez de converter
@@ -85,7 +92,7 @@ export default function SlideNavigator() {
       <iframe
         ref={iframeRef}
         src={SRC}
-        title="Bloco 4 — Construindo Tecnologia"
+        title={T.titulo}
         className="block border-0"
         style={{
           position: 'absolute',
@@ -109,26 +116,26 @@ export default function SlideNavigator() {
           <button
             type="button"
             onClick={enterPresentation}
-            title="Apresentar em tela cheia"
+            title={T.apresentarTitle}
             className="rounded-full bg-white/10 backdrop-blur border border-white/20 text-white px-4 py-2 text-xs font-medium hover:bg-white/20 transition"
           >
-            ▶ Apresentar
+            {T.apresentar}
           </button>
         ) : (
           <button
             type="button"
             onClick={exitPresentation}
-            title="Sair (ESC)"
+            title={T.sairTitle}
             className="rounded-full bg-white/10 backdrop-blur border border-white/20 text-white px-4 py-2 text-xs font-medium hover:bg-white/20 transition"
           >
-            ⤬ Sair
+            {T.sair}
           </button>
         )}
       </div>
 
       {!isPresenting && (
         <p className="absolute bottom-3 left-1/2 -translate-x-1/2 text-[10px] tracking-wider uppercase text-white/40 font-mono pointer-events-none">
-          Clique em ▶ Apresentar para tela cheia
+          {T.dica}
         </p>
       )}
     </div>

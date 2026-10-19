@@ -1,7 +1,44 @@
 import CopyButton from './CopyButton'
 import { PAINEL_GOVERNANCA_PROMPT } from './data'
+import { tr } from '../../../i18n'
 
-const DIFERENCIAIS = [
+const T = tr({
+  pt: {
+    titulo: 'Painel de governança de IA',
+    intro: 'O segundo aplicativo da oficina: um sistema de levantamento e gestão de riscos de IA, com questionário estruturado, matriz de riscos, parecer técnico e ofício de questionamento. Mesmo processo, produto mais ambicioso.',
+    aguarde: 'Aguarde ~10 minutos. Este app é maior que o gerenciador de tarefas — gere primeiro e refine depois, uma tela por vez.',
+    rotulo: 'Prompt pronto — Painel de Governança de IA',
+    rodape: ['Os grupos 2, 3 e 4 do questionário — origem dos dados, variáveis proxy e erro — são as mesmas frentes do guia', 'auditando dados e decisões', '. Aqui elas viram software.'],
+  },
+  es: {
+    titulo: 'Panel de gobernanza de IA',
+    intro: 'La segunda aplicación del taller: un sistema de relevamiento y gestión de riesgos de IA, con cuestionario estructurado, matriz de riesgos, dictamen técnico y oficio de consulta. El mismo proceso, un producto más ambicioso.',
+    aguarde: 'Espera unos 10 minutos. Esta app es más grande que el gestor de tareas — genérala primero y ajústala después, una pantalla a la vez.',
+    rotulo: 'Prompt listo — Panel de Gobernanza de IA',
+    rodape: ['Los grupos 2, 3 y 4 del cuestionario — origen de los datos, variables proxy y error — son los mismos frentes de la guía', 'auditando datos y decisiones', '. Aquí se convierten en software.'],
+  },
+})
+
+const COMO = tr({
+  pt: {
+    comoUsar: 'Como usar',
+    abra: ['Abra', 'e faça login.'],
+    copie: 'Clique no botão abaixo para copiar o prompt.',
+    cole: ['Cole na Lovable e clique em', '.'],
+    copiado: '✅ Prompt copiado!',
+    copiar: '📋 Copiar prompt completo',
+  },
+  es: {
+    comoUsar: 'Cómo usarlo',
+    abra: ['Abre', 'e inicia sesión.'],
+    copie: 'Haz clic en el botón de abajo para copiar el prompt.',
+    cole: ['Pégalo en Lovable y haz clic en', '.'],
+    copiado: '✅ ¡Prompt copiado!',
+    copiar: '📋 Copiar prompt completo',
+  },
+})
+
+const DIFERENCIAIS_PT = [
   {
     num: '01',
     title: 'Não pontua sozinho',
@@ -19,6 +56,26 @@ const DIFERENCIAIS = [
   },
 ]
 
+const DIFERENCIAIS_ES = [
+  {
+    num: '01',
+    title: 'No puntúa por sí solo',
+    body: 'La aplicación sugiere el riesgo y ubica la tarjeta, pero quien clasifica es siempre la persona. Toda clasificación queda registrada como decisión firmada: "clasificado como alto por [nombre], el [fecha]".',
+  },
+  {
+    num: '02',
+    title: '"No sé" se convierte en hallazgo',
+    body: 'Responder "no sé" no es una falla de quien opera: genera un riesgo de opacidad y lleva la pregunta directo al oficio de consulta, ya con el destinatario sugerido.',
+  },
+  {
+    num: '03',
+    title: 'Dos ejes de impacto',
+    body: 'El riesgo institucional y el riesgo sobre las personas afectadas se clasifican por separado. Cuando uno es bajo y el otro alto, la app destaca la tarjeta y pregunta quién decide si eso es aceptable.',
+  },
+]
+
+const DIFERENCIAIS = tr({ pt: DIFERENCIAIS_PT, es: DIFERENCIAIS_ES })
+
 export default function PainelGovernanca() {
   return (
     <div className="mx-auto max-w-4xl">
@@ -27,13 +84,10 @@ export default function PainelGovernanca() {
           🛡️
         </span>
         <h2 className="mt-4 font-display font-semibold text-3xl md:text-5xl text-ink leading-[1.05]">
-          Painel de governança de IA
+          {T.titulo}
         </h2>
         <p className="mt-5 max-w-2xl mx-auto text-ink-soft leading-relaxed">
-          O segundo aplicativo da oficina: um sistema de levantamento e gestão
-          de riscos de IA, com questionário estruturado, matriz de riscos,
-          parecer técnico e ofício de questionamento. Mesmo processo, produto
-          mais ambicioso.
+          {T.intro}
         </p>
       </div>
 
@@ -56,11 +110,11 @@ export default function PainelGovernanca() {
 
       <div className="mt-8 bg-card rounded-2xl border border-line p-6 md:p-8">
         <h3 className="font-display font-semibold text-base text-ink mb-4">
-          Como usar
+          {COMO.comoUsar}
         </h3>
         <ol className="space-y-2 text-sm text-ink-soft list-decimal list-inside">
           <li>
-            Abra{' '}
+            {COMO.abra[0]}{' '}
             <a
               href="https://lovable.dev"
               target="_blank"
@@ -69,34 +123,31 @@ export default function PainelGovernanca() {
             >
               lovable.dev
             </a>{' '}
-            e faça login.
+            {COMO.abra[1]}
           </li>
-          <li>Clique no botão abaixo para copiar o prompt.</li>
+          <li>{COMO.copie}</li>
           <li>
-            Cole na Lovable e clique em{' '}
-            <strong className="text-ink">Generate</strong>.
+            {COMO.cole[0]}{' '}
+            <strong className="text-ink">Generate</strong>{COMO.cole[1]}
           </li>
-          <li>
-            Aguarde ~10 minutos. Este app é maior que o gerenciador de tarefas —
-            gere primeiro e refine depois, uma tela por vez.
-          </li>
+          <li>{T.aguarde}</li>
         </ol>
       </div>
 
       <div className="mt-8 flex justify-center">
         <CopyButton
           text={PAINEL_GOVERNANCA_PROMPT}
-          copiedChildren={<span>✅ Prompt copiado!</span>}
+          copiedChildren={<span>{COMO.copiado}</span>}
           className="rounded-full bg-ink text-page px-7 py-3 text-sm font-medium hover:opacity-90 transition inline-flex items-center gap-2"
         >
-          <span>📋 Copiar prompt completo</span>
+          <span>{COMO.copiar}</span>
         </CopyButton>
       </div>
 
       <div className="mt-10 bg-card rounded-2xl border border-line overflow-hidden">
         <div className="px-5 py-3 border-b border-line">
           <span className="font-mono text-[11px] uppercase tracking-widest text-muted">
-            Prompt pronto — Painel de Governança de IA
+            {T.rotulo}
           </span>
         </div>
         <pre className="font-mono text-xs md:text-sm p-5 md:p-7 whitespace-pre-wrap break-words text-ink-soft leading-relaxed max-h-[500px] overflow-auto">
@@ -105,17 +156,16 @@ export default function PainelGovernanca() {
       </div>
 
       <p className="mt-8 text-center text-sm text-muted leading-relaxed max-w-2xl mx-auto">
-        Os grupos 2, 3 e 4 do questionário — origem dos dados, variáveis proxy e
-        erro — são as mesmas frentes do guia{' '}
+        {T.rodape[0]}{' '}
         <a
           href="/jornada/modulos/auditando-dados-e-decisoes.html"
           target="_blank"
           rel="noopener noreferrer"
           className="text-accent-fg underline underline-offset-4 hover:text-ink transition"
         >
-          auditando dados e decisões
+          {T.rodape[1]}
         </a>
-        . Aqui elas viram software.
+        {T.rodape[2]}
       </p>
     </div>
   )
