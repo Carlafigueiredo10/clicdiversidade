@@ -3,14 +3,34 @@
 // "BLOCO NN" e leria como mais um passo do roteiro.
 // A lista cresce: para incluir outra ferramenta, acrescente um objeto.
 // Ferramenta sem `url` nao renderiza.
+import { tr } from '../../../i18n'
+
+const T = tr({
+  pt: {
+    eyebrow: 'A ferramenta de sala',
+    titulo: 'Para a sala responder junto',
+    externa: 'Ferramenta externa. Abre fora do CLIC.',
+  },
+  es: {
+    eyebrow: 'La herramienta de sala',
+    titulo: 'Para que la sala responda en conjunto',
+    externa: 'Herramienta externa. Se abre fuera de CLIC.',
+  },
+})
+
 const FERRAMENTAS = [
   {
     nome: 'VivaVoz',
-    chamada: 'Participação ao vivo, sem cadastro',
-    descricao:
-      'Você projeta um QR code, a sala responde pelo celular e os resultados aparecem na hora. Nas perguntas abertas, a IA agrupa as respostas em temas — e mostra o rastro de como chegou lá, para a sala poder discordar do que a máquina concluiu.',
-    selos: ['Gratuito', 'Open source', 'Sem cadastro para participar'],
-    cta: 'Abrir o VivaVoz',
+    chamada: tr({ pt: 'Participação ao vivo, sem cadastro', es: 'Participación en vivo, sin registro' }),
+    descricao: tr({
+      pt: 'Você projeta um QR code, a sala responde pelo celular e os resultados aparecem na hora. Nas perguntas abertas, a IA agrupa as respostas em temas — e mostra o rastro de como chegou lá, para a sala poder discordar do que a máquina concluiu.',
+      es: 'Proyectas un código QR, la sala responde desde el celular y los resultados aparecen al instante. En las preguntas abiertas, la IA agrupa las respuestas por temas — y muestra el rastro de cómo llegó ahí, para que la sala pueda discrepar de lo que concluyó la máquina.',
+    }),
+    selos: tr({
+      pt: ['Gratuito', 'Open source', 'Sem cadastro para participar'],
+      es: ['Gratuito', 'Código abierto', 'Sin registro para participar'],
+    }),
+    cta: tr({ pt: 'Abrir o VivaVoz', es: 'Abrir VivaVoz' }),
     url: 'https://vivavoz.app.br/',
   },
 ]
@@ -22,10 +42,10 @@ export default function FerramentasSala() {
   return (
     <section className="mt-20 pt-12 border-t border-line">
       <p className="text-xs tracking-[0.25em] uppercase text-accent-fg font-semibold text-center">
-        A ferramenta de sala
+        {T.eyebrow}
       </p>
       <h2 className="mt-4 font-display font-semibold text-2xl md:text-3xl text-ink text-center leading-tight">
-        Para a sala responder junto
+        {T.titulo}
       </h2>
 
       <div className="mt-10 grid gap-4 max-w-3xl mx-auto">
@@ -67,7 +87,7 @@ export default function FerramentasSala() {
       </div>
 
       <p className="mt-5 text-center text-xs text-muted">
-        Ferramenta externa. Abre fora do CLIC.
+        {T.externa}
       </p>
     </section>
   )

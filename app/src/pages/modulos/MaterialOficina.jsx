@@ -1,13 +1,35 @@
 import { Link } from 'react-router-dom'
 import { BLOCOS } from '../../features/modulos/oficina/data'
 import FerramentasSala from '../../features/modulos/oficina/FerramentasSala'
+import { tr } from '../../i18n'
+
+const T = tr({
+  pt: {
+    bloco: 'BLOCO',
+    apresentacao: 'Apresentação',
+    eyebrow: 'Módulo 05 · Material da Oficina',
+    titulo: ['Humanos no', 'Comando.'],
+    intro:
+      'As apresentações de abertura da oficina presencial: a visão do programa e o material próprio daqui, para abrir a sala e virar a chave.',
+    voltar: '← Voltar aos módulos',
+  },
+  es: {
+    bloco: 'BLOQUE',
+    apresentacao: 'Presentación',
+    eyebrow: 'Módulo 05 · Material del Taller',
+    titulo: ['Humanos al', 'Mando.'],
+    intro:
+      'Las presentaciones de apertura del taller presencial: la visión del programa y el material propio, para abrir la sala y cambiar la mirada.',
+    voltar: '← Volver a los módulos',
+  },
+})
 
 function BlocoCard({ bloco }) {
   const inner = (
     <>
       <div className="flex items-baseline justify-between">
         <span className="font-mono text-xs tracking-widest text-accent-fg font-semibold">
-          {bloco.rotulo ?? `BLOCO ${bloco.numero}`}
+          {bloco.rotulo ?? `${T.bloco} ${bloco.numero}`}
         </span>
         <span className="text-[11px] uppercase tracking-wider text-muted">
           {bloco.duracao}
@@ -34,7 +56,7 @@ function BlocoCard({ bloco }) {
         </span>
         {bloco.tipo === 'apresentacao' && (
           <span className="text-[10px] uppercase tracking-wider text-muted">
-            Apresentação
+            {T.apresentacao}
           </span>
         )}
       </div>
@@ -84,17 +106,15 @@ export default function MaterialOficina() {
     <main className="px-5 py-16 md:py-24">
       <div className="mx-auto max-w-5xl">
         <p className="text-xs tracking-[0.25em] uppercase text-accent-fg font-semibold text-center">
-          Módulo 05 · Material da Oficina
+          {T.eyebrow}
         </p>
         <h1 className="mt-6 font-display font-semibold text-4xl md:text-6xl text-ink text-center leading-[1.05]">
-          Humanos no
+          {T.titulo[0]}
           <br />
-          <span className="italic text-accent-fg">Comando.</span>
+          <span className="italic text-accent-fg">{T.titulo[1]}</span>
         </h1>
         <p className="mt-6 max-w-2xl mx-auto text-center text-ink-soft text-base md:text-lg leading-relaxed">
-          As apresentações de abertura da oficina presencial: a visão do
-          programa e o material próprio daqui, para abrir a sala e virar a
-          chave.
+          {T.intro}
         </p>
 
         <div className="mt-14 grid gap-5 max-w-xl mx-auto">
@@ -110,7 +130,7 @@ export default function MaterialOficina() {
             href="/jornada/#modulos"
             className="rounded-full border border-line px-6 py-3 text-sm text-ink-soft hover:bg-card transition"
           >
-            ← Voltar aos módulos
+            {T.voltar}
           </a>
         </div>
       </div>

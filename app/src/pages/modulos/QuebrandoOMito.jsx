@@ -1,5 +1,23 @@
 import { Link } from 'react-router-dom'
 import SlideNavigator from '../../components/SlideNavigator'
+import { tr } from '../../i18n'
+
+const T = tr({
+  pt: {
+    voltar: '← Voltar ao material da oficina',
+    eyebrow: 'Oficina Humanos no Comando · Bloco 01',
+    titulo: 'Quebrando o mito',
+    sub: 'Apresentação de abertura: tecnologia orientada por pessoas, a lógica invisível por trás do código e a virada de chave.',
+    deckTitle: 'Quebrando o mito — Humanos no Comando',
+  },
+  es: {
+    voltar: '← Volver al material del taller',
+    eyebrow: 'Taller Humanos al Mando · Bloque 01',
+    titulo: 'Rompiendo el mito',
+    sub: 'Presentación de apertura: tecnología orientada por personas, la lógica invisible detrás del código y el cambio de mirada.',
+    deckTitle: 'Rompiendo el mito — Humanos al Mando',
+  },
+})
 
 export default function QuebrandoOMito() {
   return (
@@ -9,26 +27,25 @@ export default function QuebrandoOMito() {
           to="/modulos/oficina"
           className="inline-flex items-center gap-2 text-sm text-ink-soft hover:text-ink transition"
         >
-          ← Voltar ao material da oficina
+          {T.voltar}
         </Link>
 
         <div className="mt-8 text-center">
           <p className="text-xs tracking-[0.25em] uppercase text-accent-fg font-semibold">
-            Oficina Humanos no Comando · Bloco 01
+            {T.eyebrow}
           </p>
           <h1 className="mt-4 font-display font-semibold text-3xl md:text-5xl text-ink leading-[1.05]">
-            Quebrando o mito
+            {T.titulo}
           </h1>
           <p className="mt-4 max-w-xl mx-auto text-ink-soft text-sm md:text-base leading-relaxed">
-            Apresentação de abertura: tecnologia orientada por pessoas, a lógica
-            invisível por trás do código e a virada de chave.
+            {T.sub}
           </p>
         </div>
 
         <div className="mt-10">
           <SlideNavigator
             src="apresentacoes/bloco1-quebrando-o-mito.html"
-            title="Quebrando o mito — Humanos no Comando"
+            title={T.deckTitle}
             slideCount={7}
           />
         </div>
