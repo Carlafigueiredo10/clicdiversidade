@@ -1,6 +1,6 @@
 import { Navigate, useParams } from 'react-router-dom'
 import Trilha from '../../features/modulos/trilhas/Trilha'
-import { TRILHAS } from '../../features/modulos/trilhas/data'
+import { TRILHAS } from '../../features/modulos/trilhas'
 
 export default function TrilhaDetalhe() {
   const { slug } = useParams()

@@ -1,9 +1,11 @@
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { submeterDiagnostico } from '../../../services/diagnosticos'
+import { tr } from '../../../i18n'
 
 // 5 blocos × 10 perguntas (3 + 2 + 2 + 2 + 1)
-const BLOCOS = [
+// Os `val` sao gravados no Firestore e usados no scoring: iguais nos dois idiomas.
+const BLOCOS_PT = [
   {
     label: 'Bloco 1 — Experiência Atual',
     perguntas: [
@@ -141,6 +143,189 @@ const BLOCOS = [
   },
 ]
 
+const BLOCOS_ES = [
+  {
+    label: 'Bloque 1 — Experiencia actual',
+    perguntas: [
+      {
+        id: 'q1',
+        texto: '1. ¿Ya usas IA en el trabajo?',
+        tipo: 'radio',
+        opcoes: [
+          { val: '0', label: 'Nunca la usé' },
+          { val: '1', label: 'La uso de vez en cuando (resúmenes, textos, ideas)' },
+          { val: '2', label: 'La uso con frecuencia' },
+          { val: '3', label: 'Ya la uso para estructurar flujos u organizar tareas' },
+        ],
+      },
+      {
+        id: 'q2',
+        texto: '2. ¿Ya creaste algún flujo automatizado (aunque sea simple)?',
+        tipo: 'radio',
+        opcoes: [
+          { val: '0', label: 'No' },
+          { val: '1', label: 'Ya usé algo listo' },
+          { val: '2', label: 'Ya configuré una automatización simple' },
+          { val: '3', label: 'Ya creé algo desde cero' },
+        ],
+      },
+      {
+        id: 'q3',
+        texto: '3. ¿Ya organizaste datos en una tabla para resolver un problema?',
+        tipo: 'radio',
+        opcoes: [
+          { val: '0', label: 'No' },
+          { val: '1', label: 'Sí, pero sin una regla clara' },
+          { val: '2', label: 'Sí, con reglas básicas' },
+          { val: '3', label: 'Sí, con lógica de estados o condiciones' },
+        ],
+      },
+    ],
+  },
+  {
+    label: 'Bloque 2 — Objetivo',
+    perguntas: [
+      {
+        id: 'q4',
+        texto: '4. ¿Qué quieres lograr ahora?',
+        tipo: 'radio',
+        opcoes: [
+          { val: 'entender', label: 'Entender mejor qué es la IA' },
+          { val: 'produtividade', label: 'Ganar productividad' },
+          { val: 'analise', label: 'Mejorar informes y análisis' },
+          { val: 'criar', label: 'Crear una solución digital para mi área' },
+          { val: 'programar', label: 'Aprender a programar' },
+        ],
+      },
+      {
+        id: 'q5',
+        texto: '5. Si pudieras elegir, preferirías:',
+        tipo: 'radio',
+        opcoes: [
+          { val: 'usar', label: 'Usar herramientas listas' },
+          { val: 'adaptar', label: 'Adaptar herramientas' },
+          { val: 'criar', label: 'Crear tu propia solución' },
+        ],
+      },
+    ],
+  },
+  {
+    label: 'Bloque 3 — Mentalidad tecnológica',
+    perguntas: [
+      {
+        id: 'q6',
+        texto:
+          '6. Cuando surge un problema repetitivo en el trabajo, tiendes a:',
+        tipo: 'radio',
+        opcoes: [
+          { val: '0', label: 'Resolverlo a mano' },
+          { val: '1', label: 'Crear un modelo estándar' },
+          { val: '2', label: 'Organizarlo en una planilla' },
+          { val: '3', label: 'Pensar en automatizarlo' },
+        ],
+      },
+      {
+        id: 'q7',
+        texto: '7. ¿Te ves como alguien capaz de crear tecnología?',
+        tipo: 'slider',
+        min: 1,
+        max: 5,
+        labelMin: '1 — No me veo capaz',
+        labelMax: '5 — Totalmente capaz',
+      },
+    ],
+  },
+  {
+    label: 'Bloque 4 — Disponibilidad',
+    perguntas: [
+      {
+        id: 'q8',
+        texto: '8. ¿Cuánto tiempo por semana puedes dedicarle?',
+        tipo: 'radio',
+        opcoes: [
+          { val: '1h', label: 'Hasta 1 hora' },
+          { val: '2-3h', label: '2 a 3 horas' },
+          { val: '4-6h', label: '4 a 6 horas' },
+          { val: '6h+', label: 'Más de 6 horas' },
+        ],
+      },
+      {
+        id: 'q9',
+        texto: '9. ¿Tienes acceso a herramientas en tu organismo?',
+        tipo: 'radio',
+        opcoes: [
+          { val: 'navegador', label: 'Solo el navegador' },
+          { val: 'm365', label: 'Microsoft 365' },
+          { val: 'automacao', label: 'Herramientas de automatización' },
+          { val: 'naosei', label: 'No sé' },
+        ],
+      },
+    ],
+  },
+  {
+    label: 'Bloque 5 — Desafío',
+    perguntas: [
+      {
+        id: 'q10',
+        texto:
+          '10. Si aprendieras a construir una herramienta simple, ¿la aplicarías en tu área?',
+        tipo: 'radio',
+        opcoes: [
+          { val: 'naosei', label: 'No sé' },
+          { val: 'talvez', label: 'Tal vez' },
+          { val: 'sim', label: 'Sí' },
+          { val: 'sim-problema', label: 'Sí, ya tengo un problema en mente' },
+        ],
+      },
+    ],
+  },
+]
+
+const BLOCOS = tr({ pt: BLOCOS_PT, es: BLOCOS_ES })
+
+const T = tr({
+  pt: {
+    rapido: 'Diagnóstico rápido',
+    descubra: 'Descubra qual trilha combina com você',
+    meta: ['5 minutos · 10 perguntas ·', 'sem respostas certas ou erradas', '. Recebe uma recomendação personalizada de trilha + leitura do seu perfil.'],
+    comecar: 'Começar diagnóstico',
+    anonimo: 'Anônimo · sem cadastro',
+    recomendada: 'Trilha recomendada',
+    trilha: 'Trilha',
+    perfil: 'Perfil detectado',
+    leitura: 'Leitura da sua jornada',
+    comecarTrilha: 'Começar minha trilha recomendada',
+    aderencia: 'de aderência',
+    complementar: 'Trilha complementar',
+    explorar: 'Você pode explorar qualquer trilha — o diagnóstico é apenas uma sugestão.',
+    refazer: 'Refazer diagnóstico',
+    meta2: ['5 minutos. 10 perguntas.', 'Sem respostas certas ou erradas.'],
+    voltar: 'Voltar',
+    resultado: 'Ver resultado',
+    proximo: 'Próximo',
+  },
+  es: {
+    rapido: 'Diagnóstico rápido',
+    descubra: 'Descubre qué ruta va contigo',
+    meta: ['5 minutos · 10 preguntas ·', 'sin respuestas correctas ni incorrectas', '. Recibes una recomendación personalizada de ruta + una lectura de tu perfil.'],
+    comecar: 'Empezar el diagnóstico',
+    anonimo: 'Anónimo · sin registro',
+    recomendada: 'Ruta recomendada',
+    trilha: 'Ruta',
+    perfil: 'Perfil detectado',
+    leitura: 'Lectura de tu recorrido',
+    comecarTrilha: 'Empezar mi ruta recomendada',
+    aderencia: 'de afinidad',
+    complementar: 'Ruta complementaria',
+    explorar: 'Puedes explorar cualquier ruta — el diagnóstico es solo una sugerencia.',
+    refazer: 'Rehacer el diagnóstico',
+    meta2: ['5 minutos. 10 preguntas.', 'Sin respuestas correctas ni incorrectas.'],
+    voltar: 'Volver',
+    resultado: 'Ver resultado',
+    proximo: 'Siguiente',
+  },
+})
+
 // Mapeia o resultado do scoring (0-5) para o slug da trilha no projeto
 const SCORE_TO_SLUG = {
   0: 'fundamental-dados',
@@ -151,7 +336,7 @@ const SCORE_TO_SLUG = {
   5: 'programacao',
 }
 
-const PERFIS = {
+const PERFIS_PT = {
   0: {
     perfil: 'Analista em Formação',
     leitura:
@@ -189,6 +374,17 @@ const PERFIS = {
     complementar: 'construcao',
   },
 }
+
+const PERFIS_ES = {
+  0: { perfil: 'Analista en formación', leitura: 'Muestras curiosidad analítica y buscas transformar información en evidencia práctica. El próximo paso es estructurar el razonamiento con datos.', complementar: 'produtividade-automacao' },
+  1: { perfil: 'Exploración en transición', leitura: 'Todavía estás formando tu repertorio tecnológico. Es el momento de entender cómo funciona la IA y ganar autonomía en el uso diario.', complementar: 'produtividade-automacao' },
+  2: { perfil: 'Operación estratégica', leitura: 'Ya usas IA. El próximo salto es convertir el uso puntual en flujos de productividad.', complementar: 'construcao' },
+  3: { perfil: 'Perfil analítico orientado por datos', leitura: 'Muestras interés en el análisis y la evidencia. El próximo paso es usar la IA para ampliar tu capacidad analítica.', complementar: 'fundamental-dados' },
+  4: { perfil: 'Creación de soluciones', leitura: 'Ya piensas en aplicaciones prácticas. Tu momento es construir soluciones digitales.', complementar: 'dados-decisao' },
+  5: { perfil: 'Arquitectura técnica', leitura: 'Buscas una autonomía técnica profunda. El próximo paso es programar e integrar sistemas.', complementar: 'construcao' },
+}
+
+const PERFIS = tr({ pt: PERFIS_PT, es: PERFIS_ES })
 
 function calcularRecomendacao(answers) {
   const q1 = parseInt(answers.q1 || '0', 10)
@@ -350,18 +546,15 @@ export default function Diagnostico({ trilhas }) {
         <div className="relative flex flex-col md:flex-row md:items-center md:gap-8 gap-6">
           <div className="flex-1 min-w-0">
             <div className="text-[10px] tracking-[0.25em] uppercase text-accent-fg font-semibold flex items-center gap-2">
-              <span aria-hidden>🧭</span> Diagnóstico rápido
+              <span aria-hidden>🧭</span> {T.rapido}
             </div>
             <h3 className="mt-3 font-display font-semibold text-2xl md:text-3xl text-ink leading-tight">
-              Descubra qual trilha combina com você
+              {T.descubra}
             </h3>
             <p className="mt-3 text-ink-soft text-sm md:text-base leading-relaxed">
-              5 minutos · 10 perguntas ·{' '}
-              <strong className="text-ink">
-                sem respostas certas ou erradas
-              </strong>
-              . Recebe uma recomendação personalizada de trilha + leitura do seu
-              perfil.
+              {T.meta[0]}{' '}
+              <strong className="text-ink">{T.meta[1]}</strong>
+              {T.meta[2]}
             </p>
           </div>
 
@@ -371,7 +564,7 @@ export default function Diagnostico({ trilhas }) {
               onClick={() => setIniciado(true)}
               className="group rounded-full bg-ink text-page px-6 py-3.5 text-sm font-semibold hover:opacity-90 transition inline-flex items-center gap-2 shadow-soft"
             >
-              Começar diagnóstico
+              {T.comecar}
               <span
                 aria-hidden
                 className="transition group-hover:translate-x-0.5"
@@ -380,7 +573,7 @@ export default function Diagnostico({ trilhas }) {
               </span>
             </button>
             <div className="mt-2 text-[11px] text-muted text-center">
-              Anônimo · sem cadastro
+              {T.anonimo}
             </div>
           </div>
         </div>
@@ -400,21 +593,21 @@ export default function Diagnostico({ trilhas }) {
           className="text-xs uppercase tracking-widest font-semibold"
           style={{ color: accent }}
         >
-          Trilha recomendada
+          {T.recomendada}
         </div>
         <h3
           className="mt-2 font-display font-semibold text-2xl md:text-3xl leading-tight"
           style={{ color: accent }}
         >
           {trilha?.numero
-            ? `Trilha ${String(trilha.numero).padStart(2, '0')} — ${trilha.titulo.split('.')[0]}`
-            : 'Trilha recomendada'}
+            ? `${T.trilha} ${String(trilha.numero).padStart(2, '0')} — ${trilha.titulo.split('.')[0]}`
+            : T.recomendada}
         </h3>
         <p className="mt-3 text-ink-soft leading-relaxed">{trilha?.subtitulo}</p>
 
         <div className="mt-6">
           <div className="text-[10px] uppercase tracking-widest text-muted">
-            Perfil detectado
+            {T.perfil}
           </div>
           <div className="mt-1 font-display font-medium text-ink">
             {perfil}
@@ -423,7 +616,7 @@ export default function Diagnostico({ trilhas }) {
 
         <div className="mt-5">
           <div className="text-[10px] uppercase tracking-widest text-muted">
-            Leitura da sua jornada
+            {T.leitura}
           </div>
           <p className="mt-1 text-sm text-ink-soft leading-relaxed">
             {leitura}
@@ -440,7 +633,7 @@ export default function Diagnostico({ trilhas }) {
               border: `1px solid ${accent}40`,
             }}
           >
-            Começar minha trilha recomendada
+            {T.comecarTrilha}
             <span aria-hidden>→</span>
           </Link>
           <div className="flex items-baseline gap-1.5">
@@ -450,20 +643,20 @@ export default function Diagnostico({ trilhas }) {
             >
               {aderencia}%
             </span>
-            <span className="text-xs text-muted">de aderência</span>
+            <span className="text-xs text-muted">{T.aderencia}</span>
           </div>
         </div>
 
         {complementar && (
           <div className="mt-6 pt-6 border-t border-line">
             <div className="text-[10px] uppercase tracking-widest text-muted">
-              Trilha complementar
+              {T.complementar}
             </div>
             <Link
               to={`/modulos/trilhas/${complementar.slug}`}
               className="mt-1 inline-flex items-center gap-1.5 text-sm font-medium text-ink hover:opacity-70 transition"
             >
-              Trilha {String(complementar.numero).padStart(2, '0')} —{' '}
+              {T.trilha} {String(complementar.numero).padStart(2, '0')} —{' '}
               {complementar.titulo.split('.')[0]}
               <span aria-hidden>→</span>
             </Link>
@@ -471,14 +664,13 @@ export default function Diagnostico({ trilhas }) {
         )}
 
         <div className="mt-6 text-xs text-muted">
-          Você pode explorar qualquer trilha — o diagnóstico é apenas uma
-          sugestão.{' '}
+          {T.explorar}{' '}
           <button
             type="button"
             onClick={refazer}
             className="text-accent-fg font-medium hover:opacity-70 transition underline underline-offset-2"
           >
-            Refazer diagnóstico
+            {T.refazer}
           </button>
         </div>
       </section>
@@ -489,15 +681,15 @@ export default function Diagnostico({ trilhas }) {
     <section className="bg-card rounded-2xl border border-line p-6 md:p-10">
       <div className="flex items-baseline justify-between gap-4 mb-2">
         <h3 className="font-display font-semibold text-xl md:text-2xl text-ink">
-          🧭 Diagnóstico rápido
+          🧭 {T.rapido}
         </h3>
         <span className="text-xs text-muted tabular-nums">
           {answeredCount}/{totalQ}
         </span>
       </div>
       <p className="text-sm text-ink-soft">
-        5 minutos. 10 perguntas.{' '}
-        <strong className="text-ink">Sem respostas certas ou erradas.</strong>
+        {T.meta2[0]}{' '}
+        <strong className="text-ink">{T.meta2[1]}</strong>
       </p>
 
       <div className="mt-5 h-1.5 bg-page rounded-full overflow-hidden">
@@ -586,14 +778,14 @@ export default function Diagnostico({ trilhas }) {
               : 'border border-line text-ink-soft hover:bg-page')
           }
         >
-          <span aria-hidden>←</span> Voltar
+          <span aria-hidden>←</span> {T.voltar}
         </button>
         <button
           type="button"
           onClick={avancar}
           className="text-sm px-6 py-2.5 rounded-full bg-ink text-page font-medium hover:opacity-90 transition inline-flex items-center gap-2"
         >
-          {isUltimoBloco ? 'Ver resultado' : 'Próximo'}
+          {isUltimoBloco ? T.resultado : T.proximo}
           <span aria-hidden>→</span>
         </button>
       </div>

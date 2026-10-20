@@ -1,5 +1,27 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { tr } from '../../../i18n'
+
+const T = tr({
+  pt: {
+    voltar: 'Voltar para Trilhas', nav: 'Navegação dos módulos', modulos: 'Módulos',
+    deSete: (n) => `Trilha ${n} de 7 · Trilhas de Aprendizagem`,
+    continuarSeta: 'Continuar trilha →', comecarAgora: 'Começar agora →',
+    progresso: 'Progresso da trilha', concluidos: (a, b) => `${a} de ${b} módulos concluídos`,
+    modulo: 'Módulo', recursos: 'Recursos verificados', exercicio: 'Exercício prático',
+    dica: 'Dica estratégica:', concluido: 'Módulo concluído', marcar: 'Marcar módulo como concluído',
+    entrega: 'Entrega:', continuar: 'Continuar trilha', comecar: 'Começar a trilha', outras: 'Outras trilhas',
+  },
+  es: {
+    voltar: 'Volver a las Rutas', nav: 'Navegación de los módulos', modulos: 'Módulos',
+    deSete: (n) => `Ruta ${n} de 7 · Rutas de Aprendizaje`,
+    continuarSeta: 'Continuar la ruta →', comecarAgora: 'Empezar ahora →',
+    progresso: 'Progreso de la ruta', concluidos: (a, b) => `${a} de ${b} módulos completados`,
+    modulo: 'Módulo', recursos: 'Recursos verificados', exercicio: 'Ejercicio práctico',
+    dica: 'Consejo estratégico:', concluido: 'Módulo completado', marcar: 'Marcar el módulo como completado',
+    entrega: 'Entrega:', continuar: 'Continuar la ruta', comecar: 'Empezar la ruta', outras: 'Otras rutas',
+  },
+})
 
 // Cada trilha tem um par de cores pra montar o gradiente do título cinematográfico.
 // Mantém o accentColor como base e pareia com uma cor complementar do palette.
@@ -138,16 +160,16 @@ export default function Trilha({ data }) {
         >
           <path d="M19 12H5M12 19l-7-7 7-7" />
         </svg>
-        Voltar para Trilhas
+        {T.voltar}
       </Link>
 
       {/* Side rail (xl+) — módulos sempre visíveis */}
       <aside
         className="hidden xl:flex fixed left-8 top-1/2 -translate-y-1/2 flex-col gap-3 z-30 max-w-[200px]"
-        aria-label="Navegação dos módulos"
+        aria-label={T.nav}
       >
         <div className="text-[10px] tracking-[0.2em] uppercase text-muted font-semibold mb-1 pl-5">
-          Módulos
+          {T.modulos}
         </div>
         {data.modulos.map((m) => {
           const done = completed.has(m.numero)
@@ -241,8 +263,7 @@ export default function Trilha({ data }) {
                 className="text-[11px] tracking-[0.32em] uppercase font-semibold"
                 style={{ color: accent }}
               >
-                Trilha {String(data.numero).padStart(2, '0')} de 7 · Trilhas de
-                Aprendizagem
+                {T.deSete(String(data.numero).padStart(2, '0'))}
               </p>
 
               <h1 className="mt-7 font-display font-extrabold text-4xl md:text-6xl lg:text-7xl leading-[1.02] tracking-tight text-[#050816]">
@@ -277,7 +298,7 @@ export default function Trilha({ data }) {
                     boxShadow: `0 8px 28px -6px ${accent}90, 0 0 0 1px rgba(255,255,255,0.06) inset`,
                   }}
                 >
-                  {isStarted ? 'Continuar trilha →' : 'Começar agora →'}
+                  {isStarted ? T.continuarSeta : T.comecarAgora}
                 </a>
               </div>
             </div>
@@ -289,7 +310,7 @@ export default function Trilha({ data }) {
             style={{ borderColor: `${accent}1f` }}
           >
             <div className="flex items-center justify-between mb-3">
-              <span className="text-sm text-ink-soft">Progresso da trilha</span>
+              <span className="text-sm text-ink-soft">{T.progresso}</span>
               <span
                 className="text-sm font-semibold tabular-nums"
                 style={{ color: accent }}
@@ -307,7 +328,7 @@ export default function Trilha({ data }) {
               />
             </div>
             <div className="mt-2 text-xs text-muted">
-              {completed.size} de {total} módulos concluídos
+              {T.concluidos(completed.size, total)}
             </div>
           </div>
 
@@ -382,7 +403,7 @@ export default function Trilha({ data }) {
                         className="font-mono text-[10px] tracking-[0.25em] uppercase font-semibold"
                         style={{ color: accent }}
                       >
-                        Módulo {String(m.numero).padStart(2, '0')}
+                        {T.modulo} {String(m.numero).padStart(2, '0')}
                       </div>
                       <h2 className="mt-1.5 font-display font-semibold text-2xl md:text-3xl text-ink leading-tight">
                         {m.titulo}
@@ -403,7 +424,7 @@ export default function Trilha({ data }) {
                   {m.recursos.length > 0 && (
                     <div className="mt-7">
                       <div className="text-[10px] uppercase tracking-[0.2em] text-muted font-semibold mb-3">
-                        Recursos verificados
+                        {T.recursos}
                       </div>
                       <div className="grid gap-3 md:grid-cols-3">
                         {m.recursos.map((r, i) => {
@@ -475,7 +496,7 @@ export default function Trilha({ data }) {
                         className="font-display font-semibold text-base"
                         style={{ color: accent }}
                       >
-                        Exercício prático
+                        {T.exercicio}
                       </h3>
                     </div>
                     <p className="text-sm text-ink leading-relaxed">
@@ -497,7 +518,7 @@ export default function Trilha({ data }) {
                         💡
                       </span>
                       <div>
-                        <strong>Dica estratégica:</strong> {m.dica}
+                        <strong>{T.dica}</strong> {m.dica}
                       </div>
                     </div>
                   )}
@@ -517,8 +538,8 @@ export default function Trilha({ data }) {
                       }
                     >
                       {done
-                        ? 'Módulo concluído'
-                        : 'Marcar módulo como concluído'}
+                        ? T.concluido
+                        : T.marcar}
                     </span>
                   </label>
                 </article>
@@ -590,7 +611,7 @@ export default function Trilha({ data }) {
                 className="mt-10 pt-6 border-t text-sm text-ink-soft"
                 style={{ borderColor: `${accent}1f` }}
               >
-                <strong className="text-ink">Entrega:</strong>{' '}
+                <strong className="text-ink">{T.entrega}</strong>{' '}
                 {data.projetoFinal.entrega}
               </div>
             )}
@@ -618,13 +639,13 @@ export default function Trilha({ data }) {
                   boxShadow: `0 12px 32px -10px ${accent}80`,
                 }}
               >
-                {isStarted ? 'Continuar trilha' : 'Começar a trilha'}
+                {isStarted ? T.continuar : T.comecar}
               </a>
               <Link
                 to="/modulos/trilhas"
                 className="rounded-full border border-line px-7 py-3.5 text-sm text-ink-soft hover:bg-card transition"
               >
-                Outras trilhas
+                {T.outras}
               </Link>
             </div>
           </section>
