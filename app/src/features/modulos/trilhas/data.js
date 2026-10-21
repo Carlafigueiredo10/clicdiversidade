@@ -31,12 +31,13 @@ export const TRILHAS = [
           },
           {
             "instituicao": "ENAP • EV.G",
-            "nome": "Introdução à Ciência de Dados",
+            "nome": "Introdução à Ciência de Dados - Conceitos e Ferramentas",
             "meta": [
               "4h",
-              "Gratuito"
+              "Gratuito",
+              "Certificado"
             ],
-            "url": "https://www.escolavirtual.gov.br/"
+            "url": "https://www.escolavirtual.gov.br/curso/976"
           },
           {
             "instituicao": "ENAP • EV.G",
@@ -67,21 +68,23 @@ export const TRILHAS = [
         "recursos": [
           {
             "instituicao": "ENAP • EV.G",
-            "nome": "Análise de Dados como Suporte à Decisão",
+            "nome": "Análise de dados como suporte à tomada de decisão",
             "meta": [
               "30h",
-              "Gratuito"
+              "Gratuito",
+              "Certificado"
             ],
-            "url": "https://www.escolavirtual.gov.br/"
+            "url": "https://www.escolavirtual.gov.br/curso/406"
           },
           {
             "instituicao": "Fundação Bradesco",
-            "nome": "Introdução à Análise de Dados - Power BI",
+            "nome": "Introdução à Análise de Dados - Microsoft Power BI",
             "meta": [
               "5h",
+              "Gratuito",
               "Certificado"
             ],
-            "url": "https://www.ev.org.br/"
+            "url": "https://www.ev.org.br/cursos/introducao-a-analise-de-dados-microsoft-power-bi"
           }
         ],
         "exercicio": {
@@ -103,21 +106,23 @@ export const TRILHAS = [
         "recursos": [
           {
             "instituicao": "Microsoft Learn",
-            "nome": "Fundamentos de Banco de Dados",
+            "nome": "Explorar conceitos fundamentais de dados relacionais",
             "meta": [
-              "~2h",
+              "~40min",
+              "Gratuito",
               "Português"
             ],
-            "url": "https://learn.microsoft.com/pt-br/training/"
+            "url": "https://learn.microsoft.com/pt-br/training/modules/explore-relational-data-offerings/"
           },
           {
             "instituicao": "Fundação Bradesco",
-            "nome": "Implementando Banco de Dados",
+            "nome": "Administrando Banco de Dados",
             "meta": [
               "15h",
-              "Prático"
+              "Gratuito",
+              "Certificado"
             ],
-            "url": "https://www.ev.org.br/"
+            "url": "https://www.ev.org.br/cursos/administrando-banco-de-dados"
           }
         ],
         "exercicio": {
@@ -139,12 +144,13 @@ export const TRILHAS = [
         "recursos": [
           {
             "instituicao": "Fundação Bradesco",
-            "nome": "Fundamentos do Power BI",
+            "nome": "Análise de Dados no Power BI",
             "meta": [
-              "37h",
-              "Completo"
+              "4h",
+              "Gratuito",
+              "Certificado"
             ],
-            "url": "https://www.ev.org.br/"
+            "url": "https://www.ev.org.br/cursos/analise-de-dados-no-power-bi"
           },
           {
             "instituicao": "Data Science Academy",
@@ -175,12 +181,13 @@ export const TRILHAS = [
         "recursos": [
           {
             "instituicao": "ENAP • EV.G",
-            "nome": "Introdução à LGPD",
+            "nome": "Introdução à Lei Brasileira de Proteção de Dados Pessoais",
             "meta": [
               "10h",
-              "Casos reais"
+              "Gratuito",
+              "Certificado"
             ],
-            "url": "https://www.escolavirtual.gov.br/"
+            "url": "https://www.escolavirtual.gov.br/curso/153"
           },
           {
             "instituicao": "ENAP • EV.G",
@@ -259,12 +266,13 @@ export const TRILHAS = [
         "recursos": [
           {
             "instituicao": "ENAP • EV.G",
-            "nome": "Inteligência Artificial para o Setor Público",
+            "nome": "Entenda como a IA afeta você e o seu governo",
             "meta": [
-              "10h",
-              "Gratuito"
+              "4h",
+              "Gratuito",
+              "Certificado"
             ],
-            "url": "https://www.escolavirtual.gov.br/curso/1063"
+            "url": "https://www.escolavirtual.gov.br/curso/1437"
           },
           {
             "instituicao": "DeepLearning.AI • Coursera",
@@ -277,12 +285,13 @@ export const TRILHAS = [
           },
           {
             "instituicao": "ENAP • EV.G",
-            "nome": "IA Generativa: Conceitos e Aplicações",
+            "nome": "Inteligência Artificial Generativa",
             "meta": [
-              "4h",
+              "2h",
+              "Gratuito",
               "Certificado"
             ],
-            "url": "https://www.escolavirtual.gov.br/curso/1081"
+            "url": "https://www.escolavirtual.gov.br/curso/1091"
           }
         ],
         "exercicio": {
@@ -349,12 +358,13 @@ export const TRILHAS = [
           },
           {
             "instituicao": "ENAP • EV.G",
-            "nome": "Uso de IA Generativa na Gestão Pública",
+            "nome": "IA - Aplicações no Governo Federal",
             "meta": [
               "8h",
-              "Casos práticos"
+              "Gratuito",
+              "Certificado"
             ],
-            "url": "https://www.escolavirtual.gov.br/curso/1063"
+            "url": "https://www.escolavirtual.gov.br/curso/1395"
           }
         ],
         "exercicio": {
@@ -376,12 +386,13 @@ export const TRILHAS = [
         "recursos": [
           {
             "instituicao": "Microsoft Learn",
-            "nome": "Introdução ao Microsoft 365 Copilot",
+            "nome": "Rascunho, análise e apresentação com o Microsoft Copilot (MS-4018)",
             "meta": [
-              "~3h",
+              "~4h",
+              "Gratuito",
               "Português"
             ],
-            "url": "https://learn.microsoft.com/pt-br/training/paths/get-started-with-microsoft-365-copilot/"
+            "url": "https://learn.microsoft.com/pt-br/training/paths/draft-analyze-present-microsoft-365-copilot/"
           },
           {
             "instituicao": "Zapier Learn",
@@ -421,12 +432,13 @@ export const TRILHAS = [
           },
           {
             "instituicao": "ENAP • EV.G",
-            "nome": "IA e o Futuro do Trabalho Público",
+            "nome": "Liderança em IA no governo",
             "meta": [
-              "8h",
+              "4h",
+              "Gratuito",
               "Certificado"
             ],
-            "url": "https://www.escolavirtual.gov.br/curso/1063"
+            "url": "https://www.escolavirtual.gov.br/curso/1432"
           }
         ],
         "exercicio": {
@@ -505,12 +517,13 @@ export const TRILHAS = [
           },
           {
             "instituicao": "ENAP • EV.G",
-            "nome": "IA Generativa no Trabalho Público",
+            "nome": "IA e produtividade pessoal no serviço público",
             "meta": [
-              "10h",
+              "2h",
+              "Gratuito",
               "Certificado"
             ],
-            "url": "https://www.escolavirtual.gov.br/curso/1063"
+            "url": "https://www.escolavirtual.gov.br/curso/1560"
           }
         ],
         "exercicio": {
@@ -604,12 +617,13 @@ export const TRILHAS = [
         "recursos": [
           {
             "instituicao": "Microsoft Learn",
-            "nome": "Copilot em Teams e Reuniões",
+            "nome": "Torne suas reuniões mais produtivas com IA",
             "meta": [
-              "~2h",
+              "~45min",
+              "Gratuito",
               "Português"
             ],
-            "url": "https://learn.microsoft.com/pt-br/training/paths/get-started-with-microsoft-365-copilot/"
+            "url": "https://learn.microsoft.com/pt-br/training/modules/make-your-meetings-more-productive-ai/"
           },
           {
             "instituicao": "Anthropic",
@@ -732,13 +746,14 @@ export const TRILHAS = [
             "url": "https://www.escolavirtual.gov.br/trilha/216"
           },
           {
-            "instituicao": "Kaggle Learn",
-            "nome": "Intro to Data Analysis",
+            "instituicao": "ENAP • EV.G",
+            "nome": "Análise de dados: uma leitura crítica das informações",
             "meta": [
-              "~4h",
-              "Gratuito"
+              "23h",
+              "Gratuito",
+              "Certificado"
             ],
-            "url": "https://www.kaggle.com/learn/data-analysis"
+            "url": "https://www.escolavirtual.gov.br/curso/764"
           }
         ],
         "exercicio": {
@@ -760,21 +775,23 @@ export const TRILHAS = [
         "recursos": [
           {
             "instituicao": "ENAP • EV.G",
-            "nome": "Análise de Dados como Suporte à Decisão",
+            "nome": "Análise de dados como suporte à tomada de decisão",
             "meta": [
               "30h",
-              "Gratuito"
+              "Gratuito",
+              "Certificado"
             ],
-            "url": "https://www.escolavirtual.gov.br/"
+            "url": "https://www.escolavirtual.gov.br/curso/406"
           },
           {
             "instituicao": "Kaggle Learn",
-            "nome": "Data Analysis com Python e IA",
+            "nome": "Pandas",
             "meta": [
               "~4h",
-              "Gratuito"
+              "Gratuito",
+              "Certificado"
             ],
-            "url": "https://www.kaggle.com/learn"
+            "url": "https://www.kaggle.com/learn/pandas"
           }
         ],
         "exercicio": {
@@ -795,13 +812,14 @@ export const TRILHAS = [
         "navLabel": "Virada de Chave",
         "recursos": [
           {
-            "instituicao": "Fundação Bradesco",
-            "nome": "Fundamentos do Power BI",
+            "instituicao": "ENAP • EV.G",
+            "nome": "Aplicação do Power BI para Aprimoramento da Gestão",
             "meta": [
-              "37h",
-              "Completo"
+              "25h",
+              "Gratuito",
+              "Certificado"
             ],
-            "url": "https://www.ev.org.br/"
+            "url": "https://www.escolavirtual.gov.br/curso/840"
           },
           {
             "instituicao": "Data Science Academy",
@@ -832,12 +850,13 @@ export const TRILHAS = [
         "recursos": [
           {
             "instituicao": "ENAP • EV.G",
-            "nome": "Análise de Dados para Gestão Pública",
+            "nome": "Evidências para políticas públicas",
             "meta": [
-              "~12h",
-              "Gratuito"
+              "30h",
+              "Gratuito",
+              "Certificado"
             ],
-            "url": "https://www.escolavirtual.gov.br/"
+            "url": "https://www.escolavirtual.gov.br/curso/1075"
           },
           {
             "instituicao": "CGU",
@@ -877,12 +896,13 @@ export const TRILHAS = [
           },
           {
             "instituicao": "ENAP • EV.G",
-            "nome": "Governo Aberto e Dados Abertos",
+            "nome": "Governo Aberto: Transparência e Dados Abertos",
             "meta": [
-              "~8h",
-              "Gratuito"
+              "10h",
+              "Gratuito",
+              "Certificado"
             ],
-            "url": "https://www.escolavirtual.gov.br/"
+            "url": "https://www.escolavirtual.gov.br/curso/500"
           }
         ],
         "exercicio": {
@@ -961,12 +981,13 @@ export const TRILHAS = [
           },
           {
             "instituicao": "ENAP • EV.G",
-            "nome": "IA Generativa — Aplicações Práticas",
+            "nome": "Inteligência Artificial para simplificar o dia a dia",
             "meta": [
-              "10h",
+              "4h",
+              "Gratuito",
               "Certificado"
             ],
-            "url": "https://www.escolavirtual.gov.br/curso/1063"
+            "url": "https://www.escolavirtual.gov.br/curso/861"
           }
         ],
         "exercicio": {
@@ -1417,12 +1438,13 @@ export const TRILHAS = [
         "recursos": [
           {
             "instituicao": "ENAP • EV.G",
-            "nome": "Introdução à LGPD",
+            "nome": "Introdução à Lei Brasileira de Proteção de Dados Pessoais",
             "meta": [
               "10h",
-              "Gratuito"
+              "Gratuito",
+              "Certificado"
             ],
-            "url": "https://www.escolavirtual.gov.br/curso/527"
+            "url": "https://www.escolavirtual.gov.br/curso/153"
           },
           {
             "instituicao": "ANPD",
@@ -1471,23 +1493,24 @@ export const TRILHAS = [
           },
           {
             "instituicao": "ENAP • EV.G",
-            "nome": "IA Generativa: Ética e Limitações",
+            "nome": "Ética em IA",
             "meta": [
-              "~4h",
-              "Gratuito"
+              "2h",
+              "Gratuito",
+              "Certificado"
             ],
-            "url": "https://www.escolavirtual.gov.br/curso/1063"
+            "url": "https://www.escolavirtual.gov.br/curso/1090"
           }
         ],
         "exercicio": {
-          "descricao": "Pegue uma tarefa real do seu trabalho (um relatório, um parecer, uma resposta de e-mail). Escreva 3 versões do prompt para a mesma tarefa — simples, estruturado e avançado com persona. Compare os resultados.",
+          "descricao": "Escolha uma tarefa em que a IA apoie uma decisão ou um texto do seu setor (ex.: triagem de pedidos, resumo de atendimento, priorização de casos). Faça o teste contrafactual: rode o mesmo prompt duas vezes, trocando só uma variável sensível — nome, gênero, bairro ou idade. Compare as respostas e registre: o resultado mudou? Em quê? Que limite (o L do PTCFSL) você incluiria no prompt para evitar isso?",
           "meta": [
             "⏱️ 1–2 horas",
-            "💻 Claude, ChatGPT ou Gemini",
-            "🎯 Tarefa real do trabalho"
+            "🔍 Teste contrafactual",
+            "💻 Claude, ChatGPT ou Gemini"
           ]
         },
-        "dica": "Um bom prompt é como uma instrução de trabalho bem escrita: quem você é, o que quer, qual formato espera e o que deve ser evitado. Treine esse padrão até virar instinto."
+        "dica": "Viés não se vê lendo uma resposta — se vê comparando respostas. Se trocar só o nome ou o bairro muda o resultado, a IA está usando essa variável como atalho para raça, gênero ou classe. Guarde o registro do teste: ele é evidência para pedir revisão."
       },
       {
         "numero": 3,
@@ -1534,12 +1557,13 @@ export const TRILHAS = [
         "recursos": [
           {
             "instituicao": "ENAP • EV.G",
-            "nome": "Uso Responsável de IA no Setor Público",
+            "nome": "Fundamentos da IA no Contexto do Serviço Público",
             "meta": [
-              "~8h",
+              "1h",
+              "Gratuito",
               "Certificado"
             ],
-            "url": "https://www.escolavirtual.gov.br/curso/1063"
+            "url": "https://www.escolavirtual.gov.br/curso/1559"
           },
           {
             "instituicao": "CGU",
@@ -1579,12 +1603,13 @@ export const TRILHAS = [
           },
           {
             "instituicao": "ENAP • EV.G",
-            "nome": "Transformação Digital e Governança de IA",
+            "nome": "IA e Transformação Digital",
             "meta": [
-              "~8h",
+              "15h",
+              "Gratuito",
               "Certificado"
             ],
-            "url": "https://www.escolavirtual.gov.br/curso/1063"
+            "url": "https://www.escolavirtual.gov.br/curso/1588"
           }
         ],
         "exercicio": {

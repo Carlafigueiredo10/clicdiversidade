@@ -1600,14 +1600,14 @@ export const TRILHAS = [
           }
         ],
         "exercicio": {
-          "descricao": "Toma una tarea real de tu trabajo (un informe, un dictamen, una respuesta por correo). Escribe 3 versiones del prompt para la misma tarea: simple, estructurada y avanzada con persona. Compara los resultados.",
+          "descricao": "Elige una tarea en la que la IA apoye una decisión o un texto de tu área (p. ej., clasificación de solicitudes, resumen de atenciones, priorización de casos). Haz la prueba contrafáctica: ejecuta el mismo prompt dos veces, cambiando solo una variable sensible — nombre, género, barrio o edad. Compara las respuestas y registra: ¿cambió el resultado? ¿En qué? ¿Qué límite (la L del PTCFSL) incluirías en el prompt para evitarlo?",
           "meta": [
             "⏱️ 1–2 horas",
-            "💻 Claude, ChatGPT o Gemini",
-            "🎯 Tarea real del trabajo"
+            "🔍 Prueba contrafáctica",
+            "💻 Claude, ChatGPT o Gemini"
           ]
         },
-        "dica": "Un buen prompt es como una instrucción de trabajo bien escrita: quién eres, qué quieres, qué formato esperas y qué se debe evitar. Entrena ese patrón hasta que se vuelva instinto."
+        "dica": "El sesgo no se ve leyendo una respuesta — se ve comparando respuestas. Si cambiar solo el nombre o el barrio cambia el resultado, la IA está usando esa variable como atajo para raza, género o clase. Guarda el registro de la prueba: es evidencia para pedir una revisión."
       },
       {
         "numero": 3,
