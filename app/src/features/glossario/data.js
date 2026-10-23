@@ -1,4 +1,7 @@
-// Gerado a partir de servidoras-no-comando/glossario.html (Drive)
+// Origem: servidoras-no-comando/glossario.html (Drive), via
+// .tmp-import/extract-glossario.cjs. Desde entao este arquivo foi editado a mao
+// (verbetes novos e correcoes) e virou a fonte oficial: NAO rode o extrator
+// de novo, ele apagaria essas edicoes. A versao em espanhol e data.es.js.
 // Linguagem adaptada para inclusiva.
 
 export const CATEGORIAS = {
@@ -25,7 +28,7 @@ export const TERMOS = [
     "name": "Agente",
     "cat": "ia",
     "mini": "Uma IA de conversa especializada por você, sem código",
-    "def": "Assistente montado a partir de uma IA de conversa: você escreve as instruções, conecta as fontes que ele pode consultar e ele passa a responder dentro desse escopo. Cada plataforma usa um nome — <strong>Gem</strong> no Gemini, <strong>GPT</strong> no ChatGPT, <strong>agente</strong> no Copilot — mas as peças são as mesmas: instruções, fontes de conhecimento, funcionalidades e prompts sugeridos.",
+    "def": "Assistente montado a partir de uma IA de conversa: você escreve as instruções, conecta as fontes que ele pode consultar e ele passa a responder dentro desse escopo. Cada plataforma usa um nome — <strong>agente</strong> no Copilot, <strong>GPT</strong> no ChatGPT, <strong>skill</strong> no Gemini (que substituiu o Gem a partir de novembro de 2026) — mas as peças são as mesmas: instruções, fontes de conhecimento, funcionalidades e prompts sugeridos.",
     "pronunc": "A-GEN-te",
     "example": "Criei um agente com o modelo de nota técnica do setor: agora ele já devolve o rascunho no formato certo."
   },
@@ -297,7 +300,7 @@ export const TERMOS = [
     "mini": "Família de modelos de linguagem da OpenAI",
     "def": "<strong>Generative Pre-trained Transformer</strong>. Tipo de modelo de IA treinado em grandes volumes de texto para gerar linguagem natural. Base do ChatGPT e de outros produtos.",
     "pronunc": "\"gê-pê-tê\"",
-    "example": "O ChatGPT é baseado no modelo GPT-4, treinado com textos da internet até 2023."
+    "example": "O ChatGPT funciona com modelos da família GPT, que a OpenAI troca por versões novas com frequência — por isso a mesma pergunta pode ter respostas diferentes de um mês para o outro."
   },
   {
     "letter": "H",

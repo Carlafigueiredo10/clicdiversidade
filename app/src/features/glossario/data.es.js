@@ -20,7 +20,7 @@ export const TERMOS = [
     "name": "Agente",
     "cat": "ia",
     "mini": "Una IA conversacional que especializas tú, sin código",
-    "def": "Asistente armado a partir de una IA conversacional: tú escribes las instrucciones, conectas las fuentes que puede consultar y pasa a responder dentro de ese alcance. Cada plataforma usa un nombre — <strong>Gem</strong> en Gemini, <strong>GPT</strong> en ChatGPT, <strong>agente</strong> en Copilot —, pero las piezas son las mismas: instrucciones, fuentes de conocimiento, funcionalidades y prompts sugeridos.",
+    "def": "Asistente armado a partir de una IA conversacional: tú escribes las instrucciones, conectas las fuentes que puede consultar y pasa a responder dentro de ese alcance. Cada plataforma usa un nombre — <strong>agente</strong> en Copilot, <strong>GPT</strong> en ChatGPT, <strong>skill</strong> en Gemini (que reemplazó al Gem a partir de noviembre de 2026) —, pero las piezas son las mismas: instrucciones, fuentes de conocimiento, funcionalidades y prompts sugeridos.",
     "pronunc": "a-GEN-te",
     "example": "Creé un agente con la plantilla de informe técnico del sector: ahora ya me devuelve el borrador en el formato correcto."
   },
@@ -301,7 +301,7 @@ export const TERMOS = [
     "mini": "Familia de modelos de lenguaje de OpenAI",
     "def": "<strong>Generative Pre-trained Transformer</strong> (transformador generativo preentrenado). Tipo de modelo de IA entrenado con grandes volúmenes de texto para generar lenguaje natural. Base de ChatGPT y de otros productos.",
     "pronunc": "\"ge-pe-TÉ\"",
-    "example": "ChatGPT se basa en el modelo GPT-4, entrenado con textos de internet hasta 2023."
+    "example": "ChatGPT funciona con modelos de la familia GPT, que OpenAI reemplaza por versiones nuevas con frecuencia — por eso la misma pregunta puede tener respuestas distintas de un mes a otro."
   },
   {
     "letter": "H",
