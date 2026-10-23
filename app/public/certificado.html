@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Certificado · CLIC_diversidade</title>
+  <!-- Versao em espanhol: certificado.es.html (mesma estrutura; ao editar aqui, atualizar la tambem). -->
+  <script src="/assets/clic-lang.js"></script>
+  <script>if(window.CLIC_LANG==='es')location.replace(location.pathname.replace(/\.html$/,'.es.html')+location.search+location.hash)</script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -360,7 +363,7 @@
 
     /* === Carga horária + competências === */
     .cert-creds{
-      position:absolute;top:548px;left:140px;right:140px;
+      position:absolute;top:536px;left:110px;right:110px;
       display:flex;gap:46px;align-items:flex-start;justify-content:center;
     }
     .cert-creds-label{
@@ -369,11 +372,13 @@
     }
     .cert-carga{text-align:center;flex-shrink:0;}
     .cert-carga-val{font-family:'Fraunces',serif;font-size:25px;font-weight:600;color:#f0ece2;}
-    .cert-comp{flex:1;max-width:640px;text-align:left;}
-    .cert-comp-list{list-style:none;display:flex;flex-wrap:wrap;gap:7px 20px;}
+    .cert-comp{flex:1;max-width:860px;text-align:left;}
+    /* 2 colunas fixas: em fluxo livre, 5 competencias (ou textos mais longos,
+       como na versao ES) invadiam a linha das assinaturas. */
+    .cert-comp-list{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:6px 26px;}
     .cert-comp-list li{
-      font-size:14px;color:rgba(240,236,226,.82);
-      position:relative;padding-left:15px;line-height:1.45;
+      font-size:13.5px;color:rgba(240,236,226,.82);
+      position:relative;padding-left:15px;line-height:1.4;
     }
     .cert-comp-list li::before{
       content:'';position:absolute;left:0;top:7px;width:6px;height:6px;border-radius:50%;
@@ -682,7 +687,17 @@
     const agora = new Date();
     const hoje = agora.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
 
-    document.getElementById('certNome').textContent = nome;
+    const nomeEl = document.getElementById('certNome');
+    nomeEl.textContent = nome;
+    // Nome longo (comum com dois sobrenomes) quebrava em 2 linhas e invadia as
+    // competencias: reduz a fonte ate caber numa linha so.
+    nomeEl.style.whiteSpace = 'nowrap';
+    let tamanho = 64;
+    nomeEl.style.fontSize = tamanho + 'px';
+    while (nomeEl.scrollWidth > nomeEl.parentElement.clientWidth && tamanho > 30) {
+      tamanho -= 2;
+      nomeEl.style.fontSize = tamanho + 'px';
+    }
     document.getElementById('certData').textContent = hoje;
     document.getElementById('certCodigoTxt').textContent = 'CÓD. ' + codigoDisplay;
 

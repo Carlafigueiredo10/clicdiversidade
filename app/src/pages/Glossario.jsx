@@ -1,15 +1,36 @@
 import { useMemo, useState } from 'react'
-import { CATEGORIAS, TERMOS } from '../features/glossario/data'
+import { CATEGORIAS, TERMOS } from '../features/glossario'
+import { LANG, tr } from '../i18n'
+
+const T = tr({
+  pt: {
+    todos: 'Todos', eyebrow: '📖 Vocabulário Digital', titulo: ['Soletrando', 'Tecnologia'],
+    intro: 'O vocabulário mínimo para entrar em qualquer conversa sobre tecnologia sem se perder. Definição simples, como se fala e como usar numa frase.',
+    termos: 'Termos', categorias: 'Categorias', ordenados: 'Ordenados',
+    buscaPh: 'Buscar termo... ex: algoritmo, API, nuvem', buscaAria: 'Buscar termo', pular: 'Pular para letra',
+    termo: 'termo', termosMin: 'termos', para: 'para', em: 'em',
+    nenhum: 'Nenhum termo encontrado.', limpar: 'Limpar filtros →', voltar: '← Voltar à jornada',
+  },
+  es: {
+    todos: 'Todos', eyebrow: '📖 Vocabulario Digital', titulo: ['Deletreando la', 'Tecnología'],
+    intro: 'El vocabulario mínimo para entrar en cualquier conversación sobre tecnología sin perderte. Definición simple, cómo se pronuncia y cómo usarlo en una frase.',
+    termos: 'Términos', categorias: 'Categorías', ordenados: 'Ordenados',
+    buscaPh: 'Buscar término... ej.: algoritmo, API, nube', buscaAria: 'Buscar término', pular: 'Ir a la letra',
+    termo: 'término', termosMin: 'términos', para: 'para', em: 'en',
+    nenhum: 'No se encontró ningún término.', limpar: 'Limpiar filtros →', voltar: '← Volver al recorrido',
+  },
+})
 
 const FILTER_OPTIONS = [
-  { value: 'all', label: 'Todos' },
+  { value: 'all', label: T.todos },
   ...Object.entries(CATEGORIAS).map(([value, { label, icon }]) => ({
     value,
     label: `${icon} ${label}`,
   })),
 ]
 
-const ALFABETO = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
+// Em espanhol o alfabeto tem o Ñ, depois do N.
+const ALFABETO = (LANG === 'es' ? 'ABCDEFGHIJKLMNÑOPQRSTUVWXYZ' : 'ABCDEFGHIJKLMNOPQRSTUVWXYZ').split('')
 
 function normalize(s) {
   return s
@@ -52,7 +73,7 @@ export default function Glossario() {
       if (!map.has(t.letter)) map.set(t.letter, [])
       map.get(t.letter).push(t)
     }
-    return [...map.entries()].sort((a, b) => a[0].localeCompare(b[0]))
+    return [...map.entries()].sort((a, b) => a[0].localeCompare(b[0], LANG))
   }, [filtered])
 
   const usedLetters = new Set(grouped.map(([l]) => l))
@@ -67,17 +88,15 @@ export default function Glossario() {
       <div className="mx-auto max-w-4xl">
         {/* Hero */}
         <p className="text-xs tracking-[0.25em] uppercase text-accent-fg font-semibold text-center">
-          📖 Vocabulário Digital
+          {T.eyebrow}
         </p>
         <h1 className="mt-6 font-display font-semibold text-4xl md:text-6xl text-ink text-center leading-[1.05]">
-          Soletrando
+          {T.titulo[0]}
           <br />
-          <span className="italic text-accent-fg">Tecnologia</span>
+          <span className="italic text-accent-fg">{T.titulo[1]}</span>
         </h1>
         <p className="mt-6 max-w-2xl mx-auto text-center text-ink-soft text-base md:text-lg leading-relaxed">
-          O vocabulário mínimo para entrar em qualquer conversa sobre
-          tecnologia sem se perder. Definição simples, como se fala e como usar
-          numa frase.
+          {T.intro}
         </p>
 
         <div className="mt-10 grid grid-cols-3 gap-3 max-w-md mx-auto">
@@ -86,7 +105,7 @@ export default function Glossario() {
               {TERMOS.length}
             </div>
             <div className="text-[10px] uppercase tracking-wider text-muted mt-1">
-              Termos
+              {T.termos}
             </div>
           </div>
           <div className="bg-card border border-line rounded-2xl p-4 text-center">
@@ -94,7 +113,7 @@ export default function Glossario() {
               {Object.keys(CATEGORIAS).length}
             </div>
             <div className="text-[10px] uppercase tracking-wider text-muted mt-1">
-              Categorias
+              {T.categorias}
             </div>
           </div>
           <div className="bg-card border border-line rounded-2xl p-4 text-center">
@@ -102,7 +121,7 @@ export default function Glossario() {
               A→Z
             </div>
             <div className="text-[10px] uppercase tracking-wider text-muted mt-1">
-              Ordenados
+              {T.ordenados}
             </div>
           </div>
         </div>
@@ -113,8 +132,8 @@ export default function Glossario() {
             type="search"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Buscar termo... ex: algoritmo, API, nuvem"
-            aria-label="Buscar termo"
+            placeholder={T.buscaPh}
+            aria-label={T.buscaAria}
             className="w-full bg-card border border-line rounded-xl pl-11 pr-4 py-3 text-ink placeholder:text-muted focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition"
           />
           <svg
@@ -151,7 +170,7 @@ export default function Glossario() {
         {/* Alfabeto */}
         <nav
           className="mt-8 flex flex-wrap gap-1 justify-center"
-          aria-label="Pular para letra"
+          aria-label={T.pular}
         >
           {ALFABETO.map((L) =>
             usedLetters.has(L) ? (
@@ -176,9 +195,9 @@ export default function Glossario() {
 
         {/* Contador */}
         <p className="mt-8 text-center text-sm text-muted">
-          {filtered.length} {filtered.length === 1 ? 'termo' : 'termos'}
-          {search && ` para "${search}"`}
-          {cat !== 'all' && ` em ${CATEGORIAS[cat].label}`}
+          {filtered.length} {filtered.length === 1 ? T.termo : T.termosMin}
+          {search && ` ${T.para} "${search}"`}
+          {cat !== 'all' && ` ${T.em} ${CATEGORIAS[cat].label}`}
         </p>
 
         {/* Listagem agrupada */}
@@ -266,13 +285,13 @@ export default function Glossario() {
             <span aria-hidden className="text-4xl">
               🔍
             </span>
-            <p className="mt-3 text-ink-soft">Nenhum termo encontrado.</p>
+            <p className="mt-3 text-ink-soft">{T.nenhum}</p>
             <button
               type="button"
               onClick={limparFiltros}
               className="mt-4 text-sm text-accent-fg font-medium hover:opacity-70"
             >
-              Limpar filtros →
+              {T.limpar}
             </button>
           </div>
         )}
@@ -282,7 +301,7 @@ export default function Glossario() {
             href="/jornada/"
             className="rounded-full border border-line px-6 py-3 text-sm text-ink-soft hover:bg-card transition"
           >
-            ← Voltar à jornada
+            {T.voltar}
           </a>
         </div>
       </div>

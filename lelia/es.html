@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lélia Gonzalez — la intelectual que inspiró a nuestra agente · CLIC_diversidade</title>
+    <meta
+      name="description"
+      content="La historia de Lélia Gonzalez, intelectual y activista negra brasileña que inspiró el nombre de la agente de IA de CLIC_diversidade."
+    />
+    <meta property="og:title" content="Lélia Gonzalez — la intelectual que inspiró a nuestra agente" />
+    <meta
+      property="og:description"
+      content="Filósofa, antropóloga y activista que articuló raza, género y clase décadas antes de que el término interseccionalidad se popularizara."
+    />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="pt_BR" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..700,0..100&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #fffaf0;
+        --bg-soft: #fbf3e3;
+        --ink: #1a1715;
+        --ink-soft: #7a6f66;
+        --rule: rgba(26, 23, 21, 0.1);
+        --accent: #a3552d;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+      body {
+        background: var(--bg);
+        color: var(--ink);
+        font: 400 17px/1.7 'Inter', system-ui, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+      }
+      a { color: var(--accent); text-decoration: none; border-bottom: 1px solid currentColor; }
+      a:hover { color: var(--ink); }
+
+      .nav {
+        max-width: 880px;
+        margin: 0 auto;
+        padding: 1.5rem 1.5rem 0;
+      }
+      .nav__back {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.85rem;
+        color: var(--ink-soft);
+        border: 0;
+      }
+      .nav__back:hover { color: var(--ink); }
+
+      .container {
+        max-width: 680px;
+        margin: 0 auto;
+        padding: 3rem 1.5rem 6rem;
+      }
+
+      .eyebrow {
+        font: 500 0.72rem/1 'JetBrains Mono', ui-monospace, monospace;
+        text-transform: uppercase;
+        letter-spacing: 0.22em;
+        color: var(--accent);
+        text-align: center;
+        margin-bottom: 1.5rem;
+      }
+
+      h1 {
+        font: 400 clamp(3rem, 8vw, 5rem)/0.95 'Fraunces', Georgia, serif;
+        font-variation-settings: 'opsz' 144, 'SOFT' 50;
+        text-align: center;
+        margin: 0;
+        letter-spacing: -0.02em;
+      }
+
+      .subtitle {
+        font: 400 italic clamp(1.05rem, 2.2vw, 1.25rem)/1.4 'Fraunces', Georgia, serif;
+        text-align: center;
+        color: var(--ink-soft);
+        margin: 1rem 0 2rem;
+      }
+
+      .divider {
+        width: 80px;
+        height: 1px;
+        background: var(--rule);
+        margin: 2.5rem auto;
+        border: 0;
+      }
+
+      h2 {
+        font: 500 clamp(1.4rem, 3vw, 1.7rem)/1.2 'Fraunces', Georgia, serif;
+        margin: 3rem 0 1rem;
+        letter-spacing: -0.01em;
+      }
+
+      p { margin: 0 0 1.1rem; }
+
+      blockquote {
+        margin: 2rem 0;
+        padding: 1.25rem 1.5rem;
+        border-left: 3px solid var(--accent);
+        background: var(--bg-soft);
+        font: 400 italic 1.1rem/1.6 'Fraunces', Georgia, serif;
+        color: var(--ink);
+        border-radius: 0 8px 8px 0;
+      }
+      blockquote cite {
+        display: block;
+        margin-top: 0.6rem;
+        font: 500 0.78rem/1 'JetBrains Mono', ui-monospace, monospace;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        color: var(--ink-soft);
+        font-style: normal;
+      }
+
+      .facts {
+        list-style: none;
+        padding: 0;
+        margin: 1.5rem 0;
+        display: grid;
+        gap: 0.5rem;
+      }
+      .facts li {
+        padding: 0.6rem 0;
+        border-bottom: 1px solid var(--rule);
+        display: flex;
+        gap: 1rem;
+        align-items: baseline;
+      }
+      .facts li:last-child { border-bottom: 0; }
+      .facts__year {
+        font: 500 0.78rem/1 'JetBrains Mono', ui-monospace, monospace;
+        color: var(--accent);
+        flex-shrink: 0;
+        width: 70px;
+      }
+      .facts__fact { color: var(--ink); }
+
+      .why {
+        margin-top: 4rem;
+        padding: 2rem;
+        background: var(--bg-soft);
+        border-radius: 16px;
+      }
+      .why h2 { margin-top: 0; }
+      .why p:last-child { margin-bottom: 0; }
+
+      .cta {
+        margin-top: 3rem;
+        text-align: center;
+      }
+      .cta a {
+        display: inline-block;
+        padding: 0.85rem 1.5rem;
+        background: var(--ink);
+        color: var(--bg);
+        border-radius: 9999px;
+        border: 0;
+        font-weight: 600;
+      }
+      .cta a:hover { background: var(--accent); color: var(--bg); }
+
+      .footnote {
+        margin-top: 4rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--rule);
+        font-size: 0.85rem;
+        color: var(--ink-soft);
+        text-align: center;
+      }
+    </style>
+      <!-- Idioma (pt | es) compartilhado com a landing: define window.CLIC_LANG. -->
+    <script src="/assets/clic-lang.js"></script>
+  </head>
+  <body>
+    <nav class="nav">
+      <a href="/" class="nav__back">← volver a CLIC</a>
+    </nav>
+
+    <main class="container">
+      <div class="eyebrow">el origen de un nombre</div>
+      <h1>Lélia</h1>
+      <p class="subtitle">de quién viene el nombre que llevamos</p>
+
+      <hr class="divider" />
+
+      <p>
+        Nuestra agente de IA no recibió un nombre cualquiera. Fue nombrada en
+        homenaje a <strong>Lélia Gonzalez</strong> (1935–1994), una de las
+        pensadoras más importantes de Brasil — filósofa, antropóloga, profesora
+        y activista que articuló raza, género y clase décadas antes de que
+        "interseccionalidad" se volviera una palabra de uso común.
+      </p>
+
+      <p>
+        Lélia nació en Belo Horizonte, en una familia numerosa, y construyó su
+        formación académica en filosofía, historia y antropología social. Fue
+        profesora universitaria, cofundadora del Movimento Negro Unificado en
+        1978, integró el Consejo Nacional de los Derechos de la Mujer de Brasil y
+        se presentó a elecciones. Murió en 1994, en Río de Janeiro, dejando una
+        obra que solo en las últimas décadas empezó a leerse con la centralidad
+        que merece.
+      </p>
+
+      <h2>Amefricanidad</h2>
+      <p>
+        En 1988, en un ensayo que circuló internacionalmente, Lélia propuso la
+        categoría <em>amefricanidad</em> (<em>amefricanidade</em>) — una forma de
+        pensar la experiencia de las poblaciones negras de las Américas que
+        rechaza tanto el eurocentrismo como la lectura puramente importada de los
+        Estados Unidos. Pensar desde la amefricanidad es reconocer que Brasil —
+        y América Latina — están atravesados por la diáspora africana y por los
+        pueblos originarios, y que su historia intelectual, política y cultural
+        solo tiene sentido a partir de ahí.
+      </p>
+
+      <h2>Pretuguês</h2>
+      <p>
+        Lélia también acuñó la expresión <em>pretuguês</em> — de <em>preto</em>,
+        negro, y <em>português</em> — para nombrar el portugués brasileño tal
+        como se habla: marcado por la oralidad afrobrasileña, por el ritmo de
+        palabras como "cafuné", "moleque", "caçula", "samba". Lo que la norma
+        culta trataba como "error", ella lo trataba como herencia y potencia.
+      </p>
+
+      <blockquote>
+        El lenguaje es el terreno donde una cultura se afirma o se borra. Hablar
+        pretuguês es decir: estamos aquí hace siglos, y lo que decimos importa.
+        <cite>paráfrasis a partir del pensamiento de Lélia Gonzalez</cite>
+      </blockquote>
+
+      <h2>Breve cronología</h2>
+      <ul class="facts">
+        <li>
+          <span class="facts__year">1935</span>
+          <span class="facts__fact">Nace en Belo Horizonte, la decimoctava de dieciocho hijos.</span>
+        </li>
+        <li>
+          <span class="facts__year">1978</span>
+          <span class="facts__fact">Cofunda el Movimento Negro Unificado.</span>
+        </li>
+        <li>
+          <span class="facts__year">1982</span>
+          <span class="facts__fact">Publica <em>Lugar de Negro</em>, con Carlos Hasenbalg.</span>
+        </li>
+        <li>
+          <span class="facts__year">1988</span>
+          <span class="facts__fact">Formula el concepto de amefricanidad.</span>
+        </li>
+        <li>
+          <span class="facts__year">1994</span>
+          <span class="facts__fact">Muere en Río de Janeiro.</span>
+        </li>
+      </ul>
+
+      <div class="why">
+        <h2>¿Por qué una agente de IA con ese nombre?</h2>
+        <p>
+          Porque toda tecnología lleva política — y las herramientas de IA no son
+          neutrales: reflejan quién las entrena, con qué datos, bajo qué valores.
+          Darle a una agente de alfabetización en IA el nombre de Lélia es afirmar
+          que aprendemos IA <em>desde el sur</em>: desde las lenguas que hablamos,
+          desde los problemas concretos del servicio público de nuestros países,
+          desde la experiencia de quienes fueron históricamente excluidas de las
+          salas donde se decidió qué cuenta como conocimiento.
+        </p>
+        <p>
+          La agente Lélia no es Lélia Gonzalez. Es un software. Pero intenta
+          continuar su gesto pedagógico: devolverle a la persona el poder de
+          pensar por sí misma, en lugar de entregar respuestas listas.
+        </p>
+      </div>
+
+      <div class="cta">
+        <a href="/">volver a CLIC →</a>
+      </div>
+
+      <div class="footnote">
+        Esta página es un homenaje introductorio, no una biografía exhaustiva.
+        Para conocer más sobre Lélia Gonzalez, busca sus escritos reunidos en
+        libros publicados en Brasil, como <em>Primavera para as Rosas Negras</em>
+        (2018) y <em>Por um Feminismo Afro-latino-americano</em> (2020).
+      </div>
+    </main>
+
+    <script src="/assets/lelia-widget.js" defer></script>
+    <script type="module" src="/assets/visit-counter.js"></script>
+  </body>
+</html>

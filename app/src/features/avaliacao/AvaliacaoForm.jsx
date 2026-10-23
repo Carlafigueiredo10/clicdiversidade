@@ -1,5 +1,45 @@
 import { useState } from 'react'
 import { enviarAvaliacao } from '../../services/avaliacoes'
+import { tr } from '../../i18n'
+
+// Valores gravados no Firestore (notas, true/false, textos livres) sao os
+// mesmos nos dois idiomas; so os rotulos mudam.
+const T = tr({
+  pt: {
+    sim: 'Sim', nao: 'Não', opcional: ' · opcional',
+    erro: 'Não foi possível enviar agora. Tente novamente em alguns segundos.',
+    enviada: 'Avaliação enviada. Obrigada!', ajuda: 'Sua resposta ajuda a desenhar as próximas oficinas.',
+    grupoTexto: 'A conversa continua no grupo do programa — trocas, dúvidas e avisos das próximas oficinas.',
+    grupoCta: 'Entrar no grupo do WhatsApp ↗',
+    notaGeral: 'Nota geral da oficina', notaGeralAria: 'Nota geral da oficina, de 1 a 5',
+    conteudo: 'O conteúdo ajudou no seu trabalho?', conteudoAria: 'O conteúdo ajudou no seu trabalho, nota de 1 a 5',
+    funcionou: 'O que mais funcionou?', funcionouPh: 'O que você levou de mais valioso da oficina.',
+    melhorar: 'O que poderia melhorar?', melhorarPh: 'Ritmo, exemplos, duração, sala — o que você ajustaria.',
+    recomenda: 'Recomendaria a oficina?',
+    assunto: 'Sugestão de assunto para a próxima oficina', assuntoPh: 'Que tema você gostaria de ver numa próxima edição.',
+    nomeOrgao: 'Nome e órgão', nomePh: 'Seu nome', nomeAria: 'Seu nome (opcional)',
+    orgaoPh: 'Órgão / instituição', orgaoAria: 'Órgão ou instituição (opcional)',
+    deNota: 'Dê ao menos a nota geral', pronto: 'Pronto para enviar',
+    enviando: 'Enviando…', enviar: 'Enviar avaliação',
+  },
+  es: {
+    sim: 'Sí', nao: 'No', opcional: ' · opcional',
+    erro: 'No fue posible enviar en este momento. Inténtalo de nuevo en unos segundos.',
+    enviada: 'Evaluación enviada. ¡Gracias!', ajuda: 'Tu respuesta ayuda a diseñar los próximos talleres.',
+    grupoTexto: 'La conversación sigue en el grupo del programa — intercambios, dudas y avisos de los próximos talleres. El grupo es en portugués.',
+    grupoCta: 'Entrar al grupo de WhatsApp (en portugués) ↗',
+    notaGeral: 'Nota general del taller', notaGeralAria: 'Nota general del taller, de 1 a 5',
+    conteudo: '¿El contenido te ayudó en tu trabajo?', conteudoAria: 'El contenido te ayudó en tu trabajo, nota de 1 a 5',
+    funcionou: '¿Qué funcionó mejor?', funcionouPh: 'Lo más valioso que te llevaste del taller.',
+    melhorar: '¿Qué se podría mejorar?', melhorarPh: 'Ritmo, ejemplos, duración, sala — qué ajustarías.',
+    recomenda: '¿Recomendarías el taller?',
+    assunto: 'Sugerencia de tema para el próximo taller', assuntoPh: 'Qué tema te gustaría ver en una próxima edición.',
+    nomeOrgao: 'Nombre y organismo', nomePh: 'Tu nombre', nomeAria: 'Tu nombre (opcional)',
+    orgaoPh: 'Organismo / institución', orgaoAria: 'Organismo o institución (opcional)',
+    deNota: 'Pon al menos la nota general', pronto: 'Listo para enviar',
+    enviando: 'Enviando…', enviar: 'Enviar evaluación',
+  },
+})
 
 const MAX = 2000
 
@@ -48,7 +88,7 @@ function SimNao({ value, onChange }) {
             : ' border-line text-ink-soft hover:text-ink')
         }
       >
-        Sim
+        {T.sim}
       </button>
       <button
         type="button"
@@ -61,7 +101,7 @@ function SimNao({ value, onChange }) {
             : ' border-line text-ink-soft hover:text-ink')
         }
       >
-        Não
+        {T.nao}
       </button>
     </div>
   )
@@ -75,7 +115,7 @@ function Campo({ label, obrigatorio, children }) {
         {obrigatorio ? (
           <span className="text-accent-fg"> *</span>
         ) : (
-          <span className="text-muted font-normal"> · opcional</span>
+          <span className="text-muted font-normal">{T.opcional}</span>
         )}
       </label>
       {children}
@@ -123,9 +163,7 @@ export default function AvaliacaoForm() {
       setEnviado(true)
     } catch (err) {
       console.error(err)
-      setErro(
-        'Não foi possível enviar agora. Tente novamente em alguns segundos.',
-      )
+      setErro(T.erro)
     } finally {
       setEnviando(false)
     }
@@ -138,16 +176,15 @@ export default function AvaliacaoForm() {
           💜
         </span>
         <h3 className="mt-3 font-display font-semibold text-xl text-ink">
-          Avaliação enviada. Obrigada!
+          {T.enviada}
         </h3>
         <p className="mt-2 text-sm text-ink-soft">
-          Sua resposta ajuda a desenhar as próximas oficinas.
+          {T.ajuda}
         </p>
 
         <div className="mt-8 pt-6 border-t border-line">
           <p className="text-sm text-ink-soft leading-relaxed max-w-sm mx-auto">
-            A conversa continua no grupo do programa — trocas, dúvidas e avisos
-            das próximas oficinas.
+            {T.grupoTexto}
           </p>
           <a
             href="https://chat.whatsapp.com/Fto3ZuFagxrEF5EBRfUpIN"
@@ -155,7 +192,7 @@ export default function AvaliacaoForm() {
             rel="noopener noreferrer"
             className="mt-4 inline-block rounded-full bg-emerald-600 text-white px-7 py-3 text-sm font-medium hover:bg-emerald-700 transition"
           >
-            Entrar no grupo do WhatsApp ↗
+            {T.grupoCta}
           </a>
         </div>
       </div>
@@ -167,68 +204,68 @@ export default function AvaliacaoForm() {
       onSubmit={handleSubmit}
       className="bg-card border border-line rounded-2xl p-6 md:p-8 space-y-7"
     >
-      <Campo label="Nota geral da oficina" obrigatorio>
+      <Campo label={T.notaGeral} obrigatorio>
         <Nota
           value={form.nota_geral}
           onChange={set('nota_geral')}
-          ariaLabel="Nota geral da oficina, de 1 a 5"
+          ariaLabel={T.notaGeralAria}
         />
       </Campo>
 
-      <Campo label="O conteúdo ajudou no seu trabalho?">
+      <Campo label={T.conteudo}>
         <Nota
           value={form.nota_conteudo}
           onChange={set('nota_conteudo')}
-          ariaLabel="O conteúdo ajudou no seu trabalho, nota de 1 a 5"
+          ariaLabel={T.conteudoAria}
         />
       </Campo>
 
-      <Campo label="O que mais funcionou?">
+      <Campo label={T.funcionou}>
         <textarea
           value={form.funcionou}
           onChange={(e) => set('funcionou')(e.target.value)}
           rows={3}
           maxLength={MAX}
-          placeholder="O que você levou de mais valioso da oficina."
+          placeholder={T.funcionouPh}
           className={textareaCls}
         />
       </Campo>
 
-      <Campo label="O que poderia melhorar?">
+      <Campo label={T.melhorar}>
         <textarea
           value={form.melhorar}
           onChange={(e) => set('melhorar')(e.target.value)}
           rows={3}
           maxLength={MAX}
-          placeholder="Ritmo, exemplos, duração, sala — o que você ajustaria."
+          placeholder={T.melhorarPh}
           className={textareaCls}
         />
       </Campo>
 
-      <Campo label="Recomendaria a oficina?">
+      <Campo label={T.recomenda}>
         <SimNao value={form.recomenda} onChange={set('recomenda')} />
       </Campo>
 
-      <Campo label="Sugestão de assunto para a próxima oficina">
+      <Campo label={T.assunto}>
         <textarea
           value={form.assunto_proximo}
           onChange={(e) => set('assunto_proximo')(e.target.value)}
           rows={2}
           maxLength={MAX}
-          placeholder="Que tema você gostaria de ver numa próxima edição."
+          placeholder={T.assuntoPh}
           className={textareaCls}
         />
       </Campo>
 
-      <Campo label="Nome e órgão">
+      <Campo label={T.nomeOrgao}>
         <div className="grid gap-3 sm:grid-cols-2">
           <input
             type="text"
             value={form.nome}
             onChange={(e) => set('nome')(e.target.value)}
             maxLength={200}
-            placeholder="Seu nome"
-            aria-label="Seu nome (opcional)"
+            placeholder={T.nomePh}
+            aria-label={T.nomeAria}
             className={inputCls}
           />
           <input
@@ -236,8 +273,8 @@ export default function AvaliacaoForm() {
             value={form.orgao}
             onChange={(e) => set('orgao')(e.target.value)}
             maxLength={200}
-            placeholder="Órgão / instituição"
-            aria-label="Órgão ou instituição (opcional)"
+            placeholder={T.orgaoPh}
+            aria-label={T.orgaoAria}
             className={inputCls}
           />
         </div>
@@ -252,15 +289,15 @@ export default function AvaliacaoForm() {
       <div className="flex items-center justify-between gap-4 pt-1">
         <span className="text-xs text-muted">
           {form.nota_geral == null
-            ? 'Dê ao menos a nota geral'
-            : 'Pronto para enviar'}
+            ? T.deNota
+            : T.pronto}
         </span>
         <button
           type="submit"
           disabled={!podeEnviar}
           className="rounded-full bg-ink text-page px-7 py-3 text-sm font-medium hover:opacity-90 transition disabled:opacity-40 disabled:cursor-not-allowed"
         >
-          {enviando ? 'Enviando…' : 'Enviar avaliação'}
+          {enviando ? T.enviando : T.enviar}
         </button>
       </div>
     </form>
