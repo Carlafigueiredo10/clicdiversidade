@@ -1,45 +1,34 @@
 import { Link } from 'react-router-dom'
 import Tabs from '../../features/modulos/Tabs'
-import AgentesConceitos from '../../features/modulos/criando-assistente/AgentesConceitos'
-import GuiaCopilot from '../../features/modulos/criando-assistente/GuiaCopilot'
-import GuiaAgentes from '../../features/modulos/criando-assistente/GuiaAgentes'
-import TemplateAgenteAdmin from '../../features/modulos/criando-assistente/TemplateAgenteAdmin'
-import TemplateAgenteContraditorio from '../../features/modulos/criando-assistente/TemplateAgenteContraditorio'
-import TemplateAgenteAuditor from '../../features/modulos/criando-assistente/TemplateAgenteAuditor'
+import Escada from '../../features/modulos/criando-assistente/Escada'
+import Catalogo from '../../features/modulos/criando-assistente/Catalogo'
+import { tr } from '../../i18n'
+
+// Modulo 07 "Ensinando a IA a trabalhar do seu jeito — Alem do chat".
+// Rota mantida (/modulos/criando-assistente) para nao quebrar links antigos.
+// O passo a passo de Copilot saiu daqui: mora no CLIC Prisma (card 10).
+const T = tr({
+  pt: {
+    voltar: '← Voltar aos módulos',
+    eyebrow: 'Módulo 07 · Além do chat',
+    titulo: ['Ensinando a IA a', 'trabalhar do seu jeito'],
+    intro:
+      'Projeto, assistente, skill e conector: quatro formas de parar de reexplicar tudo a cada conversa. Passo a passo no Gemini, com instruções que funcionam em qualquer IA.',
+    abas: ['A escada', 'O catálogo'],
+  },
+  es: {
+    voltar: '← Volver a los módulos',
+    eyebrow: 'Módulo 07 · Más allá del chat',
+    titulo: ['Enseñarle a la IA a', 'trabajar a tu manera'],
+    intro:
+      'Proyecto, asistente, skill y conector: cuatro formas de dejar de explicarlo todo en cada conversación. Paso a paso en Gemini, con instrucciones que funcionan en cualquier IA.',
+    abas: ['La escalera', 'El catálogo'],
+  },
+})
 
 const TABS = [
-  {
-    id: 'conceitos',
-    label: 'O que é um agente',
-    render: () => <AgentesConceitos />,
-  },
-  {
-    id: 'agentes',
-    label: 'Passo a passo pra agentes',
-    render: () => (
-      <div className="space-y-16">
-        <GuiaAgentes />
-        <div id="passo-a-passo-copilot" className="scroll-mt-24 pt-12 border-t border-line">
-          <GuiaCopilot />
-        </div>
-      </div>
-    ),
-  },
-  {
-    id: 'template-admin',
-    label: 'Template Agente Admin',
-    render: () => <TemplateAgenteAdmin />,
-  },
-  {
-    id: 'template-contraditorio',
-    label: 'Template Debatedor Crítico',
-    render: () => <TemplateAgenteContraditorio />,
-  },
-  {
-    id: 'template-auditor',
-    label: 'Template Auditor de Equidade',
-    render: () => <TemplateAgenteAuditor />,
-  },
+  { id: 'escada', label: T.abas[0], render: () => <Escada /> },
+  { id: 'catalogo', label: T.abas[1], render: () => <Catalogo /> },
 ]
 
 export default function CriandoAssistente() {
@@ -50,19 +39,20 @@ export default function CriandoAssistente() {
           to="/#modulos"
           className="inline-flex items-center gap-2 text-sm text-ink-soft hover:text-ink transition"
         >
-          ← Voltar aos módulos
+          {T.voltar}
         </Link>
 
         <div className="mt-8 text-center">
           <p className="text-xs tracking-[0.25em] uppercase text-accent-fg font-semibold">
-            Módulo 07
+            {T.eyebrow}
           </p>
           <h1 className="mt-4 font-display font-semibold text-3xl md:text-5xl text-ink leading-[1.05]">
-            Criando um Assistente
+            {T.titulo[0]}
+            <br />
+            <span className="italic text-accent-fg">{T.titulo[1]}</span>
           </h1>
           <p className="mt-4 max-w-xl mx-auto text-ink-soft text-sm md:text-base leading-relaxed">
-            Do prompt ao assistente que fica: entenda, construa no Copilot e use
-            templates prontos.
+            {T.intro}
           </p>
         </div>
 

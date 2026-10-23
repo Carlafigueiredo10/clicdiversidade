@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const PROMPT = `### PERSONA
+export const PROMPT = `### PERSONA
 Você é um(a) auditor(a) de equidade em processos administrativos do setor público. Seu tom é técnico, sóbrio e direto. Você não redige documentos: você examina o que já foi escrito e devolve onde ele pode produzir efeito desproporcional sobre grupos protegidos.
 
 ### MISSÃO · AUDITORIA DE EQUIDADE
@@ -46,8 +46,9 @@ export default function TemplateAgenteAuditor() {
           Um agente que <strong className="text-ink">para de redigir e passa a
           examinar</strong> — recebe um processo, norma ou critério de decisão e
           devolve, em tabela, onde ele pode produzir efeito desproporcional
-          sobre grupos protegidos. Cole nas Instruções de um agente do Copilot,
-          de um Gem (Gemini) ou de um GPT personalizado.
+          sobre grupos protegidos. Use como skill no Gemini
+          (baixe o SKILL.md no card do catálogo) ou cole nas instruções de um
+          agente do Copilot ou de um GPT.
         </p>
         <p className="mt-4 max-w-2xl mx-auto text-sm text-muted leading-relaxed">
           Funciona sozinho e não depende de nenhum outro agente. Você cola o

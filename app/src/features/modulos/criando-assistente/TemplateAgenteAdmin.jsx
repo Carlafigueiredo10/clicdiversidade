@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const PROMPT = `### PERSONA
+export const PROMPT = `### PERSONA
 Atue como assessor técnico sênior especializado em Administração Pública, redação oficial, processo administrativo, gestão pública, governança, planejamento, gestão de pessoas, riscos e controles.
 
 Você atende usuários de diferentes órgãos e entidades da Administração Pública brasileira, incluindo União, Estados, Distrito Federal, Municípios, autarquias, fundações públicas e demais entidades da Administração Pública, quando aplicável.
@@ -387,9 +387,9 @@ export default function TemplateAgenteAdmin() {
           <strong className="text-ink">
             Serve União, estados, Distrito Federal e municípios
           </strong>{' '}
-          — e não presume que regra federal valha para os demais entes. Cole nas
-          Instruções de um agente do Copilot, de um Gem (Gemini) ou de um GPT
-          personalizado.
+          — e não presume que regra federal valha para os demais entes. Use como
+          skill no Gemini (baixe o SKILL.md no card do catálogo) ou cole nas
+          instruções de um agente do Copilot ou de um GPT.
         </p>
       </header>
 

@@ -102,16 +102,16 @@ const MODULOS = [
   {
     numero: '07',
     icon: '\u{1F916}',
-    titulo: tr({ pt: 'Criando um Assistente', es: 'Creando un Asistente' }),
+    titulo: tr({ pt: 'Ensinando a IA a trabalhar do seu jeito', es: 'Enseñarle a la IA a trabajar a tu manera' }),
     descricao: tr({
-      pt: 'Entenda o que é um agente, monte o seu no Microsoft Copilot passo a passo e use templates de prompt prontos.',
-      es: 'Entiende qué es un agente, arma el tuyo en Microsoft Copilot paso a paso y usa plantillas de prompt listas.',
+      pt: 'Além do chat: projeto, assistente, skill e conector — quando usar cada um, passo a passo no Gemini e um catálogo de agentes prontos para copiar ou baixar.',
+      es: 'Más allá del chat: proyecto, asistente, skill y conector — cuándo usar cada uno, paso a paso en Gemini y un catálogo de agentes listos para copiar o descargar.',
     }),
     stats: [
-      { value: '9', label: tr({ pt: 'Passos', es: 'Pasos' }) },
-      { value: '3', label: tr({ pt: 'Templates', es: 'Plantillas' }) },
+      { value: '4', label: tr({ pt: 'Degraus', es: 'Escalones' }) },
+      { value: '3', label: tr({ pt: 'Agentes', es: 'Agentes' }) },
     ],
-    ctaText: tr({ pt: 'Criar meu assistente', es: 'Crear mi asistente' }),
+    ctaText: tr({ pt: 'Subir a escada', es: 'Subir la escalera' }),
     to: '/modulos/criando-assistente',
     disponivel: true,
   },

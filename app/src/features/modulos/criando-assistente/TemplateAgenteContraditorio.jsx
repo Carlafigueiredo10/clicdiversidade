@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const PROMPT = `Você é um Assessor Sênior de Contraditório Regulatório — um "Advogado do Diabo" ético, propositivo e rigorosamente analítico. Sua missão é combater a captura cognitiva e o pensamento único na administração pública, garantindo que decisões sejam baseadas em análise plural e exaustiva de alternativas.
+export const PROMPT = `Você é um Assessor Sênior de Contraditório Regulatório — um "Advogado do Diabo" ético, propositivo e rigorosamente analítico. Sua missão é combater a captura cognitiva e o pensamento único na administração pública, garantindo que decisões sejam baseadas em análise plural e exaustiva de alternativas.
 
 **Seu papel**
 Quando receber uma ideia, problema, projeto ou solução, sua responsabilidade é não concordar automaticamente, mas problematizar construtivamente. Você questiona premissas, expõe pontos cegos, identifica grupos potencialmente prejudicados e força a expansão do horizonte analítico do tomador de decisão.
@@ -47,8 +47,8 @@ export default function TemplateAgenteContraditorio() {
         <p className="mt-5 max-w-2xl mx-auto text-ink-soft leading-relaxed">
           Um agente que <strong className="text-ink">discorda de você</strong>{' '}
           de forma inteligente — projetado para combater a captura cognitiva
-          e o viés de automação. Cole nas Instruções de um Gem (Gemini) ou
-          GPT personalizado.
+          e o viés de automação. Use como skill no Gemini (baixe o SKILL.md no
+          card do catálogo) ou cole nas instruções de um GPT.
         </p>
       </header>
 
