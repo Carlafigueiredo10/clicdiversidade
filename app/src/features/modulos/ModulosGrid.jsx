@@ -148,6 +148,25 @@ const MODULOS = [
     external: true,
     disponivel: true,
   },
+  {
+    // Copilot / Microsoft 365 vive no CLIC Prisma (plataforma irma), como as
+    // ferramentas vivem no clicedu da Dorina.
+    numero: '10',
+    icon: '\u{1FA9F}',
+    titulo: tr({ pt: 'Ecossistema Copilot', es: 'Ecosistema Copilot' }),
+    descricao: tr({
+      pt: 'O Microsoft 365 aplicativo por aplicativo — o que cada um resolve e o que a sua conta já abre — e como criar assistentes no Copilot. Conteúdo no CLIC Prisma, a plataforma irmã dedicada ao ecossistema Microsoft.',
+      es: 'Microsoft 365 aplicación por aplicación — qué resuelve cada una y qué ya abre tu cuenta — y cómo crear asistentes en Copilot. Contenido en CLIC Prisma, la plataforma hermana dedicada al ecosistema Microsoft (en portugués).',
+    }),
+    stats: [
+      { value: 'M365', label: tr({ pt: 'Ecossistema', es: 'Ecosistema' }) },
+      { value: '↗', label: 'CLIC Prisma' },
+    ],
+    ctaText: tr({ pt: 'Abrir no CLIC Prisma', es: 'Abrir en CLIC Prisma' }),
+    to: 'https://clicprisma.ia.br/modulos/conhecendo-o-ecossistema',
+    external: true,
+    disponivel: true,
+  },
 ]
 
 export default function ModulosGrid() {

@@ -69,6 +69,7 @@ Pagina especial:
   - **Contratando solucoes de IA** ([/jornada/modulos/contratando-solucoes-de-ia.html](/jornada/modulos/contratando-solucoes-de-ia.html)) — 5 eixos e 24 perguntas para fazer ANTES de assinar contrato: tecnossolucionismo, dados e soberania, transparencia, responsabilizacao, custos ocultos e saida. **Use quando**: pessoa fala em licitacao, edital, termo de referencia, fornecedor ou compra de IA.
 
 - **Modulo 09 — Auditando dados e decisoes** em [/jornada/modulos/auditando-dados-e-decisoes.html](/jornada/modulos/auditando-dados-e-decisoes.html) — o guia para o sistema que JA EXISTE (os outros dois sao para antes de existir). As perguntas tecnicas que revelam o vies, em 4 frentes: **origem** (qual populacao esta na base, raca autodeclarada ou inferida), **proxy** (quais variaveis carregam raca sem nomear raca), **erro** (matriz de confusao por grupo, nao acuracia geral) e **decisao** (baseline, contestacao, reavaliacao). **Use quando**: pessoa suspeita que um sistema esta discriminando, pergunta como provar vies, ou precisa questionar um fornecedor tecnicamente. E o par de leitura do **Template Auditor de Equidade** (Modulo 07): o guia tem as perguntas, o template faz a IA aplica-las.
+- **Modulo 10 — Ecossistema Copilot** — card na grade de Modulos. Nao tem pagina interna: leva ao **CLIC Prisma** (https://clicprisma.ia.br/), a plataforma irma dedicada ao ecossistema Microsoft 365 — o inventario dos aplicativos (Word, Excel, Teams, SharePoint, Lists...) e como criar assistentes no Copilot. **Use quando**: a pessoa pergunta sobre Copilot, Microsoft 365, agentes do Copilot ou o que a conta institucional da Microsoft ja oferece. Encaminhe pela navegacao (Modulos -> card 10); o conteudo de Copilot nao mora mais no CLIC Diversidade.
 
 ### Referencias transversais
 - **Glossario** em [/jornada/glossario](/jornada/glossario) — 66 termos de IA, dados, dev, seguranca, infra e gestao. Cada termo tem definicao curta, pronuncia e exemplo de uso. Inclui o vocabulario de equidade algoritmica: vies algoritmico, variavel proxy, acuracia, matriz de confusao, falso positivo/negativo, dados de treinamento, equidade e model card. **Use quando**: pessoa pergunta o que significa um termo tecnico, ou quando voce mesma usar um termo que pode confundir (recomende o glossario como complemento).
@@ -123,6 +124,6 @@ Pode citar a Dorina pelo nome, mas encaminhe pela navegacao (Modulos -> card 01)
 
 - Mentoria 1:1 ao vivo.
 - Forum interno de discussao dentro do site — a troca acontece no grupo do WhatsApp (ver acima).
-- Conteudo em outros idiomas alem do PT-BR.
+- Conteudo em idiomas alem de portugues e espanhol. (A plataforma tem versao em espanhol — seletor PT | ES no topo; a maior parte do conteudo ja esta traduzida e adaptada ao Uruguai.)
 - Catalogo de ferramentas (esta com a Dorina, ver acima).
 `
