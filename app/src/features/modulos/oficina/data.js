@@ -34,4 +34,18 @@ export const BLOCOS = [
     external: false,
     tipo: 'apresentacao',
   },
+  {
+    numero: '02',
+    rotulo: tr({ pt: 'PALESTRA', es: 'CONFERENCIA' }),
+    titulo: tr({ pt: 'Ponte ou precipício', es: 'Puente o precipicio' }),
+    descricao: tr({
+      pt: 'Palestra de Montevidéu: inteligência artificial, dados e quem decide o futuro.',
+      es: 'Conferencia en Montevideo: inteligencia artificial, datos y quién decide el futuro.',
+    }),
+    duracao: tr({ pt: '21 slides', es: '21 diapositivas' }),
+    cta: tr({ pt: 'Abrir apresentação', es: 'Abrir presentación' }),
+    href: '/modulos/oficina/ponte-ou-precipicio',
+    external: false,
+    tipo: 'apresentacao',
+  },
 ]

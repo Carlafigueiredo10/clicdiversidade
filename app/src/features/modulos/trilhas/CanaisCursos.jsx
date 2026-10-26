@@ -2,18 +2,27 @@
 // A lista cresce: para incluir outro canal, acrescente um objeto aqui.
 // `entrega` diz o que o canal faz com a atencao de quem segue — e o que
 // diferencia um do outro para quem esta decidindo qual acompanhar.
+// `largo` ocupa a linha inteira da grade (evita buraco quando a lista e impar).
 import { tr } from '../../../i18n'
 
 const CANAIS_PT = [
   {
-    nome: 'Governatech',
+    nome: 'Núcleo de IA do Governo Federal',
+    plataforma: 'gov.br · SGD/MGI',
+    icon: '🏛️',
+    largo: true,
+    entrega: 'Guias de IA generativa, prompt e RAG para o serviço público, programas de capacitação por perfil e a Matriz de Competências em IA.',
+    url: 'https://www.gov.br/governodigital/pt-br/infraestrutura-nacional-de-dados/inteligencia-artificial-1',
+  },
+  {
+    nome: 'ClicEdu',
     plataforma: 'Canal no WhatsApp',
     icon: '💬',
     entrega: 'Os cursos chegam no seu celular, junto com as outras mensagens.',
     url: 'https://www.whatsapp.com/channel/0029Vb6DD2AAu3aXBFT6So0R',
   },
   {
-    nome: 'Governatech',
+    nome: 'ClicEdu',
     plataforma: 'LinkedIn',
     icon: '💼',
     entrega: 'Posts públicos, sem entrar no seu telefone.',
@@ -21,8 +30,9 @@ const CANAIS_PT = [
   },
 ]
 
-// Catalogos em espanhol verificados (pesquisa de 2026-10-19) + o canal da
-// Carla, que publica em portugues.
+// Catalogos em espanhol verificados (pesquisa de 2026-10-19) + referencias
+// brasileiras em portugues (Nucleo de IA do MGI e o canal ClicEdu, da Carla,
+// que antes se chamava Governatech).
 const CANAIS_ES = [
   {
     nome: 'Plataforma Educativa de AGESIC',
@@ -53,7 +63,14 @@ const CANAIS_ES = [
     url: 'https://escueladedatos.online/cursos/',
   },
   {
-    nome: 'Governatech',
+    nome: 'Núcleo de IA del Gobierno Federal de Brasil',
+    plataforma: 'gov.br · en portugués',
+    icon: '🇧🇷',
+    entrega: 'Guías de IA generativa, prompts y RAG para el servicio público, programas de capacitación por perfil y la Matriz de Competencias en IA.',
+    url: 'https://www.gov.br/governodigital/pt-br/infraestrutura-nacional-de-dados/inteligencia-artificial-1',
+  },
+  {
+    nome: 'ClicEdu',
     plataforma: 'Canal de WhatsApp · en portugués',
     icon: '💬',
     entrega: 'El canal brasileño que difunde cursos gratuitos de IA para el sector público.',
@@ -104,7 +121,10 @@ export default function CanaisCursos() {
               href={c.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="group bg-page border border-line rounded-2xl p-5 hover:border-accent/40 transition"
+              className={
+                'group bg-page border border-line rounded-2xl p-5 hover:border-accent/40 transition' +
+                (c.largo ? ' sm:col-span-2' : '')
+              }
             >
               <div className="flex items-baseline gap-2.5">
                 <span aria-hidden className="text-lg">

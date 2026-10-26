@@ -1,0 +1,981 @@
+<!doctype html>
+<html lang="es-UY">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Puente o precipicio</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap">
+<style>
+/* Layout: a 16:9 stage, letterboxed in the night. One field of light points behind every slide
+   reorganises itself as the talk moves: field, signatures, timeline, feed, spiral, map, bridge. */
+:root{
+  color-scheme: dark;
+  --night:#070b24;      /* stage ground, CLIC navy pushed deeper for a dark room */
+  --ink:#ece9f7;        /* main text, lavender-tinted white */
+  --mute:#9f9bbd;       /* secondary text */
+  --lav:#c4b5fd;        /* CLIC lavanda */
+  --cyan:#7dd3fc;       /* CLIC ciano */
+  --gold:#e9c46a;       /* CLIC dourado */
+  --coral:#f4a28c;      /* warning, used rarely */
+  --line:rgba(196,181,253,.18);
+  --display:"Fraunces", "Iowan Old Style", Georgia, serif;
+  --sans:"Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+html,body{height:100%}
+body{background:var(--night);color:var(--ink);font-family:var(--sans);overflow:hidden;
+  padding-left:max(0px, env(safe-area-inset-left, 0px));padding-right:max(0px, env(safe-area-inset-right, 0px));
+  -webkit-font-smoothing:antialiased}
+#deck{position:fixed;inset:0;display:grid;place-items:center;background:
+  radial-gradient(120% 90% at 50% 40%, #0d1440 0%, var(--night) 60%, #04061a 100%);
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:12px;
+  user-select:none;-webkit-user-select:none;cursor:default}
+.stage{position:relative;width:min(100%, calc((100vh - 24px) * 16 / 9));aspect-ratio:16/9;max-width:100%;
+  container-type:size;overflow:hidden}
+#fx{position:absolute;inset:0;width:100%;height:100%;display:block}
+
+/* slides */
+.slide{position:absolute;inset:0;padding:6.5cqh 6.5cqw;display:flex;flex-direction:column;justify-content:center;
+  opacity:0;visibility:hidden;transition:opacity .9s cubic-bezier(.16,1,.3,1), visibility 0s linear .9s;pointer-events:none}
+.slide.on{opacity:1;visibility:visible;transition:opacity .9s cubic-bezier(.16,1,.3,1), visibility 0s}
+.slide.center{align-items:center;text-align:center}
+.slide.top{justify-content:flex-start}
+.col{max-width:46cqw}
+
+.eyebrow{font-size:1.25cqw;letter-spacing:.22em;text-transform:uppercase;color:var(--mute);font-weight:500;margin:0 0 2.4cqh}
+h1,h2{font-family:var(--display);font-weight:300;margin:0;letter-spacing:-.015em;text-wrap:balance;line-height:1.04}
+h1{font-size:8.2cqw;font-variation-settings:"opsz" 144}
+h2{font-size:4.6cqw;font-variation-settings:"opsz" 144}
+h2.xl{font-size:6cqw}
+em{font-style:italic;color:var(--lav)}
+em.gold{color:var(--gold)} em.cyan{color:var(--cyan)}
+.lead{font-size:2.05cqw;line-height:1.38;color:var(--ink);font-weight:300;margin:3cqh 0 0;max-width:44cqw;text-wrap:pretty}
+.lead.mute{color:var(--mute)}
+.src{position:absolute;left:6.5cqw;bottom:4.2cqh;font-size:.98cqw;color:var(--mute);letter-spacing:.02em;opacity:.85}
+.big{font-family:var(--display);font-weight:300;font-size:10cqw;line-height:.9;font-variant-numeric:tabular-nums lining-nums;letter-spacing:-.03em}
+.big small{font-size:.45em;letter-spacing:0}
+.lbl{font-size:1.6cqw;color:var(--mute);line-height:1.35;max-width:30cqw;margin-top:1.2cqh}
+.punch{font-family:var(--display);font-style:italic;font-weight:300;font-size:3.2cqw;color:var(--gold);margin-top:4cqh;text-wrap:balance}
+
+/* step reveal: visible content waits for the presenter */
+[data-s]{opacity:0;transform:translateY(1.6cqh);filter:blur(6px);
+  transition:opacity 1.1s cubic-bezier(.16,1,.3,1), transform 1.1s cubic-bezier(.16,1,.3,1), filter 1.1s}
+[data-s].in{opacity:1;transform:none;filter:none}
+.slide.on .rise{animation:rise 1.4s cubic-bezier(.16,1,.3,1) both}
+.slide.on .rise.d1{animation-delay:.25s}.slide.on .rise.d2{animation-delay:.5s}.slide.on .rise.d3{animation-delay:.8s}
+@keyframes rise{from{opacity:0;transform:translateY(2cqh);filter:blur(8px)}to{opacity:1;transform:none;filter:none}}
+
+/* cover */
+.cover .meta{position:absolute;left:6.5cqw;right:6.5cqw;bottom:5cqh;display:flex;justify-content:space-between;gap:2cqw;
+  font-size:1.15cqw;color:var(--mute);letter-spacing:.04em}
+.cover h1{margin-top:1cqh;font-size:7.6cqw}
+.cover .sub{max-width:40cqw}
+.cover .sub{font-family:var(--display);font-style:italic;font-weight:300;font-size:2.4cqw;color:var(--mute);margin-top:2.5cqh}
+
+/* timeline */
+.tl{position:absolute;left:8cqw;right:8cqw;top:58cqh;display:grid;grid-template-columns:repeat(5,1fr);gap:1cqw}
+.tl div{font-size:1.35cqw;color:var(--mute);line-height:1.35;border-left:1px solid var(--line);padding-left:1cqw}
+.tl b{display:block;font-family:var(--display);font-weight:400;font-size:2.6cqw;color:var(--ink);font-variant-numeric:lining-nums}
+
+/* quote */
+blockquote{margin:3.5cqh 0 0;font-family:var(--display);font-weight:300;font-style:italic;font-size:2.6cqw;line-height:1.25;color:var(--ink);max-width:44cqw;text-wrap:balance}
+blockquote cite{display:block;font-family:var(--sans);font-style:normal;font-size:1.15cqw;color:var(--mute);margin-top:1.6cqh;letter-spacing:.03em}
+
+/* chat */
+.chatbox{width:52cqw;margin:5cqh auto 0;border:1px solid rgba(125,211,252,.35);border-radius:1.4cqw;padding:2.2cqh 2cqw;
+  display:flex;align-items:center;gap:1.2cqw;background:rgba(7,11,36,.72);box-shadow:0 0 6cqw rgba(125,211,252,.08)}
+.chatbox .typer{font-size:2.1cqw;font-weight:300;text-align:left;flex:1;min-height:1.3em}
+.caret{display:inline-block;width:.08em;height:1.05em;background:var(--cyan);vertical-align:-.15em;margin-left:.06em;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.chatbox .send{width:3cqw;height:3cqw;border-radius:50%;border:1px solid rgba(125,211,252,.5);display:grid;place-items:center;flex:none}
+.chatbox .send::after{content:"";width:0;height:0;border-left:.7cqw solid var(--cyan);border-top:.45cqw solid transparent;border-bottom:.45cqw solid transparent;margin-left:.2cqw}
+
+.ex{display:flex;justify-content:center;flex-wrap:wrap;gap:1.2cqw}
+.ex span{font-size:1.9cqw;font-weight:300;padding:1.1cqh 1.6cqw;border:1px solid var(--line);border-radius:999px;color:var(--ink);
+  background:rgba(7,11,36,.6);opacity:0;transform:translateY(1cqh);transition:opacity .9s cubic-bezier(.16,1,.3,1), transform .9s cubic-bezier(.16,1,.3,1)}
+[data-s].in .ex span{opacity:1;transform:none}
+[data-s].in .ex span:nth-child(2){transition-delay:.35s}[data-s].in .ex span:nth-child(3){transition-delay:.7s}[data-s].in .ex span:nth-child(4){transition-delay:1.05s}
+/* chat → chart */
+.chat .cbw,.chat .m100,.chat .ttl,.chat .s1only{transition:opacity .9s cubic-bezier(.16,1,.3,1), transform 1.2s cubic-bezier(.16,1,.3,1)}
+.chat[data-step="2"] .cbw{opacity:0;transform:scale(.96)}
+.chat[data-step="2"] .ttl{transform:translateY(-19cqh) scale(.82)}
+.chat[data-step="2"] .s1only{opacity:0}
+.chartlbl{position:absolute;inset:0;pointer-events:none}
+.chartlbl .yr{position:absolute;top:86.5cqh;transform:translateX(-50%);font-size:1.2cqw;color:var(--mute);letter-spacing:.08em;font-variant-numeric:tabular-nums}
+.chartlbl .pt{position:absolute;transform:translate(calc(-100% - 1.2cqw), -115%);text-align:right;opacity:0;filter:blur(6px);
+  transition:opacity .8s cubic-bezier(.16,1,.3,1), filter .8s;white-space:nowrap}
+.chartlbl .pt.below{transform:translate(1.4cqw, 25%);text-align:left}
+.chartlbl .pt.hit{opacity:1;filter:none}
+.chartlbl .pt span{display:block;font-size:1.15cqw;color:var(--mute);letter-spacing:.06em}
+.chartlbl .pt b{display:block;font-family:var(--display);font-weight:300;font-size:3cqw;color:var(--cyan);font-variant-numeric:lining-nums;line-height:1}
+.chartlbl .pt.last{transform:translate(calc(-100% - 3cqw), -62%)}
+.chartlbl .pt.last b{font-size:6.4cqw;color:var(--gold)}
+.chartlbl .pt.last span{font-size:1.4cqw}
+.chartlbl .pt b small{font-size:.38em;letter-spacing:0}
+/* stats rows */
+.row{display:flex;gap:5cqw;margin-top:4.5cqh;flex-wrap:wrap}
+.row .stat{min-width:0}
+.center .row{justify-content:center}
+
+/* uruguay clusters labels sit under the particle discs */
+.clabels{position:absolute;left:0;right:0;top:74cqh;height:12cqh}
+.clabels div{position:absolute;transform:translateX(-50%);text-align:center;width:16cqw}
+.clabels b{display:block;font-family:var(--display);font-weight:300;font-size:3.4cqw;font-variant-numeric:lining-nums}
+.clabels span{font-size:1.3cqw;color:var(--mute);letter-spacing:.05em}
+
+/* map slides */
+.maptitle{position:absolute;left:6.5cqw;top:6cqh;max-width:40cqw}
+.mapstats{position:absolute;left:6.5cqw;right:6.5cqw;bottom:9cqh;display:flex;gap:4cqw;flex-wrap:wrap}
+.mapstats .big{font-size:5.4cqw}
+.mapstats .lbl{font-size:1.25cqw;max-width:20cqw}
+.scrim{position:absolute;left:0;right:0;bottom:0;height:38cqh;background:linear-gradient(to top, rgba(7,11,36,.92), rgba(7,11,36,0));pointer-events:none}
+
+/* rotating word */
+.rot{display:block;position:relative;height:1.15em;margin-top:.5cqh}
+.rot span{position:absolute;left:0;top:0;opacity:0;transform:translateY(.35em);filter:blur(6px);color:var(--gold);font-style:italic;
+  transition:opacity .9s cubic-bezier(.16,1,.3,1), transform .9s cubic-bezier(.16,1,.3,1), filter .9s}
+.rot span.cur{opacity:1;transform:none;filter:none}
+.rot span.out{opacity:0;transform:translateY(-.35em);filter:blur(6px)}
+
+/* bridge slide */
+.bridge-title{position:absolute;left:0;right:0;top:12cqh;text-align:center}
+.bridge-title .lead{margin:3cqh auto 0;max-width:56cqw;text-align:center}
+
+/* end */
+.end .meta{position:absolute;left:0;right:0;bottom:5cqh;text-align:center;font-size:1.25cqw;color:var(--mute);letter-spacing:.06em;line-height:1.9}
+.end .es{font-family:var(--display);font-style:italic;font-weight:300;font-size:2.4cqw;color:var(--mute);margin-top:2.6cqh}
+
+/* end · QR codes flank the bridge, above the cliffs */
+.qrs{position:absolute;inset:0;pointer-events:none}
+.qrs .qr{position:absolute;top:40cqh;width:22cqw;text-align:center}
+.qrs .qr.l{left:7cqw} .qrs .qr.r{right:7cqw}
+.qrs .qrbox{width:15cqh;margin:0 auto;background:#fff;border-radius:.7cqw;padding:1cqh;line-height:0;box-shadow:0 0 4cqw rgba(233,196,106,.12)}
+.qrs .qrbox svg{display:block;width:100%;height:auto}
+.qrs b{display:block;margin-top:1.4cqh;font-weight:500;font-size:1.3cqw;color:var(--ink);letter-spacing:.02em}
+.qrs span{display:block;margin-top:.4cqh;font-size:1cqw;color:var(--mute);letter-spacing:.04em}
+
+/* chrome */
+.prog{position:absolute;left:0;bottom:0;height:2px;background:linear-gradient(90deg,var(--lav),var(--cyan),var(--gold));
+  width:0;transition:width .8s cubic-bezier(.16,1,.3,1);opacity:.7}
+.count{position:absolute;right:2.2cqw;bottom:2.2cqh;font-size:.95cqw;color:var(--mute);font-variant-numeric:tabular-nums;opacity:.55;letter-spacing:.08em}
+.hint{position:absolute;left:50%;bottom:2.2cqh;transform:translateX(-50%);font-size:1cqw;color:var(--mute);letter-spacing:.06em;
+  transition:opacity 1.2s;white-space:nowrap}
+.hint.gone{opacity:0}
+#notes{position:fixed;left:max(16px, env(safe-area-inset-left, 0px));right:max(16px, env(safe-area-inset-right, 0px));bottom:12px;
+  max-height:42vh;overflow:auto;background:rgba(5,8,28,.94);border:1px solid var(--line);border-radius:10px;
+  padding:14px 18px;font-size:15px;line-height:1.5;color:var(--ink);z-index:5;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+#notes h3{margin:0 0 6px;font:600 11px/1.4 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+#notes ul{margin:0;padding-left:18px}
+#notes li{margin:3px 0}
+#notes .c{color:var(--gold)}
+.n{display:none}
+button.nav{position:absolute;top:0;bottom:0;width:30%;background:none;border:0;padding:0;cursor:pointer;z-index:2}
+button.nav.l{left:0;width:22%} button.nav.r{right:0;width:78%}
+button.nav:focus-visible{outline:2px solid var(--lav);outline-offset:-4px}
+@media (prefers-reduced-motion: reduce){
+  .slide,[data-s],.rot span{transition-duration:.01s}
+  .slide.on .rise{animation:none}
+  .caret{animation:none}
+}
+</style>
+
+</head>
+<body>
+<div id="deck">
+<div class="stage" id="stage">
+<canvas id="fx" aria-hidden="true"></canvas>
+
+<!-- 1 · capa -->
+<section class="slide cover" data-mode="latam" aria-label="Capa">
+  <p class="eyebrow rise">Democracias del futuro · Montevideo · 29.10.2026</p>
+  <h1 class="rise d1">Puente o<br><em>precipicio</em></h1>
+  <p class="sub rise d2">inteligencia artificial, datos y quién decide el futuro</p>
+  <div class="meta rise d3"><span>Carla Figueiredo</span><span>Ministerio de Gestión e Innovación en Servicios Públicos · Brasil</span></div>
+  <div class="n"><ul>
+    <li>Respira. Deixa o campo de luz correr alguns segundos antes de falar.</li>
+    <li>Apresenta-se em uma frase. Não precisa falar do cargo, ele está na tela.</li>
+    <li>O mapa é a América Latina, com um ponto em cada capital. O de Montevidéu brilha mais forte: é onde vocês estão.</li>
+    <li>Os pontos de luz vão mudar de forma ao longo da fala. No fim, viram uma ponte.</li>
+  </ul></div>
+</section>
+
+<!-- 2 · pergunta -->
+<section class="slide center" data-mode="field" aria-label="Pergunta">
+  <h2 class="xl rise">¿Quién de ustedes usó inteligencia artificial <em>hoy?</em></h2>
+  <p class="lead" data-s="1" style="margin-inline:auto;text-align:center;max-width:60cqw;font-size:2.6cqw;font-family:var(--display);font-style:italic">Pero hoy, probablemente, <span style="color:var(--gold)">ella los usó a todos ustedes.</span></p>
+  <div data-s="2" style="margin-top:5cqh">
+    <p class="eyebrow" style="margin-bottom:2.2cqh">y ya orientó decisiones</p>
+    <div class="ex">
+      <span>el camino en Waze</span><span>la próxima canción</span><span>las horas de sueño</span><span>cuánto corriste</span>
+    </div>
+  </div>
+  <div class="n"><ul>
+    <li>Interação: peça para levantarem a mão. Espere. Não importa quantas mãos subirem.</li>
+    <li>Toque: "mas hoje, provavelmente, ela usou todos vocês".</li>
+    <li>Toque: muito provavelmente todo mundo aqui já tomou uma decisão orientada por ela. Qual caminho pegar no Waze, a próxima música que tocou, quantas horas dormiu, quanto correu.</li>
+    <li>Gancho: a IA não chegou com o chat. Ela já estava dentro da nossa vida, decidindo junto com a gente.</li>
+  </ul></div>
+</section>
+
+<!-- 3 · dartmouth e vale -->
+<section class="slide top" data-mode="few" data-mstep="2:line" aria-label="Quem construiu">
+  <div style="max-width:54cqw">
+    <p class="eyebrow rise">1955 · Dartmouth College · Estados Unidos</p>
+    <h2 class="rise d1">El nombre nació en una <em>propuesta de verano.</em></h2>
+    <p class="lead" data-s="1">Cuatro firmas. Cuatro hombres.<br><span style="color:var(--mute);font-size:.75em">John McCarthy · Marvin Minsky · Nathaniel Rochester · Claude Shannon</span></p>
+  </div>
+  <div class="tl" data-s="2">
+    <div><b>1956</b>Shockley Semiconductor</div>
+    <div><b>1957</b>Fairchild y los ocho que se fueron</div>
+    <div><b>1968</b>Intel</div>
+    <div><b>1969</b>ARPANET, con dinero militar</div>
+    <div><b>1971</b>se difunde el nombre Silicon Valley</div>
+  </div>
+  <p class="punch" data-s="3" style="position:absolute;left:6.5cqw;bottom:8cqh;margin:0">Quien construye decide qué es normal.</p>
+  <div class="n"><ul>
+    <li>Em 31 de agosto de 1955, quatro pesquisadores assinaram a proposta de um projeto de pesquisa de verão em Dartmouth. É ali que a expressão "inteligência artificial" aparece. O encontro aconteceu em 1956. Os quatro pontos de luz são as quatro assinaturas.</li>
+    <li>Toque: os pontos viram uma linha do tempo. Conte a sua história da "interiorização": Shockley não atraiu os engenheiros consagrados da Costa Leste e recrutou jovens de fora do eixo, como Robert Noyce. Dinheiro da Guerra Fria: Sputnik, ARPA, mísseis e o programa Apollo comprando chips.</li>
+    <li>Toque: quem constrói decide o que é normal. Não é sobre culpar quem estava lá. É sobre perceber quem não estava.</li>
+    <li class="c">Cuidado: diga que a expressão "aparece na proposta"; a ideia de máquinas que pensam é mais antiga (Turing, 1950). Don Hoefler popularizou o nome "Silicon Valley" em 1971, não inventou.</li>
+  </ul></div>
+</section>
+
+<!-- 5 · youtube -->
+<section class="slide" data-mode="grid" aria-label="YouTube">
+  <div class="col">
+    <p class="eyebrow rise">YouTube · 2018</p>
+    <h2 class="rise d1">No elegiste <em>el próximo video.</em></h2>
+    <div data-s="1" style="margin-top:5cqh">
+      <div class="big"><small>+</small><span data-count="70">70</span><small>%</small></div>
+      <p class="lbl">del tiempo de visualización viene de las recomendaciones de la máquina</p>
+    </div>
+  </div>
+  <p class="src" data-s="1">Neal Mohan, director de producto de YouTube, CES, enero de 2018</p>
+  <div class="n"><ul>
+    <li>Atrás de você, um quadro acende de cada vez. É o feed escolhendo.</li>
+    <li>Em 2018, o hoje CEO do YouTube disse que mais de 70% do tempo assistido vem de recomendações por aprendizado de máquina.</li>
+    <li>Ninguém pediu. Ninguém votou. A IA entrou na sala de casa pela tela.</li>
+    <li class="c">Cuidado: é um dado de 2018 que o YouTube não atualizou. Algumas reportagens falam em 75%; use "mais de 70%".</li>
+  </ul></div>
+</section>
+
+<!-- 6 · toca do coelho -->
+<section class="slide" data-mode="spiral" aria-label="A toca do coelho">
+  <div class="col">
+    <p class="eyebrow rise">La madriguera del conejo</p>
+    <h2 class="rise d1">La máquina aprendió a <em>retenernos.</em></h2>
+    <blockquote data-s="1">“¿Cómo consumimos la mayor cantidad posible de tu tiempo y de tu atención consciente?”
+      <cite>Sean Parker, primer presidente de Facebook, 2017, sobre cómo se pensaron las plataformas</cite></blockquote>
+    <p class="punch" data-s="2">La métrica era nuestro tiempo.</p>
+  </div>
+  <div class="n"><ul>
+    <li>A espiral atrás de você é a toca do coelho: cada vídeo puxa o próximo, um pouco mais fundo.</li>
+    <li>Ninguém programou "radicalize as pessoas". Programaram "mantenha as pessoas aqui". O resto veio junto.</li>
+    <li>Parker, em 2017, ao site Axios, disse que os criadores entenderam que exploravam uma vulnerabilidade da psicologia humana, e fizeram mesmo assim.</li>
+    <li class="c">Cuidado: estudos encontraram caminhos de radicalização no YouTube; outros dão mais peso às escolhas de quem assiste. Diga "estudos encontraram", não "está provado".</li>
+  </ul></div>
+</section>
+
+<!-- 7 · mianmar -->
+<section class="slide" data-mode="dim" aria-label="Mianmar">
+  <div style="max-width:60cqw">
+    <p class="eyebrow rise">Myanmar · 2017</p>
+    <h2 class="rise d1">En Myanmar, Facebook <em>era internet.</em></h2>
+    <div data-s="1" style="margin-top:5cqh">
+      <div class="big" style="color:var(--ink)"><small>+</small><span data-count="700">700</span><small> mil</small></div>
+      <p class="lbl" style="max-width:44cqw">personas rohingyas forzadas a huir a Bangladés</p>
+    </div>
+    <p class="lead" data-s="2" style="max-width:56cqw">La misión de la ONU concluyó que el papel de las redes sociales fue significativo.</p>
+    <p class="lead mute" data-s="3" style="max-width:56cqw">En 2018, la empresa admitió que no hizo lo suficiente.</p>
+  </div>
+  <p class="src" data-s="2">Misión Internacional Independiente de Investigación de la ONU sobre Myanmar, 2018 · Amnistía Internacional, The Social Atrocity, 2022</p>
+  <div class="n"><ul>
+    <li>Este é o momento mais grave da fala. Abaixe o tom. Os pontos de luz quase somem de propósito.</li>
+    <li>Em 2017, uma operação militar forçou mais de 700 mil pessoas rohingya a fugir para Bangladesh.</li>
+    <li>A missão da ONU concluiu que o papel das redes sociais foi significativo, num país onde o Facebook era a internet.</li>
+    <li>Em 2022, a Anistia Internacional concluiu que os algoritmos do Facebook amplificaram o ódio contra os rohingya e que a empresa sabia, ou deveria saber, e não agiu.</li>
+    <li>Ponte para o próximo bloco: o mesmo algoritmo que só queria engajamento.</li>
+    <li class="c">Cuidado: quem cometeu as atrocidades foi o exército de Mianmar. O argumento é sobre amplificação e omissão da plataforma, não sobre autoria.</li>
+  </ul></div>
+</section>
+
+<!-- 8 · chat -->
+<section class="slide center chat" data-mode="halo" data-mstep="2:chart" aria-label="A IA virou chat">
+  <div class="ttl"><p class="eyebrow rise">30 de noviembre de 2022</p>
+  <h2 class="rise d1">La IA se volvió <em>una caja de texto.</em></h2></div>
+  <div class="cbw"><div class="chatbox rise d2"><div class="typer" data-text="Hola. ¿En qué te puedo ayudar?"></div><div class="send"></div></div></div>
+  <div data-s="1" class="m100" style="margin-top:5cqh">
+    <div class="big" style="font-size:6.5cqw"><span data-count="100">100</span><small> millones</small></div>
+    <p class="lbl" style="margin-inline:auto">de personas en dos meses</p>
+  </div>
+  <p class="src s1only" data-s="1">Estimación de UBS con datos de Similarweb, difundida por Reuters en febrero de 2023</p>
+  <div class="chartlbl" data-s="2">
+    <div class="yr" style="left:13.9%">2023</div><div class="yr" style="left:32.6%">2024</div><div class="yr" style="left:51.3%">2025</div><div class="yr" style="left:70.1%">2026</div>
+    <div class="pt" data-k="2"><span>feb 2025</span><b>400<small> millones</small></b></div>
+    <div class="pt" data-k="3"><span>oct 2025</span><b>800<small> millones</small></b></div>
+    <div class="pt below" data-k="4"><span>feb 2026</span><b>900<small> millones</small></b></div>
+    <div class="pt last" data-k="5"><span>sep 2026 · por semana</span><b>1.200<small> millones</small></b></div>
+    <p class="src" style="left:auto;right:6.5cqw">OpenAI, usuarios semanales, febrero de 2025 a septiembre de 2026 · punto inicial: UBS, enero de 2023</p>
+  </div>
+  <div class="n"><ul>
+    <li>Até aqui, a IA escolhia por nós em silêncio. A partir daqui, ela conversa.</li>
+    <li>O ChatGPT foi lançado em 30 de novembro de 2022. Chegou a 1 milhão de pessoas em cinco dias e a cerca de 100 milhões em dois meses.</li>
+    <li>Toque: os 100 milhões encolhem para o canto. Era só o começo. A linha sobe sozinha por uns 7 segundos e acende cada ponto: 400 milhões por semana em fevereiro de 2025, 800 milhões em outubro, 900 milhões em fevereiro de 2026 e 1,2 bilhão em setembro. Olhe para a plateia enquanto ela sobe.</li>
+    <li>No slide em espanhol, 1,2 bilhão aparece como "1.200 millones", que é como se lê no Uruguai.</li>
+    <li>Pela primeira vez, qualquer pessoa podia pedir algo à IA, em vez de só receber o que ela escolhia. E mais de 1 bilhão de pessoas pedem toda semana.</li>
+    <li class="c">Cuidado: o primeiro ponto é uma estimativa mensal do UBS; os demais são usuários semanais informados pela OpenAI. O 1,2 bilhão de setembro pode incluir todo o ecossistema da OpenAI, por isso o slide diz "mais de 1 bilhão". Entre janeiro de 2023 e fevereiro de 2025 a linha só liga os pontos; não há dado oficial no meio.</li>
+  </ul></div>
+</section>
+
+<!-- 9 · hoje -->
+<section class="slide center" data-mode="rise" aria-label="Hoje">
+  <p class="eyebrow rise">Hoy</p>
+  <h2 class="rise d1">Impresionados y nerviosos. <em>Al mismo tiempo.</em></h2>
+  <div class="row" data-s="1">
+    <div class="stat"><div class="big" style="font-size:7.5cqw;color:var(--cyan)"><span data-count="59">59</span><small>%</small></div><p class="lbl">ven más beneficios que riesgos en la IA</p></div>
+    <div class="stat"><div class="big" style="font-size:7.5cqw;color:var(--lav)"><span data-count="52">52</span><small>%</small></div><p class="lbl">sienten nervios frente a la IA</p></div>
+  </div>
+  <p class="src" data-s="1">Stanford AI Index 2026, encuesta de opinión global</p>
+  <div class="n"><ul>
+    <li>Os dois números sobem juntos. Muitas vezes são as mesmas pessoas.</li>
+    <li>Pergunte: quem aqui se sente assim, impressionado e com medo ao mesmo tempo?</li>
+    <li class="c">Cuidado: a pesquisa diz "nervosas". "Com medo" é a sua leitura, diga como leitura.</li>
+  </ul></div>
+</section>
+
+<!-- 10 · uruguai -->
+<section class="slide top" data-mode="clusters" aria-label="Uruguai">
+  <div style="text-align:center">
+    <p class="eyebrow rise">Uruguay · agosto de 2025</p>
+    <h2 class="rise d1"><em>Apertura vigilante</em></h2>
+  </div>
+  <div class="clabels rise d2">
+    <div style="left:16%"><b style="color:var(--cyan)">50%</b><span>curiosidad</span></div>
+    <div style="left:33%"><b style="color:var(--lav)">48%</b><span>desconfianza</span></div>
+    <div style="left:50%"><b style="color:var(--cyan)">46%</b><span>interés</span></div>
+    <div style="left:67%"><b style="color:var(--gold)">26%</b><span>esperanza</span></div>
+    <div style="left:84%"><b style="color:var(--coral)">23%</b><span>miedo</span></div>
+  </div>
+  <p class="src">Factum, Monitor Social: Inteligencia Artificial, 900 entrevistas, agosto de 2025</p>
+  <div class="n"><ul>
+    <li>Cada disco de luz tem o tamanho do sentimento. Metade do país sente curiosidade, e quase a mesma proporção sente desconfiança.</li>
+    <li>O medo é o menor dos cinco: 23%. O que domina é a desconfiança.</li>
+    <li>A Factum chamou isso de "apertura vigilante". É uma expressão deles, use em espanhol.</li>
+    <li>As mulheres relatam mais medo (29%) e mais desconfiança (55%).</li>
+    <li class="c">Cuidado: as pessoas podiam escolher mais de uma emoção, por isso a soma passa de 100%.</li>
+  </ul></div>
+</section>
+
+<!-- 11 · 46 → 75 -->
+<section class="slide" data-mode="people" data-lit="0,0.46,0.75" aria-label="Já estamos dentro">
+  <div class="col">
+    <p class="eyebrow rise">Uruguay · cada punto, una persona</p>
+    <h2 class="rise d1">Mucha gente ya usa IA <em>sin saberlo.</em></h2>
+    <div data-s="1" style="margin-top:4.5cqh;display:flex;gap:3.5cqw;align-items:flex-end">
+      <div><div class="big" style="font-size:6.5cqw;color:var(--mute)"><span data-count="46">46</span><small>%</small></div><p class="lbl" style="max-width:16cqw">dice usar IA</p></div>
+      <div data-s="2"><div class="big" style="font-size:6.5cqw;color:var(--cyan)"><span data-count="75">75</span><small>%</small></div><p class="lbl" style="max-width:18cqw">cuando escucha ejemplos de la vida cotidiana</p></div>
+    </div>
+    <p class="punch" data-s="3">Ya estamos adentro. La cuestión es en qué lugar.</p>
+  </div>
+  <p class="src" data-s="1">Factum, Monitor Social: Inteligencia Artificial, agosto de 2025</p>
+  <div class="n"><ul>
+    <li>Toque uma vez: 46 pontos acendem. Foi quem disse, espontaneamente, que usa IA.</li>
+    <li>Toque de novo: 75. É quem se reconhece usuário depois de ouvir exemplos como recomendações, filtro de spam e tradução.</li>
+    <li>A barreira não é acesso. É reconhecimento. A IA já está aqui, escolhendo por nós.</li>
+    <li>Metade dos uruguaios usa IA todos os dias, segundo a mesma pesquisa.</li>
+  </ul></div>
+</section>
+
+<!-- 12 · desconfiar é racional -->
+<section class="slide center" data-mode="dim2" aria-label="Desconfiar é racional">
+  <div data-s="1">
+    <div class="big" style="font-size:7cqw;color:var(--gold)"><span data-count="77">77</span><small>%</small></div>
+    <p class="lbl" style="margin-inline:auto;max-width:42cqw">cree que la IA puede ser peligrosa si no se regula</p>
+  </div>
+  <h2 class="xl" data-s="2" style="margin-top:5cqh">Desconfiar es <em>racional.</em></h2>
+  <p class="lead" data-s="3" style="margin-inline:auto;max-width:58cqw;text-align:center">Pero la desconfianza que aleja deja la construcción en manos de quienes siempre construyeron.</p>
+  <p class="src" data-s="1">Factum, Monitor Social: Inteligencia Artificial, agosto de 2025</p>
+  <div class="n"><ul>
+    <li>Esta é a virada da fala.</li>
+    <li>Depois de Dartmouth, do feed, da toca do coelho e de Mianmar, desconfiar faz todo sentido. Ninguém aqui está errado por desconfiar.</li>
+    <li>O problema é quando a desconfiança vira distância. Quem não usa não questiona, e quem não questiona não constrói.</li>
+    <li>Na pesquisa, a maior diferença de sentimento é entre quem já usa e quem não usa: entre quem não usa, predominam desconfiança e pouco interesse.</li>
+  </ul></div>
+</section>
+
+<!-- 13 · mapa norte -->
+<section class="slide" data-mode="map" aria-label="A IA é feita no Norte">
+  <div class="maptitle">
+    <p class="eyebrow rise">Dónde se produce la IA</p>
+    <h2 class="rise d1">La IA se hace <em class="gold">en el Norte.</em></h2>
+  </div>
+  <div class="scrim"></div>
+  <div class="mapstats" data-s="1">
+    <div><div class="big" style="color:var(--gold)">~<span data-count="75">75</span><small>%</small></div><p class="lbl">de la potencia de las supercomputadoras de IA está en Estados Unidos</p></div>
+    <div><div class="big" style="color:var(--gold)"><span data-count="15">15</span><small>%</small></div><p class="lbl">en China</p></div>
+    <div><div class="big" style="color:var(--lav)"><span data-count="3">3</span><small>%</small></div><p class="lbl">de la computación de IA está en África y América Latina, juntas</p></div>
+  </div>
+  <p class="src" data-s="1">Epoch AI, 2025 · Brookings, 2026 · mapa centrado en Brasil</p>
+  <div class="n"><ul>
+    <li>Deixe o mapa se formar em silêncio. Os pontos dourados são onde está a capacidade de treinar IA.</li>
+    <li>Cerca de 75% da potência dos supercomputadores de IA está nos Estados Unidos e 15% na China (Epoch AI). África e América Latina, juntas, têm cerca de 3% da computação de IA do mundo (Brookings).</li>
+    <li>Pergunta para a sala: se a IA é treinada lá, com dados de lá, por pessoas de lá, de quem é o normal que ela aprende?</li>
+    <li class="c">Cuidado: o 75% mede a potência de clusters de GPU, não o número de data centers. Com o Brasil no centro, o Japão aparece na borda esquerda; é normal.</li>
+  </ul></div>
+</section>
+
+<!-- 14 · nuestro norte es el sur -->
+<section class="slide" data-mode="flip" aria-label="Nuestro norte es el Sur">
+  <div class="scrim"></div>
+  <div class="maptitle" style="top:auto;bottom:10cqh;max-width:60cqw">
+    <p class="eyebrow rise d2">Joaquín Torres-García · Montevideo</p>
+    <h2 class="rise d3" style="font-size:5.4cqw">Nuestro norte <em class="cyan">es el Sur.</em></h2>
+  </div>
+  <p class="src">América invertida, 1943 · La Escuela del Sur, 1944</p>
+  <div class="n"><ul>
+    <li>Deixe o mapa virar em silêncio. É o momento de olhar para a plateia.</li>
+    <li>Em 1943, o uruguaio Joaquín Torres-García desenhou a América invertida, com o Sul para cima. No texto La Escuela del Sur, de 1944, escreveu que nosso norte é o Sul.</li>
+    <li>Não é um mapa errado. É o mapa visto de onde a gente está. A IA que chega aqui aprendeu com o mapa deles. Quem vai ensinar o nosso?</li>
+    <li class="c">Cuidado: a frase é do texto de 1944; o desenho é de 1943.</li>
+  </ul></div>
+</section>
+
+<!-- 13b · canelones -->
+<section class="slide" data-mode="tank" data-mstep="2:tankdrain" aria-label="Canelones">
+  <div class="col">
+    <p class="eyebrow rise">Canelones · 2023</p>
+    <h2 class="rise d1">Cuando el Sur <em class="cyan">pregunta.</em></h2>
+    <div data-s="1" style="margin-top:4cqh">
+      <div class="big" style="font-size:6.5cqw;color:var(--cyan)"><span data-count="7600">7600</span><small> m³</small></div>
+      <p class="lbl" style="max-width:36cqw">de agua potable por día en el proyecto original del centro de datos de Google. El consumo de unas 55 mil personas.</p>
+    </div>
+    <p class="lead" data-s="2" style="font-size:1.7cqw">Una solicitud de acceso a la información. Una acción judicial. El proyecto cambió.</p>
+    <div data-s="3" style="margin-top:3cqh;display:flex;align-items:flex-end;gap:2cqw">
+      <div class="big" style="font-size:6.5cqw;color:var(--gold)"><span data-count="48">48</span><small> m³</small></div>
+      <p class="lbl" style="max-width:20cqw;margin-bottom:1cqh">por día, con refrigeración por aire</p>
+    </div>
+  </div>
+  <p class="src" data-s="1">El Observador, febrero y noviembre de 2023 · Bloomberg Línea, 2025</p>
+  <div class="n"><ul>
+    <li>Os pontos ciano atrás de você são a água do projeto original.</li>
+    <li>O Google planejou um data center no Parque de las Ciencias, em Canelones. No primeiro desenho, cerca de 7.600 m³ de água potável por dia, o consumo de umas 55 mil pessoas.</li>
+    <li>Toque: o pesquisador Daniel Pena, da Faculdade de Ciências Sociais, pediu os dados por acesso à informação. O ministério negou, alegando segredo industrial. A Comisión Nacional en Defensa del Agua y la Vida foi à Justiça e ganhou em primeira instância. A água escoa.</li>
+    <li>Toque: o projeto foi redesenhado com refrigeração a ar, um prédio em vez de dois, cerca de 48 m³ por dia, para cozinha e banheiros.</li>
+    <li>Esta é a ponte acontecendo: gente que usa, pergunta e não aceita a resposta pronta muda o projeto.</li>
+    <li class="c">Cuidado: a imprensa liga a mudança à polêmica pública, não à seca de 2023; não diga que foi a seca. O Google investe mais de US$ 850 milhões ali: o tom é "a cidadania funcionou", não "o Google é vilão". Você não precisa saber o desfecho final do recurso; diga que a Justiça deu razão em primeira instância.</li>
+  </ul></div>
+</section>
+
+<!-- 14b · o estado vai usar -->
+<section class="slide center" data-mode="rise" aria-label="O Estado já decidiu">
+  <p class="eyebrow rise">Brasil · Uruguay</p>
+  <h2 class="rise d1">El Estado <em>ya decidió</em> usar IA.</h2>
+  <div class="row" data-s="1" style="gap:4.5cqw">
+    <div class="stat"><div class="big" style="font-size:5.6cqw;color:var(--gold)"><small>R$ </small><span data-count="23">23</span><small> mil millones</small></div><p class="lbl" style="margin-inline:auto;max-width:20cqw">Plan Brasileño de Inteligencia Artificial · 2024 a 2028</p></div>
+    <div class="stat"><div class="big" style="font-size:5.6cqw;color:var(--gold)"><small>R$ </small><span data-count="390">390</span><small> millones</small></div><p class="lbl" style="margin-inline:auto;max-width:20cqw">INSPIRE · MGI y CPQD · IA en los servicios públicos</p></div>
+    <div class="stat"><div class="big" style="font-size:5.6cqw;color:var(--cyan)">~<span data-count="90">90</span><small>%</small></div><p class="lbl" style="margin-inline:auto;max-width:20cqw">de las escuelas públicas uruguayas en el programa de pensamiento computacional e IA de Ceibal</p></div>
+  </div>
+  <p class="punch" data-s="2">El dinero está decidido. La regla, no.</p>
+  <p class="src" data-s="1">Gobierno Federal de Brasil · Finep · Ceibal, 2025</p>
+  <div class="n"><ul>
+    <li>Aqui o espírito da fala: o mundo vai usar IA, e o Estado também. O Brasil está deslocando orçamento. O Uruguai levou o pensamento computacional e a IA para quase todas as escolas públicas.</li>
+    <li>PBIA: R$ 23 bilhões previstos de 2024 a 2028. INSPIRE: projeto do MGI com o CPQD, R$ 390 milhões do FNDCT geridos pela Finep, lema "um governo para cada pessoa". Até maio de 2026, cerca de 3,5 milhões de atendimentos no Chat GOV.BR, em 22 políticas.</li>
+    <li>Ceibal: começou em 2007 com um computador por estudante. Hoje o programa de pensamento computacional e IA chega a cerca de 90% das escolas públicas, com uns 100 mil estudantes.</li>
+    <li>Toque: o dinheiro está decidido. A regra, não.</li>
+    <li class="c">Cuidado: os R$ 23 bi são valor projetado, e mais da metade é crédito. Se alguém perguntar, diga "previstos".</li>
+  </ul></div>
+</section>
+
+<!-- 14c · cachaça e cannabis -->
+<section class="slide center" data-mode="dim2" aria-label="A regra">
+  <h2 class="rise">Brasil reguló <em class="gold">la cachaça.</em></h2>
+  <h2 class="rise d1" style="margin-top:2cqh">Uruguay reguló <em class="cyan">el cannabis.</em></h2>
+  <p class="lead" data-s="1" style="margin-inline:auto;max-width:56cqw;text-align:center;font-size:2.6cqw">Ninguno de los dos tiene una ley general de inteligencia artificial.</p>
+  <p class="lead mute" data-s="2" style="margin-inline:auto;max-width:56cqw;text-align:center">La regla que no está escrita se escribe en la práctica, por quienes están adentro.</p>
+  <div class="n"><ul>
+    <li>Espere o riso no "cannabis". Ele vem.</li>
+    <li>Brasil: a cachaça tem lei, decreto e portarias que definem teor, barril e rótulo (Lei 8.918 de 1994, Decreto 6.871 de 2009). A IA não tem lei geral; o PL 2.338/2023 passou no Senado em dezembro de 2024 e aguarda a Câmara.</li>
+    <li>Uruguai: foi o primeiro país a regular o mercado de cannabis, em 2013 (Lei 19.172). Para IA, trabalha com estratégia nacional (Lei 20.212, de 2023, artigo 74, com a AGESIC) e assinou a convenção de IA do Conselho da Europa em setembro de 2025. Não tem uma lei geral.</li>
+    <li>A virada: se a regra não está escrita, ela é escrita na prática. Por quem está lá dentro. Por isso importa quem está na mesa.</li>
+    <li class="c">Cuidado: sem lei geral não é sem lei. Proteção de dados, defesa do consumidor e as constituições já valem. Confira o andamento do PL 2.338 na véspera.</li>
+  </ul></div>
+</section>
+
+<!-- 15 · quem está na mesa -->
+<section class="slide" data-mode="orbit" aria-label="Quem está na mesa">
+  <div class="col">
+    <p class="eyebrow rise">Quién construye la IA hoy</p>
+    <div class="rise d1">
+      <div class="big" style="color:var(--lav)"><span data-count="26">26</span><small> de 100</small></div>
+      <p class="lbl" style="max-width:36cqw">contrataciones en IA en 2025 fueron de mujeres</p>
+    </div>
+    <div data-s="1" style="margin-top:4cqh">
+      <div class="big" style="color:var(--lav)"><span data-count="13">13</span><small> de 100</small></div>
+      <p class="lbl" style="max-width:36cqw">en la alta dirección de las empresas de IA</p>
+    </div>
+    <p class="punch" data-s="2">No es maldad. Es ausencia.</p>
+  </div>
+  <p class="src" data-s="1">LinkedIn, Economic Graph, 2026</p>
+  <div class="n"><ul>
+    <li>Mulheres foram 26% das contratações em IA em 2025, contra cerca de 50% nas outras áreas. Na alta liderança das empresas de IA, 13%.</li>
+    <li>Não encontrei dado confiável sobre raça, classe ou território entre quem constrói IA. A ausência do dado também é um dado.</li>
+    <li>O sistema não precisa ser mau para apagar alguém. Basta que esse alguém não estivesse na mesa quando ele foi feito.</li>
+  </ul></div>
+</section>
+
+<!-- 16 · diversidade -->
+<section class="slide" data-mode="orbit" aria-label="Diversidade">
+  <div class="col" style="max-width:56cqw">
+    <h2 class="xl rise">La IA necesita más diversidad de
+      <span class="rot" aria-live="off"><span>género</span><span>raza</span><span>clase</span><span>territorio</span><span>edad</span><span>formación</span><span>carrera</span><span>sexualidad</span><span>origen</span></span>
+    </h2>
+  </div>
+  <div class="n"><ul>
+    <li>As palavras giram sozinhas. Fale por cima, sem esperar.</li>
+    <li>A sua teoria: se diversidade é um valor, ela não vale zero. Vale mais um. Não excluir é o mínimo; o Estado precisa produzir inclusão.</li>
+    <li>A IA barateou muito da habilidade técnica. O que ficou raro é o repertório: experiência, território, julgamento.</li>
+  </ul></div>
+</section>
+
+<!-- 16b · bbsia -->
+<section class="slide" data-mode="latam" data-mstep="2:latamnet" aria-label="BBSIA">
+  <div class="col" style="max-width:44cqw">
+    <p class="eyebrow rise">Brasil · bancobrasileiro.ia.br</p>
+    <h2 class="rise d1">Nadie tiene que <em>construir solo.</em></h2>
+    <div data-s="1" style="margin-top:4cqh">
+      <div class="big" style="font-size:6.5cqw;color:var(--lav)"><small>+</small><span data-count="500">500</span></div>
+      <p class="lbl" style="max-width:34cqw">soluciones de IA del sector público mapeadas en el Banco Brasileño de Soluciones de IA</p>
+    </div>
+    <p class="punch" data-s="2" style="font-size:2.8cqw">¿Y si existiera un banco de soluciones del Cono Sur?</p>
+  </div>
+  <div class="n"><ul>
+    <li>O BBSIA mapeia soluções de IA do setor público para que nenhum órgão reinvente o que outro já fez, e para que quem está começando encontre por onde começar.</li>
+    <li>Toque: as capitais do Cone Sul se conectam. Amanhã, o próprio evento apresenta o Banco de Soluciones do inLAB de Montevidéu, e hoje à tarde vocês escrevem a Llamada para Acción da Rede de Inovação do Cone Sul.</li>
+    <li>A provocação: e se esses bancos conversassem? Um banco de soluções do Cone Sul é construir a ponte juntos.</li>
+    <li class="c">Cuidado: confirme na véspera o número de soluções publicadas no site.</li>
+  </ul></div>
+</section>
+
+<!-- 17 · ponte ou precipício -->
+<section class="slide" data-mode="cliffs" data-mstep="2:bridge" aria-label="Ponte ou precipício">
+  <div class="bridge-title" style="top:5.5cqh">
+    <p class="eyebrow rise">Puente o precipicio</p>
+    <h2 class="xl rise d1" style="font-size:5.2cqw">El Estado va a usar IA.</h2>
+    <p class="punch" data-s="1" style="margin:2cqh auto 0;max-width:70cqw;font-size:2.9cqw">La pregunta es quién va a participar de esa construcción.</p>
+    <p class="lead" data-s="2">El puente se construye con más gente usando, cuestionando y construyendo.</p>
+  </div>
+  <div class="n"><ul>
+    <li>Esta é a tese da fala. Diga devagar: o Estado vai usar IA. Isso já está decidido.</li>
+    <li>Toque: a pergunta é quem vai participar dessa construção. Atrás de você, os pontos caem pelo vão: é o precipício, a mesma história de Dartmouth, do feed e de Mianmar, agora com o Estado.</li>
+    <li>Toque: a ponte se forma das duas bordas para o centro. Cada ponto é uma pessoa a mais usando, questionando e construindo. Canelones mostrou que funciona.</li>
+  </ul></div>
+</section>
+
+<!-- 18 · fecho -->
+<section class="slide center end top" data-mode="bridge" aria-label="Encerramento">
+  <h2 class="xl rise" style="margin-top:6cqh">Con todas las personas, <em class="gold">para todas las personas.</em></h2>
+  <p class="es rise d1">com todas as pessoas, para todas as pessoas</p>
+  <div class="meta rise d2">Carla Figueiredo<br>clicdiversidade.netlify.app · linkedin.com/in/carlacristinefigueiredo</div>
+  <div class="qrs rise d3">
+    <div class="qr l"><div class="qrbox"><svg role="img" aria-label="QR: https://clicdiversidade.netlify.app/?lang=es" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33 33" shape-rendering="crispEdges"><path fill="#ffffff" d="M0 0h33v33H0z"/><path stroke="#070b24" d="M0 0.5h7m2 0h2m2 0h1m2 0h5m2 0h1m2 0h7M0 1.5h1m5 0h1m3 0h2m1 0h5m2 0h1m1 0h1m1 0h1m1 0h1m5 0h1M0 2.5h1m1 0h3m1 0h1m1 0h1m1 0h4m1 0h1m1 0h2m7 0h1m1 0h3m1 0h1M0 3.5h1m1 0h3m1 0h1m1 0h1m1 0h2m2 0h1m1 0h1m3 0h3m1 0h1m1 0h1m1 0h3m1 0h1M0 4.5h1m1 0h3m1 0h1m1 0h1m2 0h2m2 0h1m2 0h1m5 0h1m1 0h1m1 0h3m1 0h1M0 5.5h1m5 0h1m1 0h1m1 0h1m2 0h4m3 0h2m4 0h1m5 0h1M0 6.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M8 7.5h1m1 0h1m4 0h1m2 0h1m2 0h4M0 8.5h1m1 0h5m2 0h1m3 0h3m1 0h1m4 0h1m1 0h1m1 0h5M0 9.5h1m1 0h1m2 0h1m3 0h1m1 0h2m1 0h1m1 0h1m1 0h6m2 0h2m1 0h4M0 10.5h1m2 0h1m2 0h5m4 0h1m2 0h1m2 0h1m6 0h1m1 0h2M0 11.5h2m1 0h1m5 0h1m2 0h1m1 0h3m3 0h6m2 0h4M0 12.5h1m3 0h1m1 0h1m11 0h1m2 0h1m3 0h1m1 0h3M1 13.5h1m3 0h1m3 0h1m2 0h5m3 0h4m2 0h1m3 0h3M6 14.5h1m3 0h1m1 0h3m4 0h1m2 0h1m2 0h3m2 0h2M0 15.5h1m1 0h3m4 0h1m3 0h2m1 0h1m2 0h3m3 0h2m1 0h3M0 16.5h2m1 0h1m1 0h3m2 0h1m1 0h2m3 0h3m2 0h1m1 0h2m1 0h3m2 0h1M3 17.5h1m1 0h1m2 0h1m2 0h1m1 0h2m1 0h5m2 0h1m2 0h2m1 0h2m1 0h1M1 18.5h8m1 0h2m2 0h2m1 0h1m2 0h1m1 0h1m2 0h4m1 0h2M0 19.5h2m1 0h3m2 0h1m1 0h3m2 0h4m5 0h1m1 0h5m1 0h1M0 20.5h2m2 0h3m1 0h2m1 0h1m3 0h2m2 0h7m1 0h3m1 0h2M0 21.5h4m4 0h2m1 0h3m1 0h1m1 0h2m2 0h1m1 0h1m2 0h1m3 0h1m1 0h1M0 22.5h1m1 0h1m1 0h5m2 0h2m1 0h4m2 0h3m5 0h1m1 0h2M0 23.5h1m1 0h1m2 0h1m2 0h4m2 0h2m2 0h1m2 0h2m2 0h2m1 0h1m1 0h1M0 24.5h1m2 0h2m1 0h2m1 0h1m2 0h2m1 0h3m4 0h7m2 0h2M8 25.5h1m1 0h1m1 0h2m2 0h1m1 0h5m1 0h1m3 0h1m1 0h1m1 0h1M0 26.5h7m3 0h1m2 0h4m1 0h1m1 0h2m1 0h2m1 0h1m1 0h1m1 0h1M0 27.5h1m5 0h1m1 0h4m3 0h2m2 0h1m1 0h4m3 0h4M0 28.5h1m1 0h3m1 0h1m1 0h1m1 0h3m1 0h2m2 0h1m2 0h1m2 0h6m2 0h1M0 29.5h1m1 0h3m1 0h1m1 0h2m1 0h1m2 0h4m2 0h3m1 0h2m2 0h2m2 0h1M0 30.5h1m1 0h3m1 0h1m1 0h1m2 0h2m4 0h1m1 0h1m3 0h1m2 0h2m1 0h1M0 31.5h1m5 0h1m3 0h1m1 0h2m2 0h1m1 0h4m1 0h1m1 0h1m2 0h1m1 0h1M0 32.5h7m1 0h1m2 0h2m4 0h1m1 0h2m1 0h1m1 0h4m1 0h1m1 0h1"/></svg></div><b>CLIC diversidade</b><span>clicdiversidade.netlify.app</span><span>plataforma · en español</span></div>
+    <div class="qr r"><div class="qrbox"><svg role="img" aria-label="QR: https://lelia.ia.br/" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" shape-rendering="crispEdges"><path fill="#ffffff" d="M0 0h25v25H0z"/><path stroke="#070b24" d="M0 0.5h7m2 0h1m6 0h1m1 0h7M0 1.5h1m5 0h1m2 0h5m1 0h1m2 0h1m5 0h1M0 2.5h1m1 0h3m1 0h1m1 0h2m1 0h1m4 0h1m1 0h1m1 0h3m1 0h1M0 3.5h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h3m3 0h1m1 0h3m1 0h1M0 4.5h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m3 0h1m1 0h3m1 0h1M0 5.5h1m5 0h1m1 0h1m1 0h2m1 0h1m1 0h2m1 0h1m5 0h1M0 6.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M8 7.5h1m6 0h1M0 8.5h1m1 0h5m6 0h1m1 0h1m2 0h5M1 9.5h3m1 0h1m5 0h3m2 0h1m2 0h1m3 0h1M2 10.5h2m2 0h1m1 0h3m2 0h6m2 0h1m1 0h2M0 11.5h1m2 0h1m3 0h1m3 0h1m2 0h2m1 0h4m3 0h1M1 12.5h1m2 0h4m3 0h1m5 0h2m1 0h1m1 0h3M0 13.5h4m1 0h1m4 0h1m1 0h2m2 0h1m2 0h1m1 0h1m1 0h1M0 14.5h1m2 0h1m2 0h1m1 0h3m2 0h3m1 0h1m1 0h3m1 0h2M0 15.5h1m1 0h1m1 0h1m4 0h1m2 0h2m2 0h1m1 0h3m3 0h1M0 16.5h1m1 0h2m1 0h3m4 0h1m1 0h1m1 0h5m1 0h1M8 17.5h1m6 0h2m3 0h2M0 18.5h7m4 0h2m3 0h1m1 0h1m1 0h1m1 0h3M0 19.5h1m5 0h1m1 0h1m2 0h1m2 0h3m3 0h2m2 0h1M0 20.5h1m1 0h3m1 0h1m1 0h1m2 0h1m3 0h6m1 0h3M0 21.5h1m1 0h3m1 0h1m1 0h1m3 0h3m2 0h2m1 0h5M0 22.5h1m1 0h3m1 0h1m1 0h1m1 0h1m2 0h3m5 0h2m1 0h1M0 23.5h1m5 0h1m2 0h1m2 0h2m1 0h2m2 0h3m2 0h1M0 24.5h7m1 0h2m2 0h1m1 0h1m2 0h8"/></svg></div><b>Lélia</b><span>lelia.ia.br</span><span>agente de gobernanza · en portugués</span></div>
+  </div>
+  <div class="n"><ul>
+    <li>Fale a revelação aqui, de viva voz: esta apresentação foi criada com inteligência artificial, durante noites de conversa. O conhecimento, as reflexões e a crítica são seus; a IA foi parceira, não deu resposta pronta.</li>
+    <li>A frase em espanhol é um gesto para a plateia. Pode ler as duas.</li>
+    <li>Agradeça ao Montevideo Lab, ao GNova e à Enap.</li>
+  </ul></div>
+</section>
+
+<button class="nav l" type="button" aria-label="Volver"></button>
+<button class="nav r" type="button" aria-label="Avanzar"></button>
+<div class="prog" id="prog"></div>
+<div class="count" id="count"></div>
+<div class="hint" id="hint">→ avanzar · ← volver · N notas · F pantalla completa · L português</div>
+</div>
+<aside id="notes" hidden aria-live="polite"></aside>
+</div>
+
+<script>
+(() => {
+const MAP = [4539,98,0,4641,98,0,5150,98,0,5252,98,0,5354,98,0,5456,98,0,1071,294,0,4029,294,0,4131,294,0,4233,294,0,4335,294,0,4437,294,0,4539,294,0,4641,294,0,4743,294,0,4845,294,0,4947,294,0,5048,294,0,5150,294,0,5252,294,0,5354,294,0,5456,294,0,5558,294,0,6272,294,0,8006,294,0,561,490,0,663,490,0,765,490,0,867,490,0,969,490,0,3621,490,0,4947,490,0,5048,490,0,5150,490,0,5252,490,0,5354,490,0,5456,490,0,5558,490,0,7190,490,0,7802,490,0,7904,490,0,8006,490,0,8108,490,0,8210,490,0,51,687,0,153,687,0,255,687,0,357,687,0,459,687,0,561,687,0,663,687,0,765,687,0,867,687,0,969,687,0,1071,687,0,1173,687,0,1275,687,0,1377,687,0,1479,687,0,1581,687,0,1683,687,0,1785,687,0,1887,687,0,2805,687,0,2907,687,0,3417,687,0,3825,687,0,3927,687,0,4131,687,0,4335,687,0,4437,687,0,4539,687,0,4641,687,0,4947,687,0,5048,687,0,5150,687,0,5252,687,0,5354,687,0,5456,687,0,6578,687,0,6680,687,0,7496,687,0,7700,687,0,7802,687,0,7904,687,0,8006,687,0,8108,687,0,8210,687,0,8312,687,0,8414,687,0,8516,687,0,8618,687,0,8720,687,0,8822,687,0,8924,687,0,9026,687,0,9128,687,0,9230,687,0,9332,687,0,51,883,0,153,883,0,255,883,0,357,883,0,459,883,0,561,883,0,663,883,0,765,883,0,867,883,0,969,883,0,1071,883,0,1173,883,0,1275,883,0,1377,883,0,1479,883,0,1581,883,0,1683,883,0,1785,883,0,1887,883,0,1989,883,0,2091,883,0,2193,883,0,2295,883,0,2397,883,0,2703,883,0,2805,883,0,2907,883,0,3009,883,0,3111,883,0,3213,883,0,3315,883,0,3417,883,0,3519,883,0,3621,883,0,3723,883,0,3825,883,0,3927,883,0,4029,883,0,4131,883,0,4233,883,0,4335,883,0,4539,883,0,4641,883,0,4743,883,0,5048,883,0,5150,883,0,5252,883,0,5354,883,0,6476,883,0,6578,883,0,6680,883,0,6782,883,0,6884,883,0,6986,883,0,7088,883,0,7190,883,0,7292,883,0,7394,883,0,7496,883,0,7598,883,0,7802,883,0,7904,883,0,8006,883,0,8108,883,0,8210,883,0,8312,883,0,8414,883,0,8516,883,0,8618,883,0,8720,883,0,8822,883,0,8924,883,0,9026,883,0,9128,883,0,9230,883,0,9332,883,0,9434,883,0,9536,883,0,9638,883,0,9740,883,0,9842,883,0,9944,883,0,51,1079,0,153,1079,0,255,1079,0,357,1079,0,459,1079,0,561,1079,0,663,1079,0,765,1079,0,867,1079,0,969,1079,0,1071,1079,0,1173,1079,0,1275,1079,0,1377,1079,0,1479,1079,0,1581,1079,0,1683,1079,0,1785,1079,0,1887,1079,0,1989,1079,0,2091,1079,0,2397,1079,0,2601,1079,0,2703,1079,0,2805,1079,0,2907,1079,0,3009,1079,0,3111,1079,0,3213,1079,0,3315,1079,0,3417,1079,0,3519,1079,0,3621,1079,0,3723,1079,0,3825,1079,0,3927,1079,0,4029,1079,0,4131,1079,0,4641,1079,0,5048,1079,0,5150,1079,0,6374,1079,0,6476,1079,0,6680,1079,0,6782,1079,0,6884,1079,0,6986,1079,0,7088,1079,0,7190,1079,0,7292,1079,0,7394,1079,0,7496,1079,0,7598,1079,0,7700,1079,0,7802,1079,0,7904,1079,0,8006,1079,0,8108,1079,0,8210,1079,0,8312,1079,0,8414,1079,0,8516,1079,0,8618,1079,0,8720,1079,0,8822,1079,0,8924,1079,0,9026,1079,0,9128,1079,0,9230,1079,0,9332,1079,0,9434,1079,0,9536,1079,0,9638,1079,0,9740,1079,0,9842,1079,0,9944,1079,0,51,1275,0,153,1275,0,255,1275,0,357,1275,0,459,1275,0,561,1275,0,663,1275,0,765,1275,0,867,1275,0,969,1275,0,1071,1275,0,1173,1275,0,1275,1275,0,1377,1275,0,1479,1275,0,1683,1275,0,2499,1275,0,2601,1275,0,3009,1275,0,3111,1275,0,3213,1275,0,3315,1275,0,3417,1275,0,3519,1275,0,3621,1275,0,3723,1275,0,3825,1275,0,3927,1275,0,4437,1275,0,4539,1275,0,6374,1275,0,6476,1275,0,6578,1275,0,6884,1275,0,6986,1275,0,7088,1275,0,7190,1275,0,7292,1275,0,7394,1275,0,7496,1275,0,7598,1275,0,7700,1275,0,7802,1275,0,7904,1275,0,8006,1275,0,8108,1275,0,8210,1275,0,8312,1275,0,8414,1275,0,8516,1275,0,8618,1275,0,8720,1275,0,8822,1275,0,8924,1275,0,9026,1275,0,9128,1275,0,9230,1275,0,9332,1275,0,9434,1275,0,9536,1275,0,9638,1275,0,51,1471,0,153,1471,0,255,1471,0,357,1471,0,459,1471,0,561,1471,0,663,1471,0,765,1471,0,867,1471,0,969,1471,0,1479,1471,0,1581,1471,0,2499,1471,0,3213,1471,0,3315,1471,0,3417,1471,0,3519,1471,0,3621,1471,0,3723,1471,0,3825,1471,0,3927,1471,0,4029,1471,0,4131,1471,0,4437,1471,0,4539,1471,0,4641,1471,0,4743,1471,0,6578,1471,0,6782,1471,0,6884,1471,0,6986,1471,0,7088,1471,0,7190,1471,0,7292,1471,0,7394,1471,0,7496,1471,0,7598,1471,0,7700,1471,0,7802,1471,0,7904,1471,0,8006,1471,0,8108,1471,0,8210,1471,0,8312,1471,0,8414,1471,0,8516,1471,0,8618,1471,0,8720,1471,0,8822,1471,0,8924,1471,0,9026,1471,0,9128,1471,0,9230,1471,0,9332,1471,0,9944,1471,0,51,1667,2,153,1667,2,255,1667,2,357,1667,2,459,1667,2,561,1667,2,663,1667,2,765,1667,2,867,1667,0,969,1667,0,1377,1667,0,3213,1667,0,3315,1667,0,3417,1667,0,3519,1667,0,3621,1667,0,3723,1667,0,3825,1667,0,3927,1667,0,4029,1667,0,4131,1667,0,4233,1667,0,4437,1667,0,4539,1667,0,4641,1667,0,4743,1667,0,4845,1667,0,6068,1667,0,6170,1667,0,6272,1667,0,6374,1667,0,6476,1667,0,6578,1667,0,6680,1667,0,6782,1667,0,6884,1667,0,6986,1667,0,7088,1667,0,7190,1667,0,7292,1667,0,7394,1667,0,7496,1667,0,7598,1667,0,7700,1667,0,7802,1667,0,7904,1667,0,8006,1667,2,8108,1667,2,8210,1667,2,8312,1667,2,8414,1667,2,8516,1667,2,8618,1667,2,8720,1667,2,8822,1667,2,8924,1667,2,9026,1667,2,9128,1667,2,9230,1667,2,9332,1667,2,9434,1667,2,9536,1667,0,9638,1667,0,51,1863,2,153,1863,2,255,1863,2,357,1863,2,459,1863,2,561,1863,2,663,1863,2,765,1863,2,867,1863,0,969,1863,0,3213,1863,1,3315,1863,1,3417,1863,1,3519,1863,1,3621,1863,1,3723,1863,1,3825,1863,1,3927,1863,1,4029,1863,1,4131,1863,1,4233,1863,1,4335,1863,1,4437,1863,1,4539,1863,1,4743,1863,0,6272,1863,0,6374,1863,0,6476,1863,0,6578,1863,0,6680,1863,0,6782,1863,0,6884,1863,0,6986,1863,0,7088,1863,0,7190,1863,0,7292,1863,0,7394,1863,0,7496,1863,0,7598,1863,0,7700,1863,0,7802,1863,0,7904,1863,0,8006,1863,0,8108,1863,2,8210,1863,2,8312,1863,2,8414,1863,2,8516,1863,2,8618,1863,2,8720,1863,2,8822,1863,2,8924,1863,2,9026,1863,2,9128,1863,2,9230,1863,2,9332,1863,2,9434,1863,2,9536,1863,2,9638,1863,0,9740,1863,0,51,2060,2,153,2060,2,255,2060,2,357,2060,2,459,2060,2,561,2060,2,663,2060,2,765,2060,0,3213,2060,1,3315,2060,1,3417,2060,1,3519,2060,1,3621,2060,1,3723,2060,1,3825,2060,1,3927,2060,1,4029,2060,1,4131,2060,1,4233,2060,1,4335,2060,1,4437,2060,1,4539,2060,1,4641,2060,1,4743,2060,0,6272,2060,0,6374,2060,0,6476,2060,0,6578,2060,0,6680,2060,0,6782,2060,0,6884,2060,0,6986,2060,0,7292,2060,0,7394,2060,0,7496,2060,0,7700,2060,0,7802,2060,0,7904,2060,0,8006,2060,0,8108,2060,2,8210,2060,2,8312,2060,2,8414,2060,2,8516,2060,2,8618,2060,2,8720,2060,2,8822,2060,2,8924,2060,2,9026,2060,2,9128,2060,2,9230,2060,2,9332,2060,2,9434,2060,2,9536,2060,2,9638,2060,2,51,2256,2,153,2256,2,255,2256,2,357,2256,2,459,2256,2,765,2256,0,3213,2256,1,3315,2256,1,3417,2256,1,3519,2256,1,3621,2256,1,3723,2256,1,3825,2256,1,3927,2256,1,4029,2256,1,4131,2256,1,4233,2256,1,4335,2256,1,4437,2256,1,6170,2256,0,6272,2256,0,6374,2256,0,6578,2256,0,6782,2256,0,6884,2256,0,6986,2256,0,7394,2256,0,7496,2256,0,7700,2256,0,7802,2256,0,7904,2256,0,8006,2256,0,8108,2256,0,8210,2256,2,8312,2256,2,8414,2256,2,8516,2256,2,8618,2256,2,8720,2256,2,8822,2256,2,8924,2256,2,9026,2256,2,9128,2256,2,9230,2256,2,9332,2256,2,9434,2256,2,9536,2256,2,9638,2256,2,9944,2256,0,51,2452,2,153,2452,2,255,2452,2,357,2452,2,3213,2452,1,3315,2452,1,3417,2452,1,3519,2452,1,3621,2452,1,3723,2452,1,3825,2452,1,3927,2452,1,4029,2452,1,4131,2452,1,4233,2452,1,4335,2452,1,6170,2452,0,6272,2452,0,6578,2452,0,6884,2452,0,7088,2452,0,7190,2452,0,7292,2452,0,7394,2452,0,7496,2452,0,7598,2452,0,7700,2452,0,7802,2452,0,7904,2452,0,8006,2452,0,8108,2452,0,8210,2452,2,8312,2452,2,8414,2452,2,8516,2452,2,8618,2452,2,8720,2452,2,8822,2452,2,8924,2452,2,9026,2452,2,9128,2452,2,9230,2452,2,9332,2452,2,9536,2452,2,9944,2452,0,51,2648,2,357,2648,2,561,2648,0,3213,2648,1,3315,2648,1,3417,2648,1,3519,2648,1,3621,2648,1,3723,2648,1,3825,2648,1,3927,2648,1,4029,2648,1,4131,2648,1,4233,2648,1,4335,2648,1,6272,2648,4,6476,2648,4,6578,2648,4,7088,2648,4,7190,2648,4,7292,2648,4,7394,2648,4,7496,2648,4,7598,2648,4,7700,2648,4,7802,2648,0,7904,2648,0,8006,2648,0,8108,2648,0,8210,2648,0,8312,2648,2,8414,2648,2,8516,2648,2,8618,2648,2,8720,2648,2,8822,2648,2,8924,2648,2,9026,2648,2,9128,2648,2,9230,2648,2,9332,2648,2,9434,2648,2,9638,2648,2,9944,2648,0,51,2844,2,357,2844,2,3315,2844,1,3417,2844,1,3519,2844,1,3621,2844,1,3723,2844,1,3825,2844,1,3927,2844,1,4029,2844,1,4131,2844,1,4233,2844,1,6170,2844,4,6272,2844,4,6374,2844,4,6476,2844,4,6578,2844,4,7394,2844,4,7496,2844,4,7598,2844,4,7700,2844,4,7802,2844,0,7904,2844,0,8006,2844,0,8108,2844,0,8210,2844,0,8312,2844,2,8414,2844,2,8516,2844,2,8618,2844,2,8720,2844,2,8822,2844,2,8924,2844,2,9026,2844,2,9128,2844,2,9230,2844,2,9332,2844,2,9434,2844,2,3315,3040,1,3417,3040,1,3519,3040,1,3621,3040,1,3723,3040,1,3825,3040,1,3927,3040,1,4131,3040,1,6170,3040,4,6272,3040,4,6374,3040,4,6476,3040,4,6578,3040,4,6680,3040,4,6782,3040,4,6986,3040,4,7088,3040,4,7190,3040,4,7292,3040,4,7394,3040,4,7496,3040,4,7598,3040,4,7700,3040,4,7802,3040,0,7904,3040,0,8006,3040,0,8108,3040,0,8210,3040,0,8312,3040,0,8414,3040,2,8516,3040,2,8618,3040,2,8720,3040,2,8822,3040,2,8924,3040,2,9026,3040,2,9128,3040,2,9230,3040,2,9332,3040,2,9434,3040,2,9536,3040,2,3519,3237,1,3621,3237,1,3723,3237,1,4233,3237,1,6068,3237,4,6170,3237,4,6272,3237,4,6374,3237,4,6476,3237,4,6578,3237,4,6680,3237,4,6782,3237,4,6884,3237,4,6986,3237,4,7088,3237,4,7190,3237,4,7292,3237,4,7394,3237,4,7496,3237,4,7598,3237,4,7700,3237,4,7904,3237,0,8006,3237,0,8108,3237,0,8210,3237,0,8312,3237,0,8414,3237,2,8516,3237,2,8618,3237,2,8720,3237,2,8822,3237,2,8924,3237,2,9026,3237,2,9128,3237,2,9230,3237,2,9332,3237,2,9434,3237,2,9536,3237,2,3417,3433,1,3519,3433,1,3621,3433,1,3723,3433,1,6068,3433,4,6170,3433,4,6272,3433,4,6374,3433,4,6476,3433,4,6578,3433,4,6680,3433,4,6782,3433,4,6884,3433,4,6986,3433,4,7088,3433,4,7190,3433,4,7292,3433,4,7496,3433,4,7598,3433,4,7700,3433,4,7802,3433,4,7904,3433,0,8312,3433,0,8414,3433,2,8516,3433,2,8618,3433,2,8720,3433,2,8822,3433,2,8924,3433,2,9026,3433,2,9128,3433,2,9230,3433,2,9332,3433,2,9434,3433,2,9536,3433,2,3621,3629,3,3723,3629,3,4029,3629,3,4335,3629,3,5966,3629,4,6068,3629,4,6170,3629,4,6272,3629,4,6374,3629,4,6476,3629,4,6578,3629,4,6680,3629,4,6782,3629,4,6884,3629,4,6986,3629,4,7088,3629,4,7190,3629,4,7292,3629,4,7394,3629,4,7496,3629,4,7598,3629,4,7700,3629,4,7802,3629,4,7904,3629,0,8006,3629,0,8414,3629,2,8516,3629,2,8618,3629,2,8720,3629,2,8924,3629,2,9026,3629,2,9128,3629,2,9230,3629,2,3723,3825,3,3825,3825,3,3927,3825,3,6068,3825,4,6170,3825,4,6272,3825,4,6374,3825,4,6476,3825,4,6578,3825,4,6680,3825,4,6782,3825,4,6884,3825,4,6986,3825,4,7088,3825,4,7190,3825,4,7292,3825,4,7394,3825,4,7598,3825,4,7700,3825,4,7802,3825,4,7904,3825,0,8516,3825,0,8618,3825,0,9026,3825,0,9128,3825,0,9230,3825,0,9332,3825,0,9740,3825,0,3927,4021,3,4029,4021,3,4131,4021,3,5966,4021,4,6068,4021,4,6170,4021,4,6272,4021,4,6374,4021,4,6476,4021,4,6578,4021,4,6680,4021,4,6782,4021,4,6884,4021,4,6986,4021,4,7088,4021,4,7190,4021,4,7292,4021,4,7394,4021,4,7496,4021,4,7700,4021,4,8516,4021,0,8618,4021,0,9128,4021,0,9230,4021,0,9332,4021,0,4437,4217,3,6068,4217,4,6170,4217,4,6272,4217,4,6374,4217,4,6476,4217,4,6578,4217,4,6680,4217,4,6782,4217,4,6884,4217,4,6986,4217,4,7088,4217,4,7190,4217,4,7292,4217,4,7394,4217,4,7496,4217,4,7598,4217,4,7802,4217,4,8618,4217,0,9332,4217,0,9434,4217,0,4335,4413,3,4437,4413,3,4539,4413,3,4641,4413,3,4743,4413,3,6170,4413,4,6272,4413,4,6374,4413,4,6476,4413,4,6578,4413,4,6680,4413,4,6782,4413,4,6884,4413,4,6986,4413,4,7088,4413,4,7190,4413,4,7292,4413,4,7394,4413,4,7496,4413,4,7598,4413,4,7700,4413,4,7802,4413,4,9842,4413,0,4335,4610,3,4437,4610,3,4539,4610,3,4641,4610,3,4743,4610,3,4845,4610,3,4947,4610,3,6272,4610,4,6374,4610,4,6680,4610,4,6782,4610,4,6884,4610,4,6986,4610,4,7088,4610,4,7190,4610,4,7292,4610,4,7394,4610,4,7496,4610,4,7598,4610,4,7700,4610,4,9128,4610,0,9230,4610,0,9638,4610,0,9740,4610,0,4335,4806,3,4437,4806,3,4539,4806,3,4641,4806,3,4743,4806,5,4845,4806,3,4947,4806,5,6782,4806,4,6884,4806,4,6986,4806,4,7088,4806,4,7190,4806,4,7292,4806,4,7394,4806,4,7496,4806,4,7598,4806,4,7700,4806,4,9230,4806,0,9332,4806,0,9536,4806,0,9638,4806,0,153,5001,0,4233,5001,3,4335,5001,3,4437,5001,3,4539,5001,5,4641,5001,5,4743,5001,5,4845,5001,5,4947,5001,5,5048,5001,5,5150,5001,5,6782,5001,4,6884,5001,4,6986,5001,4,7088,5001,4,7190,5001,4,7292,5001,4,7394,5001,4,7496,5001,4,7598,5001,4,9332,5001,0,9536,5001,0,9638,5001,0,9842,5001,0,255,5197,0,357,5197,0,459,5197,0,663,5197,0,4233,5197,3,4335,5197,3,4437,5197,3,4539,5197,5,4641,5197,5,4743,5197,5,4845,5197,5,4947,5197,5,5048,5197,5,5150,5197,5,5252,5197,5,5354,5197,5,6782,5197,4,6884,5197,4,6986,5197,4,7088,5197,4,7190,5197,4,7292,5197,4,7394,5197,4,7496,5197,4,9332,5197,0,9842,5197,0,357,5393,0,459,5393,0,867,5393,0,4335,5393,3,4437,5393,5,4539,5393,5,4641,5393,5,4743,5393,5,4845,5393,5,4947,5393,5,5048,5393,5,5150,5393,5,5252,5393,5,5354,5393,5,5456,5393,5,6884,5393,4,6986,5393,4,7088,5393,4,7190,5393,4,7292,5393,4,7394,5393,4,7496,5393,4,9434,5393,0,9536,5393,0,969,5589,0,4335,5589,3,4437,5589,3,4539,5589,5,4641,5589,5,4743,5589,5,4845,5589,5,4947,5589,5,5048,5589,5,5150,5589,5,5252,5589,5,5354,5589,5,6884,5589,4,6986,5589,4,7088,5589,4,7190,5589,4,7292,5589,4,7394,5589,4,7496,5589,4,153,5786,0,255,5786,0,459,5786,0,4335,5786,3,4437,5786,3,4539,5786,3,4641,5786,3,4743,5786,3,4845,5786,5,4947,5786,5,5048,5786,5,5150,5786,5,5252,5786,5,5354,5786,5,6782,5786,4,6884,5786,4,6986,5786,4,7088,5786,4,7190,5786,4,7292,5786,4,7394,5786,4,7496,5786,4,7802,5786,4,51,5982,0,153,5982,0,255,5982,0,357,5982,0,459,5982,0,4539,5982,3,4641,5982,3,4743,5982,3,4845,5982,5,4947,5982,5,5048,5982,5,5150,5982,5,5252,5982,5,6782,5982,4,6884,5982,4,6986,5982,4,7088,5982,4,7190,5982,4,7292,5982,4,7394,5982,4,7700,5982,4,9842,5982,0,9944,5982,0,51,6178,0,153,6178,0,255,6178,0,357,6178,0,459,6178,0,561,6178,0,4539,6178,3,4641,6178,3,4743,6178,3,4845,6178,5,4947,6178,5,5048,6178,5,5150,6178,5,5252,6178,5,6782,6178,4,6884,6178,4,6986,6178,4,7088,6178,4,7190,6178,4,7292,6178,4,7700,6178,4,9740,6178,0,9842,6178,0,9944,6178,0,51,6374,0,153,6374,0,255,6374,0,357,6374,0,459,6374,0,561,6374,0,663,6374,0,4539,6374,3,4641,6374,3,4743,6374,3,4845,6374,3,4947,6374,5,5048,6374,5,5150,6374,5,6884,6374,4,6986,6374,4,7088,6374,4,7190,6374,4,7292,6374,4,7598,6374,4,9536,6374,0,9638,6374,0,9740,6374,0,9842,6374,0,9944,6374,0,51,6570,0,153,6570,0,255,6570,0,357,6570,0,459,6570,0,561,6570,0,663,6570,0,765,6570,0,4539,6570,3,4641,6570,3,4743,6570,3,4845,6570,3,4947,6570,3,5048,6570,5,6884,6570,4,6986,6570,4,7088,6570,4,7190,6570,4,9536,6570,0,9638,6570,0,9740,6570,0,9842,6570,0,9944,6570,0,51,6766,0,153,6766,0,255,6766,0,357,6766,0,459,6766,0,561,6766,0,663,6766,0,765,6766,0,867,6766,0,4539,6766,3,4641,6766,3,4743,6766,3,4845,6766,3,4947,6766,5,5048,6766,5,6884,6766,4,6986,6766,4,7088,6766,4,7190,6766,4,9536,6766,0,9638,6766,0,9740,6766,0,9842,6766,0,9944,6766,0,51,6962,0,153,6962,0,459,6962,0,561,6962,0,663,6962,0,765,6962,0,867,6962,0,4539,6962,3,4641,6962,3,4743,6962,3,4845,6962,6,4947,6962,6,6884,6962,4,6986,6962,4,7088,6962,4,9434,6962,0,9536,6962,0,9638,6962,0,9944,6962,0,663,7159,0,765,7159,0,867,7159,0,4539,7159,3,4641,7159,3,4743,7159,3,4845,7159,3,1581,7355,0,4539,7355,3,4641,7355,3,1581,7551,0,4539,7551,3,4641,7551,3,1479,7747,0,4437,7747,3,4539,7747,3,4437,7943,3,4539,7943,3,4539,8139,3];
+const LA = {"d":[860,87,1051,87,1242,261,1433,261,1624,261,1815,261,2006,261,1051,434,1433,434,1624,434,1815,434,2006,434,2198,434,2389,434,1051,608,1433,608,1624,608,1815,608,2006,608,2198,608,2389,608,1242,782,1624,782,1815,782,2006,782,2198,782,2389,782,2580,782,2771,782,1815,955,2006,955,2198,955,2389,955,2580,955,2006,1129,2198,1129,2389,1129,2580,1129,4300,1129,4491,1129,2006,1303,2198,1303,2389,1303,2580,1303,3535,1303,3726,1303,4873,1303,2006,1477,2198,1477,2389,1477,2580,1477,2771,1477,3535,1477,3726,1477,5255,1477,5446,1477,2198,1650,2389,1650,2580,1650,2771,1650,2962,1650,3153,1650,3344,1650,3535,1650,5446,1650,6019,1650,2580,1824,2771,1824,2962,1824,3153,1824,3344,1824,3535,1824,3344,1998,3535,1998,3726,1998,3917,1998,4108,1998,3535,2171,3726,2171,3917,2171,4108,2171,3917,2345,4108,2345,5446,2345,4108,2519,5064,2519,5255,2519,5446,2519,5637,2519,6019,2519,4300,2693,4491,2693,4682,2693,5064,2693,5255,2693,5446,2693,5637,2693,5828,2693,6019,2693,6210,2693,6402,2693,6593,2693,4491,2866,4873,2866,5064,2866,5255,2866,5446,2866,5637,2866,5828,2866,6019,2866,6210,2866,6402,2866,6593,2866,6784,2866,4873,3040,5064,3040,5255,3040,5446,3040,5637,3040,5828,3040,6019,3040,6210,3040,6402,3040,6593,3040,6784,3040,6975,3040,7166,3040,4873,3214,5064,3214,5255,3214,5446,3214,5637,3214,5828,3214,6019,3214,6210,3214,6402,3214,6593,3214,6784,3214,6975,3214,7166,3214,7357,3214,7548,3214,4873,3388,5064,3388,5255,3388,5446,3388,5637,3388,5828,3388,6019,3388,6210,3388,6402,3388,6593,3388,6784,3388,6975,3388,7166,3388,7357,3388,7548,3388,4682,3561,4873,3561,5064,3561,5255,3561,5446,3561,5637,3561,5828,3561,6019,3561,6210,3561,6402,3561,6593,3561,6784,3561,6975,3561,7166,3561,7357,3561,7548,3561,7739,3561,3344,3735,4682,3735,4873,3735,5064,3735,5255,3735,5446,3735,5637,3735,5828,3735,6019,3735,6210,3735,6402,3735,6593,3735,6784,3735,6975,3735,7166,3735,7357,3735,7548,3735,7739,3735,4491,3909,4682,3909,4873,3909,5064,3909,5255,3909,5446,3909,5637,3909,5828,3909,6019,3909,6210,3909,6402,3909,6593,3909,6784,3909,6975,3909,7166,3909,7357,3909,7548,3909,7739,3909,7930,3909,8121,3909,8313,3909,4682,4082,4873,4082,5064,4082,5255,4082,5446,4082,5637,4082,5828,4082,6019,4082,6210,4082,6402,4082,6593,4082,6784,4082,6975,4082,7166,4082,7357,4082,7548,4082,7739,4082,7930,4082,8121,4082,8313,4082,8504,4082,8695,4082,8886,4082,4491,4256,4682,4256,4873,4256,5064,4256,5255,4256,5446,4256,5637,4256,5828,4256,6019,4256,6210,4256,6402,4256,6593,4256,6784,4256,6975,4256,7166,4256,7357,4256,7548,4256,7739,4256,7930,4256,8121,4256,8313,4256,8504,4256,8695,4256,8886,4256,9077,4256,4491,4430,4682,4430,4873,4430,5064,4430,5255,4430,5446,4430,5637,4430,5828,4430,6019,4430,6210,4430,6402,4430,6593,4430,6784,4430,6975,4430,7166,4430,7357,4430,7548,4430,7739,4430,7930,4430,8121,4430,8313,4430,8504,4430,8695,4430,8886,4430,9077,4430,9268,4430,4682,4604,4873,4604,5064,4604,5255,4604,5446,4604,5637,4604,5828,4604,6019,4604,6210,4604,6402,4604,6593,4604,6784,4604,6975,4604,7166,4604,7357,4604,7548,4604,7739,4604,7930,4604,8121,4604,8313,4604,8504,4604,8695,4604,8886,4604,9077,4604,9268,4604,4873,4777,5064,4777,5255,4777,5446,4777,5637,4777,5828,4777,6019,4777,6210,4777,6402,4777,6593,4777,6784,4777,6975,4777,7166,4777,7357,4777,7548,4777,7739,4777,7930,4777,8121,4777,8313,4777,8504,4777,8695,4777,8886,4777,9077,4777,9268,4777,4873,4951,5064,4951,5255,4951,5446,4951,5637,4951,5828,4951,6019,4951,6210,4951,6402,4951,6593,4951,6784,4951,6975,4951,7166,4951,7357,4951,7548,4951,7739,4951,7930,4951,8121,4951,8313,4951,8504,4951,8695,4951,8886,4951,9077,4951,5064,5125,5255,5125,5446,5125,5637,5125,5828,5125,6019,5125,6210,5125,6402,5125,6593,5125,6784,5125,6975,5125,7166,5125,7357,5125,7548,5125,7739,5125,7930,5125,8121,5125,8313,5125,8504,5125,8695,5125,8886,5125,5064,5298,5255,5298,5446,5298,5637,5298,5828,5298,6019,5298,6210,5298,6402,5298,6593,5298,6784,5298,6975,5298,7166,5298,7357,5298,7548,5298,7739,5298,7930,5298,8121,5298,8313,5298,8504,5298,8695,5298,8886,5298,5255,5472,5446,5472,5637,5472,5828,5472,6019,5472,6210,5472,6402,5472,6593,5472,6784,5472,6975,5472,7166,5472,7357,5472,7548,5472,7739,5472,7930,5472,8121,5472,8313,5472,8504,5472,8695,5472,8886,5472,5446,5646,5637,5646,5828,5646,6019,5646,6210,5646,6402,5646,6593,5646,6784,5646,6975,5646,7166,5646,7357,5646,7548,5646,7739,5646,7930,5646,8121,5646,8313,5646,8504,5646,8695,5646,5637,5820,5828,5820,6019,5820,6210,5820,6402,5820,6593,5820,6784,5820,6975,5820,7166,5820,7357,5820,7548,5820,7739,5820,7930,5820,8121,5820,8313,5820,8504,5820,8695,5820,5637,5993,5828,5993,6019,5993,6210,5993,6402,5993,6593,5993,6784,5993,6975,5993,7166,5993,7357,5993,7548,5993,7739,5993,7930,5993,8121,5993,8313,5993,8504,5993,8695,5993,5637,6167,5828,6167,6019,6167,6210,6167,6402,6167,6593,6167,6784,6167,6975,6167,7166,6167,7357,6167,7548,6167,7739,6167,7930,6167,8121,6167,8313,6167,8504,6167,5637,6341,5828,6341,6019,6341,6210,6341,6402,6341,6593,6341,6784,6341,6975,6341,7166,6341,7357,6341,7548,6341,7739,6341,7930,6341,8121,6341,5637,6515,5828,6515,6019,6515,6210,6515,6402,6515,6593,6515,6784,6515,6975,6515,7166,6515,7357,6515,7548,6515,7739,6515,7930,6515,5637,6688,5828,6688,6019,6688,6210,6688,6402,6688,6593,6688,6784,6688,6975,6688,7166,6688,7357,6688,7548,6688,7739,6688,5637,6862,5828,6862,6019,6862,6210,6862,6402,6862,6593,6862,6784,6862,6975,6862,7166,6862,7357,6862,7548,6862,7739,6862,5637,7036,5828,7036,6019,7036,6210,7036,6402,7036,6593,7036,6784,7036,6975,7036,7166,7036,7357,7036,7548,7036,5446,7209,5637,7209,5828,7209,6019,7209,6210,7209,6402,7209,6593,7209,6784,7209,6975,7209,7166,7209,7357,7209,5446,7383,5637,7383,5828,7383,6019,7383,6210,7383,6402,7383,6593,7383,6784,7383,6975,7383,7166,7383,7357,7383,5446,7557,5637,7557,5828,7557,6019,7557,6210,7557,6402,7557,6593,7557,6784,7557,6975,7557,7166,7557,5446,7731,5637,7731,5828,7731,6019,7731,6210,7731,6402,7731,6593,7731,6784,7731,5255,7904,5446,7904,5637,7904,5828,7904,6019,7904,6210,7904,6402,7904,6593,7904,6784,7904,5255,8078,5446,8078,5637,8078,5828,8078,6019,8078,6210,8078,6402,8078,6593,8078,5255,8252,5446,8252,5637,8252,5828,8252,6019,8252,6210,8252,5255,8425,5446,8425,5637,8425,5828,8425,6019,8425,5446,8599,5637,8599,5828,8599,6019,8599,5255,8773,5446,8773,5637,8773,5828,8773,5064,8947,5255,8947,5446,8947,5637,8947,5255,9120,5446,9120,5637,9120,5828,9120,5064,9294,5255,9294,5446,9294,5637,9294,5064,9468,5255,9468,5446,9468,5255,9641,5446,9641,5446,9815,5637,9815],"c":[6756,7638,5813,5579,7968,5499,5514,7507,5190,3179,4116,2589,4310,1093,5621,1618,4717,3732,3575,2163,3437,2056,5366,1613,3787,2120,2537,1512,3887,2340,4605,2696,6897,6575,4870,5075,5955,2525,6978,7672]};
+const stage = document.getElementById('stage');
+const cv = document.getElementById('fx');
+const ctx = cv.getContext('2d');
+const slides = [...document.querySelectorAll('.slide')];
+const notes = document.getElementById('notes');
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- palette ---------- */
+const C = { lav:[196,181,253], cyan:[125,211,252], gold:[233,196,106], ink:[236,233,247], coral:[244,162,140] };
+
+/* ---------- particles ---------- */
+const mapN = MAP.length / 3;
+const N = 1400;
+const P = [];
+let seed = 7;
+const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+for (let i = 0; i < N; i++) {
+  const p = { hx:rnd(), hy:rnd(), r1:rnd(), r2:rnd(), r3:rnd(), x:0, y:0, a:0, s:1,
+    cr:196, cg:181, cb:253, tx:0, ty:0, ta:0, ts:1, tc:C.lav };
+  if (i < mapN) { p.mx = MAP[i*3]/9999; p.my = MAP[i*3+1]/9999; p.tag = MAP[i*3+2]; } else p.tag = -1;
+  // cliffs: left or right mass, ragged top sloping toward the gap
+  const left = rnd() < .5; const u = rnd();
+  const cx = left ? u * .37 : 1 - u * .37;
+  const top = .715 - .05 * u + .012 * Math.sin(u * 40 + i);
+  p.cx = cx; p.cy = top + rnd() * (1.04 - top);
+  P.push(p);
+}
+// bridge builders: every 5th particle, ordered along the span
+const B = P.filter((_, i) => i % 5 === 2);
+B.forEach((p, k) => {
+  p.bu = k / (B.length - 1);
+  p.part = k % 5 < 2 ? 'deck' : (k % 5 < 4 ? 'arch' : 'hang');
+  p.hu = Math.round(p.bu * 10) / 10;              // hangers snap to 11 columns
+  p.bdelay = (0.5 - Math.abs(p.bu - 0.5)) * 2 * 2.6;   // edges first, centre last
+});
+P.forEach(p => { p.x = p.hx; p.y = p.hy; });
+
+/* cluster allocation for the Uruguay emotions slide */
+const EMO = [[.16,50,'cyan'],[.33,48,'lav'],[.50,46,'cyan'],[.67,26,'gold'],[.84,23,'coral']];
+const sumE = EMO.reduce((s,e)=>s+e[1],0), CM = 1000;
+let acc = 0; const emoOf = [];
+EMO.forEach((e, k) => { const c = Math.round(e[1] / sumE * CM); for (let j=0;j<c;j++) emoOf.push([k,j,c]); });
+
+let W = 0, H = 0, DPR = 1;
+function resize(){
+  const r = stage.getBoundingClientRect();
+  DPR = Math.min(2, window.devicePixelRatio || 1);
+  W = r.width; H = r.height;
+  cv.width = Math.round(W * DPR); cv.height = Math.round(H * DPR);
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+}
+addEventListener('resize', resize);
+
+let mode = 'field', modeT0 = 0, lit = 0, litShown = 0, prevMode = 'field';
+function setMode(m){ if (m !== mode){ prevMode = mode; mode = m; modeT0 = performance.now()/1000; } }
+
+/* chart geometry for the ChatGPT growth line */
+const CH = { x0:.12, x1:.86, yb:.84, h:.50, t0:2022.9, t1:2026.85, vmax:1250 };
+const CPTS = [[2022.92,0],[2023.08,100],[2025.12,400],[2025.8,800],[2026.15,900],[2026.75,1200]];
+const cxy = ([yr, v]) => [CH.x0 + (yr - CH.t0)/(CH.t1 - CH.t0)*(CH.x1 - CH.x0), CH.yb - v/CH.vmax*CH.h];
+const CXY = CPTS.map(cxy);
+const CLEN = []; let ctot = 0;
+for (let k = 1; k < CXY.length; k++){ const dx = (CXY[k][0]-CXY[k-1][0])*16/9, dy = CXY[k][1]-CXY[k-1][1]; ctot += Math.hypot(dx, dy); CLEN.push(ctot); }
+const CU = CXY.map((_, k) => k ? CLEN[k-1] / ctot : 0);   // arc fraction of each data point
+const CSPD = 1 / 7.5;                                        // the line takes ~7.5 s to climb
+function onCurve(u){
+  const d = u * ctot; let k = 0; while (k < CLEN.length - 1 && CLEN[k] < d) k++;
+  const d0 = k ? CLEN[k-1] : 0, f = (d - d0) / (CLEN[k] - d0 || 1);
+  return [CXY[k][0] + (CXY[k+1][0]-CXY[k][0])*f, CXY[k][1] + (CXY[k+1][1]-CXY[k][1])*f];
+}
+/* map box in stage units (fraction of W for x, of H for y) */
+const MB = { x:.10, y:.17, w:.80 };
+function mapXY(p, flip){
+  const w = MB.w * W, h = w * .52;
+  let x = MB.x * W + p.mx * w, y = MB.y * H + p.my * h;
+  if (flip){ const cx = MB.x*W + w/2, cy = MB.y*H + h*.44; x = 2*cx - x; y = 2*cy - y; }
+  return [x, y];
+}
+
+function targets(t){
+  const dt = t - modeT0;
+  for (let i = 0; i < N; i++){
+    const p = P[i]; let x, y, a, c = C.lav, s = 1;
+    switch (mode){
+      case 'field': {
+        x = (p.hx + .012*Math.sin(t*.13 + p.r1*6.3)) * W; y = (p.hy + .012*Math.cos(t*.11 + p.r2*6.3)) * H;
+        a = .14 + .32*p.r3; c = p.r1 < .5 ? C.lav : (p.r1 < .8 ? C.cyan : C.ink); break; }
+      case 'latam': case 'latamnet': {
+        const laN = LA.d.length / 2, bx = .50*W, by = .06*H, bh = .88*H, bw = bh * .909;
+        if (i >= N - 20){
+          const k = i - (N - 20);
+          x = bx + LA.c[k*2]/9999*bw; y = by + LA.c[k*2+1]/9999*bh;
+          const cone = [0,2,3,16,19].includes(k);
+          if (k === 19){ a = .9 + .1*Math.sin(t*2); c = C.gold; s = 3 + .5*Math.sin(t*2); }
+          else if (mode === 'latamnet' && cone){ a = 1; c = C.gold; s = 2.4; }
+          else { a = .9; c = C.ink; s = 1.9; }
+        } else if (i < laN){
+          x = bx + LA.d[i*2]/9999*bw + Math.sin(t*.6 + p.r1*9)*.6; y = by + LA.d[i*2+1]/9999*bh + Math.cos(t*.5 + p.r2*9)*.6;
+          a = .36 + .24*p.r3; c = p.r1 < .7 ? C.lav : C.cyan; s = 1.05;
+        } else { x = p.hx*W; y = p.hy*H; a = .04; }
+        break; }
+      case 'tank': case 'tankdrain': {
+        if (i < 1100){
+          const gx = .56, gy = .2, gw = .36, gh = .62;
+          const keep = i < 7;
+          const wave = .006*Math.sin(t*1.3 + p.r1*12);
+          x = (gx + p.r1*gw) * W; y = (gy + .03 + wave + p.r2*(gh-.03)) * H; a = .28 + .3*p.r3; c = p.r3 < .75 ? C.cyan : C.ink;
+          if (mode === 'tankdrain'){
+            if (keep){ x = (gx + gw/2 + (i-3)*.012) * W; y = (gy + gh - .01) * H; a = 1; c = C.gold; s = 2.2; }
+            else if (RM || dt > p.r1*2.2 + p.r2*.6){ x = (gx + gw*(.35 + .3*p.r2)) * W; y = 1.2*H; a = 0; }
+          }
+        } else { x = p.hx*W; y = p.hy*H; a = .03; }
+        break; }
+      case 'chart': {
+        if (i < 800){
+          const u = i / 799, [cx2, cy2] = onCurve(u), on = RM || dt * CSPD > u;
+          x = cx2*W; y = cy2*H + (p.r2-.5)*.003*H;
+          a = on ? .9 : 0; c = u > .9 ? C.gold : C.cyan; s = 1;
+        } else if (i < 806){
+          const k = i - 800, uk = CU[k] + .01, on = RM || dt * CSPD > uk;
+          x = CXY[k][0]*W; y = CXY[k][1]*H; a = on ? 1 : 0; c = k === 5 ? C.gold : C.cyan; s = k === 5 ? 3.2 + .5*Math.sin(t*2) : 2.3;
+        } else if (i < 1250){
+          const u = p.r1, [cx2, cy2] = onCurve(u), on = RM || dt > 1/CSPD + .4 + p.r3*.9;
+          x = cx2*W; y = (cy2 + (CH.yb - cy2) * p.r2) * H; a = on ? .13 : 0; c = C.cyan;
+          if (!on){ y = CH.yb*H; }
+        } else { x = p.hx*W; y = p.hy*H; a = .03; }
+        break; }
+      case 'few': {
+        const k = i % 56;
+        if (i < 4*56 && k < 26){
+          const g = Math.floor(i/56), cc = [[.70,.34],[.83,.44],[.72,.62],[.86,.70]][g];
+          const ang = p.r1*6.283 + t*.2, rr = Math.sqrt(p.r2) * .022 * W;
+          x = cc[0]*W + Math.cos(ang)*rr; y = cc[1]*H + Math.sin(ang)*rr; a = .85; c = p.r3 < .5 ? C.gold : C.ink; s = 1.3;
+        } else { x = p.hx*W; y = p.hy*H; a = .045; }
+        break; }
+      case 'line': {
+        x = (.08 + p.hx*.84) * W; y = .555*H + (p.r2-.5)*.008*H + Math.sin(t*.8 + p.hx*20)*.002*H;
+        a = .18 + .3*p.r3; c = p.r1 < .3 ? C.gold : C.lav;
+        const nodes = [.08,.27,.46,.65,.84];
+        if (i < 5*18){ const n = Math.floor(i/18); const ang = p.r1*6.283 + t*.4; const rr = p.r2*.006*W;
+          x = (nodes[n]+.003)*W + Math.cos(ang)*rr; y = .555*H + Math.sin(ang)*rr; a = .9; c = C.gold; s = 1.2; }
+        break; }
+      case 'grid': {
+        const cols = 4, rows = 3, gx = .52, gy = .2, gw = .41, gh = .62, gap = .014;
+        const k = i % 12, col = k % cols, row = Math.floor(k / cols);
+        const cw = (gw - gap*(cols-1))/cols, ch = (gh - gap*(rows-1)*16/9)/rows;
+        x = (gx + col*(cw+gap) + p.r1*cw) * W; y = (gy + row*(ch+gap*16/9) + p.r2*ch) * H;
+        const order = [5,2,9,0,7,11,3,6,10,1,8,4], cur = order[Math.floor(t/1.5) % 12];
+        if (k === cur){ a = .95; c = C.cyan; s = 1.15; } else { a = .13; c = C.lav; }
+        break; }
+      case 'spiral': {
+        const ph = (p.r1 + t*.03) % 1, R = .46*H, rr = R * Math.pow(1-ph, 1.25);
+        const th = ph*13 + (i%3)*2.094 + p.r2*.35;
+        x = .74*W + Math.cos(th)*rr*1.05; y = .5*H + Math.sin(th)*rr;
+        a = ph > .97 ? 0 : .08 + .75*ph; c = ph > .72 ? C.coral : C.lav; s = .8 + .6*ph; break; }
+      case 'dim': {
+        x = (p.hx + .008*Math.sin(t*.07 + p.r1*6.3)) * W; y = (p.hy + .008*Math.cos(t*.06 + p.r2*6.3)) * H;
+        a = .03 + .05*p.r3; c = C.ink; break; }
+      case 'dim2': {
+        x = (p.hx + .01*Math.sin(t*.09 + p.r1*6.3)) * W; y = (p.hy + .01*Math.cos(t*.08 + p.r2*6.3)) * H;
+        a = .06 + .12*p.r3; c = p.r1 < .7 ? C.lav : C.gold; break; }
+      case 'halo': {
+        const th = p.r1*6.283 + t*.05*(p.r3<.5?1:-1), rr = (.33 + (p.r2-.5)*.09 + .01*Math.sin(t+p.r1*9)) * H;
+        x = .5*W + Math.cos(th)*rr*1.75; y = .55*H + Math.sin(th)*rr;
+        a = .1 + .35*p.r3; c = p.r2 < .6 ? C.cyan : C.lav; break; }
+      case 'rise': {
+        x = p.hx * W; y = (((p.hy - t*.018) % 1) + 1) % 1 * H; a = .1 + .3*p.r3; c = p.r1 < .5 ? C.cyan : C.lav; break; }
+      case 'clusters': {
+        if (i < emoOf.length){
+          const [k, j, cnt] = emoOf[i], R = Math.sqrt(cnt) * .0047 * W;
+          const rr = R * Math.sqrt((j + .5) / cnt), th = j * 2.39996 + t * .08 * (k % 2 ? 1 : -1);
+          x = EMO[k][0]*W + Math.cos(th)*rr; y = .5*H + Math.sin(th)*rr; a = .85; c = C[EMO[k][2]]; s = 1.05;
+        } else { x = p.hx*W; y = p.hy*H; a = .03; }
+        break; }
+      case 'people': {
+        if (i < 100){
+          const col = i % 10, row = 9 - Math.floor(i / 10);
+          x = (.585 + col*.033) * W; y = (.22 + row*.062) * H;
+          const on = i < Math.round(litShown*100);
+          a = on ? .95 : .2; c = on ? C.cyan : C.lav; s = 3.2;
+        } else { x = p.hx*W; y = p.hy*H; a = .035; }
+        break; }
+      case 'map': case 'flip': {
+        if (p.tag >= 0){
+          [x, y] = mapXY(p, mode === 'flip');
+          const tg = p.tag, pulse = .85 + .15*Math.sin(t*1.6 + p.r1*6.3);
+          if (mode === 'map'){
+            if (tg === 1 || tg === 2){ a = pulse; c = C.gold; s = 1.35; }
+            else if (tg === 5 || tg === 6){ a = .5; c = C.cyan; }
+            else if (tg === 3 || tg === 4){ a = .2; c = C.lav; }
+            else { a = .3; c = C.ink; }
+          } else {
+            if (tg === 6){ a = 1; c = C.gold; s = 2.4; }
+            else if (tg === 5 || tg === 3){ a = pulse; c = C.cyan; s = 1.3; }
+            else if (tg === 4){ a = .7; c = C.cyan; }
+            else if (tg === 1 || tg === 2){ a = .14; c = C.lav; }
+            else { a = .22; c = C.ink; }
+          }
+        } else { x = p.hx*W; y = p.hy*H; a = 0; }
+        break; }
+      case 'orbit': {
+        const ring = i % 3, R = [.15,.26,.37][ring] * H, sp = [.09,-.055,.035][ring];
+        const th = p.r1*6.283 + t*sp;
+        x = .77*W + Math.cos(th)*R + (p.r2-.5)*.006*W; y = .5*H + Math.sin(th)*R + (p.r3-.5)*.006*W;
+        a = .1 + .25*p.r3; c = [C.lav,C.cyan,C.gold][ring];
+        if (i < 3){ a = 1; s = 3.2; }
+        break; }
+      case 'cliffs': case 'bridge': {
+        if (p.bu !== undefined){
+          const span0 = .37, span1 = .63, bx = span0 + p.bu*(span1-span0);
+          const build = mode === 'bridge' && (RM || dt > p.bdelay);
+          if (build){
+            const archY = u => .655 - .12*Math.sin(Math.PI*u);
+            if (p.part === 'deck'){ x = bx*W; y = .655*H; }
+            else if (p.part === 'arch'){ x = bx*W; y = archY(p.bu)*H; }
+            else { x = (span0 + p.hu*(span1-span0))*W; y = (.655 + (archY(p.hu)-.655)*p.r2) * H; }
+            a = .75 + .2*Math.sin(t*1.2 + p.bu*7); c = C.gold; s = 1.1;
+          } else {
+            const fall = ((p.r1 + t*.06) % 1);
+            x = (.40 + p.r2*.20) * W; y = (.62 + fall*.5) * H; a = .5 * (1 - fall); c = C.coral;
+          }
+        } else { x = p.cx*W; y = p.cy*H; a = .22 + .3*p.r3; c = p.r1 < .6 ? C.lav : C.ink; }
+        break; }
+      default: { x = p.hx*W; y = p.hy*H; a = .2; }
+    }
+    p.tx = x; p.ty = y; p.ta = a; p.tc = c; p.ts = s;
+  }
+}
+
+function frame(ms){
+  const t = ms / 1000;
+  litShown += (lit - litShown) * (RM ? 1 : .05);
+  targets(t);
+  ctx.clearRect(0, 0, W, H);
+  const base = Math.max(.9, W / 1000 * 1.45);
+  for (let i = 0; i < N; i++){
+    const p = P[i];
+    const k = RM ? 1 : .028 + .05 * p.r3;
+    const dx = p.tx - p.x, dy = p.ty - p.y;
+    if (dx*dx + dy*dy > (H*.45)*(H*.45) && (mode === 'rise' || mode === 'spiral' || mode === 'cliffs' || mode === 'bridge') && p.a < .35){
+      p.x = p.tx; p.y = p.ty; p.a = 0;              // teleport wrapped particles while invisible
+    } else { p.x += dx * k; p.y += dy * k; }
+    p.a += (p.ta - p.a) * (RM ? 1 : .06);
+    p.s += (p.ts - p.s) * .08;
+    p.cr += (p.tc[0] - p.cr) * .06; p.cg += (p.tc[1] - p.cg) * .06; p.cb += (p.tc[2] - p.cb) * .06;
+    if (p.a < .01) continue;
+    const r = base * p.s;
+    ctx.globalAlpha = p.a;
+    ctx.fillStyle = `rgb(${p.cr|0},${p.cg|0},${p.cb|0})`;
+    ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, 6.2832); ctx.fill();
+    if (p.s > 1.25 && p.a > .5){ ctx.globalAlpha = p.a * .12; ctx.beginPath(); ctx.arc(p.x, p.y, r * 3.2, 0, 6.2832); ctx.fill(); }
+  }
+  const lbls = document.querySelectorAll('.chartlbl .pt');
+  lbls.forEach(el => { const k = +el.dataset.k, hit = mode === 'chart' && (RM || (t - modeT0) * CSPD >= CU[k] + .015); el.classList.toggle('hit', hit); });
+  if (mode === 'latamnet'){
+    // Cone Sul network: Buenos Aires 0, Brasília 2, Santiago 3, Asunción 16, Montevideo 19
+    const ids = [0,2,3,16,19].map(k => P[N - 20 + k]), dt = t - modeT0;
+    ctx.strokeStyle = 'rgb(233,196,106)'; ctx.lineWidth = Math.max(1, W/900);
+    let n = 0;
+    for (let a2 = 0; a2 < ids.length; a2++) for (let b2 = a2 + 1; b2 < ids.length; b2++){
+      const k = RM ? 1 : Math.max(0, Math.min(1, (dt - n*.18) / 1.1)); n++;
+      if (k <= 0) continue;
+      const A = ids[a2], Bp = ids[b2];
+      ctx.globalAlpha = .55 * k;
+      ctx.beginPath(); ctx.moveTo(A.x, A.y); ctx.lineTo(A.x + (Bp.x - A.x)*k, A.y + (Bp.y - A.y)*k); ctx.stroke();
+    }
+  }
+  ctx.globalAlpha = 1;
+  requestAnimationFrame(frame);
+}
+
+/* ---------- slides & steps ---------- */
+let cur = 0, step = 0;
+const maxStep = s => Math.max(0, ...[...s.querySelectorAll('[data-s]')].map(e => +e.dataset.s));
+
+function countUp(el){
+  const end = +el.dataset.count; if (RM){ el.textContent = end.toLocaleString('es-UY'); return; }
+  const t0 = performance.now(), dur = 1400;
+  const tick = now => { const k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+    el.textContent = Math.round(end * e).toLocaleString('es-UY'); if (k < 1) requestAnimationFrame(tick); };
+  requestAnimationFrame(tick);
+}
+let typeTimer = null;
+function typeIn(el){
+  clearTimeout(typeTimer); const txt = el.dataset.text; let n = 0;
+  el.innerHTML = '<span class="caret"></span>';
+  const go = () => { n++; el.innerHTML = txt.slice(0, n) + '<span class="caret"></span>'; if (n < txt.length) typeTimer = setTimeout(go, 55 + Math.random()*60); };
+  typeTimer = setTimeout(go, RM ? 0 : 900);
+}
+let rotTimer = null;
+function startRot(sl){
+  clearInterval(rotTimer);
+  const words = [...sl.querySelectorAll('.rot span')]; if (!words.length) return;
+  let k = 0; words.forEach(w => w.className = ''); words[0].className = 'cur';
+  rotTimer = setInterval(() => { words[k].className = 'out'; k = (k + 1) % words.length; words[k].className = 'cur'; }, 1700);
+}
+
+function applyStep(){
+  const sl = slides[cur];
+  sl.querySelectorAll('[data-s]').forEach(e => {
+    const want = +e.dataset.s <= step;
+    if (want && !e.classList.contains('in')){ e.classList.add('in'); e.querySelectorAll('[data-count]').forEach(countUp); if (e.dataset.count) countUp(e); }
+    if (!want) e.classList.remove('in');
+  });
+  let m = sl.dataset.mode;
+  (sl.dataset.mstep || '').split(',').filter(Boolean).forEach(rule => { const [k, mm] = rule.split(':'); if (step >= +k) m = mm; });
+  setMode(m);
+  sl.dataset.step = step;
+  const m100 = sl.querySelector('.m100');
+  if (m100){
+    if (step >= 2){
+      m100.style.transform = 'none';
+      const sr = stage.getBoundingClientRect(), r = m100.getBoundingClientRect();
+      const tx = (CH.x0 + .055) * sr.width + sr.left, ty = (CH.yb - .06 - 100/CH.vmax*CH.h) * sr.height + sr.top;
+      m100.style.transform = `translate(${tx - (r.left + r.width/2)}px, ${ty - (r.top + r.height/2)}px) scale(.38)`;
+    } else m100.style.transform = '';
+  }
+  lit = sl.dataset.lit ? +(sl.dataset.lit.split(',')[Math.min(step, sl.dataset.lit.split(',').length-1)]) : 0;
+  document.getElementById('prog').style.width = ((cur + (step+1)/(maxStep(sl)+1)) / slides.length * 100) + '%';
+  document.getElementById('count').textContent = String(cur+1).padStart(2,'0') + ' / ' + slides.length;
+  const n = sl.querySelector('.n');
+  notes.innerHTML = '<h3>' + (cur+1) + ' · ' + (sl.getAttribute('aria-label')||'') + (maxStep(sl) ? ' · toque ' + step + ' de ' + maxStep(sl) : '') + '</h3>' + (n ? n.innerHTML : '');
+}
+function show(i, st){
+  i = Math.max(0, Math.min(slides.length - 1, i));
+  const changed = i !== cur || !slides[i].classList.contains('on');
+  slides.forEach((s, k) => s.classList.toggle('on', k === i));
+  cur = i; step = st === 'max' ? maxStep(slides[i]) : (st || 0);
+  if (changed){
+    const sl = slides[i];
+    sl.querySelectorAll('.rise [data-count], .rise[data-count]').forEach(countUp);
+    sl.querySelectorAll('.typer').forEach(typeIn);
+    startRot(sl);
+    sl.querySelectorAll('.rise').forEach(e => { e.style.animation = 'none'; e.offsetHeight; e.style.animation = ''; });
+    try { history.replaceState(null, '', '#s' + (i+1)); } catch(e){}
+  }
+  applyStep();
+}
+function next(){ const ms = maxStep(slides[cur]); if (step < ms){ step++; applyStep(); } else if (cur < slides.length - 1) show(cur + 1, 0); hideHint(); }
+function prev(){ if (step > 0){ step--; applyStep(); } else if (cur > 0) show(cur - 1, 'max'); hideHint(); }
+
+let hintGone = false;
+function hideHint(){ if (!hintGone){ hintGone = true; document.getElementById('hint').classList.add('gone'); } }
+setTimeout(hideHint, 6000);
+
+addEventListener('keydown', e => {
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  const k = e.key;
+  if (['ArrowRight','ArrowDown','PageDown',' ','Enter'].includes(k)){ e.preventDefault(); next(); }
+  else if (['ArrowLeft','ArrowUp','PageUp','Backspace'].includes(k)){ e.preventDefault(); prev(); }
+  else if (k === 'Home'){ show(0, 0); }
+  else if (k === 'End'){ show(slides.length - 1, 0); }
+  else if (k === 'n' || k === 'N'){ notes.hidden = !notes.hidden; }
+  else if (k === 'l' || k === 'L'){
+    try { localStorage.setItem('clic-lang', 'pt'); } catch(err){}
+    location.replace(location.pathname.replace(/\.es\.html$/, '.html') + location.hash);
+  }
+  else if (k === 'f' || k === 'F'){
+    try { if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{}); else document.exitFullscreen().catch(()=>{}); } catch(err){}
+  }
+});
+document.querySelector('.nav.r').addEventListener('click', next);
+document.querySelector('.nav.l').addEventListener('click', prev);
+let tx0 = null;
+stage.addEventListener('touchstart', e => { tx0 = e.touches[0].clientX; }, {passive:true});
+stage.addEventListener('touchend', e => { if (tx0 === null) return; const d = e.changedTouches[0].clientX - tx0; if (Math.abs(d) > 50){ d < 0 ? next() : prev(); } tx0 = null; }, {passive:true});
+
+document.querySelectorAll('.chartlbl .pt').forEach(el => { const k = +el.dataset.k; el.style.left = (CXY[k][0]*100) + '%'; el.style.top = (CXY[k][1]*100) + '%'; });
+resize();
+const h = (location.hash.match(/^#s(\d+)$/) || [])[1];
+show(h ? (+h - 1) : 0, 0);
+requestAnimationFrame(frame);
+})();
+</script>
+
+</body>
+</html>
