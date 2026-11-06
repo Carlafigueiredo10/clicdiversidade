@@ -11,8 +11,8 @@ const MODULOS = [
       es: 'Catálogo curado con más de 120 herramientas de IA organizadas por categoría, nivel de gratuidad y control de datos. (Contenido en portugués.)',
     }),
     stats: [
-      { value: '120+', label: tr({ pt: 'Ferramentas', es: 'Herramientas' }) },
-      { value: '10', label: tr({ pt: 'Categorias', es: 'Categorías' }) },
+      { value: 'Catálogo', label: tr({ pt: 'Ferramentas', es: 'Herramientas' }) },
+      { value: '↗', label: 'ClicEdu' },
     ],
     ctaText: tr({ pt: 'Explorar catálogo', es: 'Explorar catálogo' }),
     to: 'https://clicedu.com.br/ferramentas',
@@ -28,8 +28,7 @@ const MODULOS = [
       es: '7 rutas independientes, cada una con 5 módulos y un proyecto final. Desde los fundamentos de datos hasta la programación con IA y la gobernanza.',
     }),
     stats: [
-      { value: '7', label: tr({ pt: 'Trilhas', es: 'Rutas' }) },
-      { value: '35', label: tr({ pt: 'Módulos', es: 'Módulos' }) },
+      { value: tr({ pt: 'Trilhas', es: 'Rutas' }), label: tr({ pt: '+ projeto final', es: '+ proyecto final' }) },
     ],
     ctaText: tr({ pt: 'Descobrir sua trilha', es: 'Descubrir tu ruta' }),
     to: '/modulos/trilhas',
@@ -64,7 +63,7 @@ const MODULOS = [
       es: 'Técnicas para conversar con las IA y obtener resultados precisos y profesionales.',
     }),
     stats: [
-      { value: '15', label: tr({ pt: 'Slides', es: 'Diapositivas' }) },
+      { value: tr({ pt: 'Método', es: 'Método' }), label: 'PTCFSL' },
       { value: '~20min', label: tr({ pt: 'Módulo', es: 'Módulo' }) },
     ],
     ctaText: tr({ pt: 'Acessar conteúdo', es: 'Ver contenido' }),
@@ -80,8 +79,7 @@ const MODULOS = [
       es: 'El módulo práctico del taller — crea tu primera app en Lovable en 20 minutos. Guía con prompts listos, desde cero hasta la publicación.',
     }),
     stats: [
-      { value: '7', label: tr({ pt: 'Etapas', es: 'Etapas' }) },
-      { value: '15+', label: tr({ pt: 'Prompts', es: 'Prompts' }) },
+      { value: tr({ pt: 'Roteiro', es: 'Guía' }), label: tr({ pt: 'com prompts prontos', es: 'con prompts listos' }) },
     ],
     ctaText: tr({ pt: 'Começar a construir', es: 'Empezar a construir' }),
     to: '/modulos/construindo-tecnologia',
@@ -96,8 +94,7 @@ const MODULOS = [
       es: 'Agente de mediación de riesgos, autoevaluación de impacto ético (AIE) y base teórica unificada para una IA responsable en el sector público.',
     }),
     stats: [
-      { value: '3', label: tr({ pt: 'Frentes', es: 'Frentes' }) },
-      { value: '24+', label: tr({ pt: 'Refs', es: 'Refs' }) },
+      { value: 'Framework', label: '+ agente + AIE' },
     ],
     ctaText: tr({ pt: 'Acessar governança', es: 'Ver gobernanza' }),
     to: '/modulos/governanca',
@@ -112,8 +109,7 @@ const MODULOS = [
       es: 'Más allá del chat: proyecto, asistente, skill y conector — cuándo usar cada uno, paso a paso en Gemini y un catálogo de agentes listos para copiar o descargar.',
     }),
     stats: [
-      { value: '4', label: tr({ pt: 'Degraus', es: 'Escalones' }) },
-      { value: '3', label: tr({ pt: 'Agentes', es: 'Agentes' }) },
+      { value: tr({ pt: 'Degraus', es: 'Escalones' }), label: tr({ pt: 'do chat ao agente', es: 'del chat al agente' }) },
     ],
     ctaText: tr({ pt: 'Subir a escada', es: 'Subir la escalera' }),
     to: '/modulos/criando-assistente',
@@ -128,8 +124,7 @@ const MODULOS = [
       es: 'Dos guías para el momento de decidir: cómo estructurar un proyecto antes de ponerlo en marcha, y qué preguntar antes de firmar un contrato de IA.',
     }),
     stats: [
-      { value: '2', label: tr({ pt: 'Guias', es: 'Guías' }) },
-      { value: '31', label: tr({ pt: 'Perguntas', es: 'Preguntas' }) },
+      { value: tr({ pt: 'Guias', es: 'Guías' }), label: tr({ pt: 'antes de decidir', es: 'antes de decidir' }) },
     ],
     ctaText: tr({ pt: 'Ver os guias', es: 'Ver las guías' }),
     to: '/modulos/antes-de-construir',
@@ -144,8 +139,7 @@ const MODULOS = [
       es: 'Para el sistema que ya existe: las preguntas técnicas que revelan el sesgo antes de que decida por ti. Origen, proxy, error y decisión.',
     }),
     stats: [
-      { value: '4', label: tr({ pt: 'Frentes', es: 'Frentes' }) },
-      { value: '14', label: tr({ pt: 'Perguntas', es: 'Preguntas' }) },
+      { value: tr({ pt: 'Perguntas', es: 'Preguntas' }), label: tr({ pt: 'técnicas de auditoria', es: 'técnicas de auditoría' }) },
     ],
     ctaText: tr({ pt: 'Abrir guia', es: 'Abrir guía' }),
     to: '/jornada/modulos/auditando-dados-e-decisoes.html',
