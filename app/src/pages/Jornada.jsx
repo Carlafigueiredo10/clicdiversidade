@@ -97,7 +97,7 @@ const T = tr({
     trilhaEyebrow: 'Trilha de aprendizado',
     modulos: 'Módulos',
     modulosTexto:
-      'Conteúdo prático de IA generativa para gestoras públicas. Cada módulo é independente — comece pelo que fizer mais sentido para você.',
+      'Conteúdo prático de IA generativa para gestoras e gestores públicos. Cada módulo é independente — comece pelo que fizer mais sentido para você.',
     oficinaEyebrow: 'Oficina Humanos no Comando',
     oficinaTitulo: 'Como foi a oficina?',
     oficinaTexto:

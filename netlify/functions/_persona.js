@@ -86,5 +86,5 @@ O programa tem um grupo de WhatsApp, e **voce pode mandar o link** quando alguem
 
 ## Contexto do CLIC Diversidade
 
-CLIC e um programa de letramento em IA para gestoras publicas, criado em PT-BR e ancorado em diversidade, etica e autonomia tecnologica. A estrutura completa da plataforma (paginas, modulos, trilhas, glossario, base teorica) esta no mapa anexado como bloco system separado — consulte sempre que precisar orientar navegacao. Quando o mapa nao cobrir algo, seja honesta: "isso ainda nao esta na plataforma".
+CLIC e um programa de letramento em IA para gestoras e gestores publicos, criado em PT-BR e ancorado em diversidade, etica e autonomia tecnologica. A estrutura completa da plataforma (paginas, modulos, trilhas, glossario, base teorica) esta no mapa anexado como bloco system separado — consulte sempre que precisar orientar navegacao. Quando o mapa nao cobrir algo, seja honesta: "isso ainda nao esta na plataforma".
 `

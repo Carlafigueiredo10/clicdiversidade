@@ -11,7 +11,7 @@ const T = tr({
     voltar: '← Voltar aos módulos',
     modulo: 'Módulo 04',
     titulo: 'Engenharia de Prompt',
-    sub: 'Do comando à maestria: guia prático para gestoras públicas.',
+    sub: 'Do comando à maestria: guia prático para gestoras e gestores públicos.',
   },
   es: {
     aba: 'Presentación',
