@@ -40,12 +40,16 @@ const MODULOS = [
     icon: '\u{1F393}',
     titulo: tr({ pt: 'Material da Oficina', es: 'Material del Taller' }),
     descricao: tr({
-      pt: 'As apresentações da oficina Humanos no Comando: a visão que abre o programa, a abertura cinematográfica e duas palestras — da lógica invisível por trás do código a quem decide o futuro da IA.',
-      es: 'Las presentaciones del taller Humanos al Mando: la visión que abre el programa, la apertura cinematográfica y dos conferencias — de la lógica invisible detrás del código a quién decide el futuro de la IA.',
+      pt: 'As apresentações da oficina Humanos no Comando: a visão que abre o programa, a abertura cinematográfica e as palestras — da lógica invisível por trás do código a quem decide o futuro da IA.',
+      es: 'Las presentaciones del taller Humanos al Mando: la visión que abre el programa, la apertura cinematográfica y las conferencias — de la lógica invisible detrás del código a quién decide el futuro de la IA.',
     }),
+    // Sem contagem de proposito: apresentacao nova entra em oficina/data.js e
+    // o card continua certo, sem ninguem precisar lembrar de atualizar numero.
     stats: [
-      { value: '4', label: tr({ pt: 'Apresentações', es: 'Presentaciones' }) },
-      { value: '60', label: tr({ pt: 'Slides', es: 'Diapositivas' }) },
+      {
+        value: tr({ pt: 'Apresentações', es: 'Presentaciones' }),
+        label: tr({ pt: 'base', es: 'base' }),
+      },
     ],
     ctaText: tr({ pt: 'Ver material', es: 'Ver material' }),
     to: '/modulos/oficina',
