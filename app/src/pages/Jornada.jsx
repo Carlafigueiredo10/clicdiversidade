@@ -150,6 +150,13 @@ const T = tr({
   },
 })
 
+// O diagnostico de nivel esta DESLIGADO a pedido da Carla (nov/2026). O codigo
+// fica inteiro: formulario, termometro em tempo real e gravacao no Firestore.
+// Para religar, basta trocar para true — nada mais precisa mudar.
+// Nada depende dele: o certificado olha so `clic_avaliacao`, e o
+// `clic_diagnostico` que este formulario gravava nao era lido em lugar nenhum.
+const MOSTRAR_DIAGNOSTICO = false
+
 export default function Jornada() {
   const [form, setForm] = useState({
     nome: '',
@@ -168,6 +175,7 @@ export default function Jornada() {
 
   // Listener real-time da distribuicao — atualiza enquanto a pagina esta aberta.
   useEffect(() => {
+    if (!MOSTRAR_DIAGNOSTICO) return
     const unsub = onDistribuicao(
       (d) => {
         setDist(d)
@@ -233,6 +241,7 @@ export default function Jornada() {
 
   return (
     <main className="px-5 py-16 md:py-24">
+      {MOSTRAR_DIAGNOSTICO && (
       <section className="mx-auto max-w-3xl">
         <HeadlineCinematic
           eyebrow={T.eyebrow}
@@ -390,10 +399,14 @@ export default function Jornada() {
           </div>
         )}
       </section>
+      )}
 
       <section
         id="modulos"
-        className="mx-auto max-w-5xl mt-28 pt-16 border-t border-line scroll-mt-8"
+        className={
+          'mx-auto max-w-5xl scroll-mt-8 ' +
+          (MOSTRAR_DIAGNOSTICO ? 'mt-28 pt-16 border-t border-line' : '')
+        }
       >
         <p className="text-xs tracking-[0.25em] uppercase text-accent-fg font-semibold text-center">
           {T.trilhaEyebrow}
