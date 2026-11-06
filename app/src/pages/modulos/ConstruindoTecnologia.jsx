@@ -9,13 +9,13 @@ import { tr } from '../../i18n'
 const T = tr({
   pt: {
     abas: ['O Processo', 'Painel de Tarefas', 'Painel de Governança', 'Conectando uma base', 'Construindo Aplicativos'],
-    eyebrow: 'Módulo 04 · Construindo Tecnologia',
+    eyebrow: 'Módulo 05 · Construindo Tecnologia',
     titulo: ['Crie seu primeiro app', 'em 20 min.'],
     intro: 'Guia prático para usar a Lovable na oficina — do primeiro prompt ao deploy, sem precisar saber programar.',
   },
   es: {
     abas: ['El Proceso', 'Panel de Tareas', 'Panel de Gobernanza', 'Conectando una base', 'Construyendo Aplicaciones'],
-    eyebrow: 'Módulo 04 · Construyendo Tecnología',
+    eyebrow: 'Módulo 05 · Construyendo Tecnología',
     titulo: ['Crea tu primera app', 'en 20 min.'],
     intro: 'Guía práctica para usar Lovable en el taller — del primer prompt a la publicación, sin necesidad de saber programar.',
   },

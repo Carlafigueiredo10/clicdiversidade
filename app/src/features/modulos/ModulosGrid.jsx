@@ -37,6 +37,22 @@ const MODULOS = [
   },
   {
     numero: '03',
+    icon: '\u{1F393}',
+    titulo: tr({ pt: 'Material da Oficina', es: 'Material del Taller' }),
+    descricao: tr({
+      pt: 'As apresentações da oficina Humanos no Comando: a visão do programa (Desde a origem) e a abertura cinematográfica — pensamento estruturado, a lógica invisível por trás do código e a virada de chave.',
+      es: 'Las presentaciones del taller Humanos al Mando: la visión del programa (Desde el origen) y la apertura cinematográfica — pensamiento estructurado, la lógica invisible detrás del código y el cambio de mirada.',
+    }),
+    stats: [
+      { value: '2', label: tr({ pt: 'Apresentações', es: 'Presentaciones' }) },
+      { value: '14', label: tr({ pt: 'Slides', es: 'Diapositivas' }) },
+    ],
+    ctaText: tr({ pt: 'Ver material', es: 'Ver material' }),
+    to: '/modulos/oficina',
+    disponivel: true,
+  },
+  {
+    numero: '04',
     icon: '\u{1FA84}',
     titulo: tr({ pt: 'Engenharia de Prompts', es: 'Ingeniería de Prompts' }),
     descricao: tr({
@@ -52,7 +68,7 @@ const MODULOS = [
     disponivel: true,
   },
   {
-    numero: '04',
+    numero: '05',
     icon: '\u{1F3D7}\u{FE0F}',
     titulo: tr({ pt: 'Construindo Tecnologia', es: 'Construyendo Tecnología' }),
     descricao: tr({
@@ -65,22 +81,6 @@ const MODULOS = [
     ],
     ctaText: tr({ pt: 'Começar a construir', es: 'Empezar a construir' }),
     to: '/modulos/construindo-tecnologia',
-    disponivel: true,
-  },
-  {
-    numero: '05',
-    icon: '\u{1F393}',
-    titulo: tr({ pt: 'Material da Oficina', es: 'Material del Taller' }),
-    descricao: tr({
-      pt: 'As apresentações da oficina Humanos no Comando: a visão do programa (Desde a origem) e a abertura cinematográfica — pensamento estruturado, a lógica invisível por trás do código e a virada de chave.',
-      es: 'Las presentaciones del taller Humanos al Mando: la visión del programa (Desde el origen) y la apertura cinematográfica — pensamiento estructurado, la lógica invisible detrás del código y el cambio de mirada.',
-    }),
-    stats: [
-      { value: '2', label: tr({ pt: 'Apresentações', es: 'Presentaciones' }) },
-      { value: '14', label: tr({ pt: 'Slides', es: 'Diapositivas' }) },
-    ],
-    ctaText: tr({ pt: 'Ver material', es: 'Ver material' }),
-    to: '/modulos/oficina',
     disponivel: true,
   },
   {

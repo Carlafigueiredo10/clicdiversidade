@@ -7,7 +7,7 @@ const T = tr({
   pt: {
     bloco: 'BLOCO',
     apresentacao: 'Apresentação',
-    eyebrow: 'Módulo 05 · Material da Oficina',
+    eyebrow: 'Módulo 03 · Material da Oficina',
     titulo: ['Humanos no', 'Comando.'],
     intro:
       'As apresentações de abertura da oficina presencial: a visão do programa e o material próprio daqui, para abrir a sala e virar a chave.',
@@ -16,7 +16,7 @@ const T = tr({
   es: {
     bloco: 'BLOQUE',
     apresentacao: 'Presentación',
-    eyebrow: 'Módulo 05 · Material del Taller',
+    eyebrow: 'Módulo 03 · Material del Taller',
     titulo: ['Humanos al', 'Mando.'],
     intro:
       'Las presentaciones de apertura del taller presencial: la visión del programa y el material propio, para abrir la sala y cambiar la mirada.',
