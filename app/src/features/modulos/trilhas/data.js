@@ -170,7 +170,7 @@ export const TRILHAS = [
             "👥 Em duplas"
           ]
         },
-        "dica": "Este módulo é transformador se você precisa apresentar relatórios para gestores ou defender projetos em reuniões. Visualizações claras comunicam insights de forma mais eficaz que tabelas de números. Foque em: escolher o gráfico certo, usar cores com propósito e destacar a mensagem principal."
+        "dica": "Este módulo é transformador se você precisa apresentar relatórios para gestoras e gestores ou defender projetos em reuniões. Visualizações claras comunicam insights de forma mais eficaz que tabelas de números. Foque em: escolher o gráfico certo, usar cores com propósito e destacar a mensagem principal."
       },
       {
         "numero": 5,
@@ -236,7 +236,7 @@ export const TRILHAS = [
           "desc": "Produza uma análise de 1-2 páginas com insights principais e recomendações práticas baseadas nos dados."
         }
       ],
-      "entrega": "Painel de dados + documento de análise com recomendações para gestores do seu setor."
+      "entrega": "Painel de dados + documento de análise com recomendações para gestoras e gestores do seu setor."
     },
     "ctaFinal": {
       "tituloLinhas": [
@@ -478,7 +478,7 @@ export const TRILHAS = [
           "desc": "Produza uma análise de 1-2 páginas com insights principais e recomendações práticas baseadas nos dados."
         }
       ],
-      "entrega": "Painel de dados + documento de análise com recomendações para gestores do seu setor."
+      "entrega": "Painel de dados + documento de análise com recomendações para gestoras e gestores do seu setor."
     },
     "ctaFinal": {
       "tituloLinhas": [
@@ -708,7 +708,7 @@ export const TRILHAS = [
           "desc": "Produza uma análise de 1-2 páginas com insights principais e recomendações práticas baseadas nos dados."
         }
       ],
-      "entrega": "Painel de dados + documento de análise com recomendações para gestores do seu setor."
+      "entrega": "Painel de dados + documento de análise com recomendações para gestoras e gestores do seu setor."
     },
     "ctaFinal": {
       "tituloLinhas": [
@@ -808,7 +808,7 @@ export const TRILHAS = [
         "numero": 3,
         "titulo": "Dashboards com IA",
         "subtitulo": "Power BI e Looker Studio com Assistência de IA",
-        "descricao": "Visualização de dados é comunicação estratégica. Este módulo ensina a criar dashboards que convencem gestores — usando IA para sugerir gráficos, identificar métricas e gerar o texto de contexto automaticamente.",
+        "descricao": "Visualização de dados é comunicação estratégica. Este módulo ensina a criar dashboards que convencem gestoras e gestores — usando IA para sugerir gráficos, identificar métricas e gerar o texto de contexto automaticamente.",
         "navLabel": "Virada de Chave",
         "recursos": [
           {
@@ -942,14 +942,14 @@ export const TRILHAS = [
           "desc": "Produza uma análise de 1-2 páginas com insights principais e recomendações práticas baseadas nos dados."
         }
       ],
-      "entrega": "Painel de dados + documento de análise com recomendações para gestores do seu setor."
+      "entrega": "Painel de dados + documento de análise com recomendações para gestoras e gestores do seu setor."
     },
     "ctaFinal": {
       "tituloLinhas": [
         "Você transforma dados",
         "em decisões."
       ],
-      "descricao": "Completar esta trilha é dominar o ciclo completo: dado → análise → evidência → recomendação. É ser a servidora que não só entende o relatório — é quem os gestores ligam quando precisam de um diagnóstico confiável."
+      "descricao": "Completar esta trilha é dominar o ciclo completo: dado → análise → evidência → recomendação. É ser a servidora que não só entende o relatório — é para quem gestoras e gestores ligam quando precisam de um diagnóstico confiável."
     },
     "unlockText": "Pensamento Analítico em Dados"
   },
@@ -1171,7 +1171,7 @@ export const TRILHAS = [
           "desc": "Produza uma análise de 1-2 páginas com insights principais e recomendações práticas baseadas nos dados."
         }
       ],
-      "entrega": "Painel de dados + documento de análise com recomendações para gestores do seu setor."
+      "entrega": "Painel de dados + documento de análise com recomendações para gestoras e gestores do seu setor."
     },
     "ctaFinal": {
       "tituloLinhas": [
@@ -1408,7 +1408,7 @@ export const TRILHAS = [
           "desc": "Produza uma análise de 1-2 páginas com insights principais e recomendações práticas baseadas nos dados."
         }
       ],
-      "entrega": "Painel de dados + documento de análise com recomendações para gestores do seu setor."
+      "entrega": "Painel de dados + documento de análise com recomendações para gestoras e gestores do seu setor."
     },
     "ctaFinal": {
       "tituloLinhas": [
@@ -1620,7 +1620,7 @@ export const TRILHAS = [
             "🏛️ Proposta para o órgão"
           ]
         },
-        "dica": "Servidoras que entendem governança de IA têm vantagem estratégica: são as que conseguem traduzir riscos para gestores, propor políticas internas e liderar a transição responsável dos seus setores. Esse é o perfil que o serviço público precisa."
+        "dica": "Servidoras que entendem governança de IA têm vantagem estratégica: são as que conseguem traduzir riscos para gestoras e gestores, propor políticas internas e liderar a transição responsável dos seus setores. Esse é o perfil que o serviço público precisa."
       }
     ],
     "projetoFinal": {
