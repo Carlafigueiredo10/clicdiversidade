@@ -48,4 +48,18 @@ export const BLOCOS = [
     external: false,
     tipo: 'apresentacao',
   },
+  {
+    numero: '03',
+    rotulo: tr({ pt: 'PALESTRA', es: 'CONFERENCIA' }),
+    titulo: tr({ pt: 'Entender, questionar, usar e construir', es: 'Entender, cuestionar, usar y construir' }),
+    descricao: tr({
+      pt: 'Decidindo seu lugar no futuro: de onde a IA veio, o que ela já decide por nós e quem participa da construção daqui em diante.',
+      es: 'Decidiendo tu lugar en el futuro: de dónde vino la IA, qué decide ya por nosotras y quién participa de la construcción de aquí en adelante.',
+    }),
+    duracao: tr({ pt: '25 slides', es: '25 diapositivas' }),
+    cta: tr({ pt: 'Abrir apresentação', es: 'Abrir presentación' }),
+    href: '/modulos/oficina/entender-questionar-usar-construir',
+    external: false,
+    tipo: 'apresentacao',
+  },
 ]

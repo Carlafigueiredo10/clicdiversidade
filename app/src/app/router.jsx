@@ -18,6 +18,7 @@ import Equipe from '../pages/Equipe'
 import Manifesto from '../pages/Manifesto'
 import Visao from '../pages/Visao'
 import PonteOuPrecipicio from '../pages/modulos/PonteOuPrecipicio'
+import EntenderQuestionarUsarConstruir from '../pages/modulos/EntenderQuestionarUsarConstruir'
 import Avaliacao from '../pages/Avaliacao'
 import LeliaTest from '../pages/LeliaTest'
 import Admin from '../pages/Admin'
@@ -51,6 +52,10 @@ export const router = createBrowserRouter(
           element: <QuebrandoOMito />,
         },
         { path: '/modulos/oficina/ponte-ou-precipicio', element: <PonteOuPrecipicio /> },
+        {
+          path: '/modulos/oficina/entender-questionar-usar-construir',
+          element: <EntenderQuestionarUsarConstruir />,
+        },
         { path: '/glossario', element: <Glossario /> },
         { path: '/base-teorica', element: <BaseTeorica /> },
         { path: '/equipe', element: <Equipe /> },
