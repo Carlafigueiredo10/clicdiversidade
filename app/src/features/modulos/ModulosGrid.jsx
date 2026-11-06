@@ -40,12 +40,12 @@ const MODULOS = [
     icon: '\u{1F393}',
     titulo: tr({ pt: 'Material da Oficina', es: 'Material del Taller' }),
     descricao: tr({
-      pt: 'As apresentações da oficina Humanos no Comando: a visão do programa (Desde a origem) e a abertura cinematográfica — pensamento estruturado, a lógica invisível por trás do código e a virada de chave.',
-      es: 'Las presentaciones del taller Humanos al Mando: la visión del programa (Desde el origen) y la apertura cinematográfica — pensamiento estructurado, la lógica invisible detrás del código y el cambio de mirada.',
+      pt: 'As apresentações da oficina Humanos no Comando: a visão que abre o programa, a abertura cinematográfica e duas palestras — da lógica invisível por trás do código a quem decide o futuro da IA.',
+      es: 'Las presentaciones del taller Humanos al Mando: la visión que abre el programa, la apertura cinematográfica y dos conferencias — de la lógica invisible detrás del código a quién decide el futuro de la IA.',
     }),
     stats: [
-      { value: '2', label: tr({ pt: 'Apresentações', es: 'Presentaciones' }) },
-      { value: '14', label: tr({ pt: 'Slides', es: 'Diapositivas' }) },
+      { value: '4', label: tr({ pt: 'Apresentações', es: 'Presentaciones' }) },
+      { value: '60', label: tr({ pt: 'Slides', es: 'Diapositivas' }) },
     ],
     ctaText: tr({ pt: 'Ver material', es: 'Ver material' }),
     to: '/modulos/oficina',

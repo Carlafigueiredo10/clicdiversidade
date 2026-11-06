@@ -10,7 +10,7 @@ const T = tr({
     eyebrow: 'Módulo 03 · Material da Oficina',
     titulo: ['Humanos no', 'Comando.'],
     intro:
-      'As apresentações de abertura da oficina presencial: a visão do programa e o material próprio daqui, para abrir a sala e virar a chave.',
+      'As apresentações da oficina presencial: a visão que abre o programa, o material próprio daqui para virar a chave na sala, e as palestras que levaram essa conversa para fora.',
     voltar: '← Voltar aos módulos',
   },
   es: {
