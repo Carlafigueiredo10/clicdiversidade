@@ -31,7 +31,7 @@ const TABS = [
       <SlideNavigator
         src="apresentacoes/bloco2-engenharia-prompt.html"
         title={T.deckTitle}
-        slideCount={9}
+        slideCount={18}
       />
     ),
   },
