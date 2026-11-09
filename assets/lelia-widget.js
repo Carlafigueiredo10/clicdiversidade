@@ -11,6 +11,7 @@
 
   var STORAGE_KEY = 'clic_lelia_history_v1'
   var MAX_HISTORY = 30
+  var ACENO_KEY = 'clic_lelia_aceno_v1'
   var AVATAR_SRC = '/assets/lelia.jpg' // troque o arquivo aqui se subir com outro nome
 
   // Textos da interface por idioma (window.CLIC_LANG vem de /assets/clic-lang.js).
@@ -26,6 +27,8 @@
       fabLabel: 'Falar com a Lelia',
       talk: 'Falar com a Lélia',
       greeting: 'Oi. Sou a Lélia. Como posso te ajudar?',
+      welcome: 'Que bom ter você aqui. Dúvida sobre o CLIC? É só me chamar.',
+      welcomeClose: 'Fechar aviso',
       thinking: 'Lélia está pensando',
       empty: '(resposta vazia)',
       error: function (m) { return 'Ops, deu erro: ' + m + '. Tenta de novo daqui a pouco.' },
@@ -50,6 +53,8 @@
       fabLabel: 'Hablar con Lélia',
       talk: 'Hablar con Lélia',
       greeting: 'Hola. Soy Lélia. ¿En qué puedo ayudarte?',
+      welcome: 'Qué bueno tenerte aquí. ¿Dudas sobre el CLIC? Escríbeme.',
+      welcomeClose: 'Cerrar aviso',
       thinking: 'Lélia está pensando',
       empty: '(respuesta vacía)',
       error: function (m) { return 'Ups, hubo un error: ' + m + '. Inténtalo de nuevo en un momento.' },
@@ -70,6 +75,12 @@
     + '.__lelia-fab{position:fixed;right:20px;bottom:20px;z-index:2147483646;display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1rem;border:0;border-radius:9999px;background:#1a1715;color:#fffaf0;font:600 .875rem/1 "Inter",system-ui,sans-serif;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.18);transition:transform .15s ease,box-shadow .15s ease}'
     + '.__lelia-fab:hover{transform:translateY(-1px);box-shadow:0 12px 28px rgba(0,0,0,.22)}'
     + '.__lelia-fab__dot{width:8px;height:8px;border-radius:9999px;background:#7cd1a3;box-shadow:0 0 0 3px rgba(124,209,163,.22)}'
+    + '.__lelia-aceno{position:fixed;right:20px;bottom:72px;z-index:2147483645;display:flex;align-items:flex-start;gap:.25rem;max-width:min(300px,calc(100vw - 40px));padding:.7rem .5rem .7rem .9rem;border-radius:14px;background:#fffaf0;color:#1a1715;font:400 .8125rem/1.45 "Inter",system-ui,sans-serif;box-shadow:0 10px 30px rgba(0,0,0,.18);border:1px solid rgba(26,23,21,.08);animation:__leliaAceno .35s ease both}'
+    + '.__lelia-aceno__txt{flex:1;border:0;background:none;padding:0;margin:0;font:inherit;color:inherit;text-align:left;cursor:pointer}'
+    + '.__lelia-aceno__x{flex:none;border:0;background:none;padding:0 .2rem;margin:0;font:400 1rem/1 "Inter",system-ui,sans-serif;color:rgba(26,23,21,.45);cursor:pointer}'
+    + '.__lelia-aceno__x:hover{color:#1a1715}'
+    + '@keyframes __leliaAceno{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}'
+    + '@media (prefers-reduced-motion:reduce){.__lelia-aceno{animation:none}}'
     + '.__lelia-panel{position:fixed;right:20px;bottom:20px;z-index:2147483647;width:min(380px,calc(100vw - 32px));height:min(560px,calc(100vh - 40px));display:none;flex-direction:column;background:#fffaf0;border:1px solid rgba(26,23,21,.08);border-radius:18px;box-shadow:0 24px 60px rgba(0,0,0,.22);overflow:hidden;font:400 14px/1.5 "Inter",system-ui,sans-serif;color:#1a1715}'
     + '.__lelia-panel--open{display:flex}'
     + '.__lelia-header{display:flex;align-items:center;gap:.75rem;padding:.85rem 1rem;border-bottom:1px solid rgba(26,23,21,.06);background:linear-gradient(180deg,#fffaf0 0%,#fbf3e3 100%)}'
@@ -250,6 +261,47 @@
     document.body.appendChild(fab)
     document.body.appendChild(panel)
 
+    // Aceno: a Lelia fala sozinha ao carregar, ao lado do botao, SEM abrir o
+    // chat. Abrir o painel sozinho cobriria o conteudo, roubaria o foco do
+    // teclado e, como o widget esta em todas as paginas, repetiria a cada
+    // navegacao. Aparece uma vez por sessao e nunca pra quem ja conversou.
+    var aceno = null
+    function fecharAceno(lembrar) {
+      if (!aceno) return
+      if (aceno.parentNode) aceno.parentNode.removeChild(aceno)
+      aceno = null
+      if (lembrar) {
+        try { sessionStorage.setItem(ACENO_KEY, '1') } catch (e) {}
+      }
+    }
+    function mostrarAceno() {
+      if (aceno || panel.classList.contains('__lelia-panel--open')) return
+      var texto = el(
+        'button',
+        {
+          class: '__lelia-aceno__txt',
+          type: 'button',
+          onclick: function () { fecharAceno(true); toggle() },
+        },
+        [T.welcome],
+      )
+      var x = el(
+        'button',
+        {
+          class: '__lelia-aceno__x',
+          type: 'button',
+          'aria-label': T.welcomeClose,
+          onclick: function () { fecharAceno(true) },
+        },
+        ['×'],
+      )
+      aceno = el('div', { class: '__lelia-aceno' }, [texto, x])
+      document.body.appendChild(aceno)
+    }
+    var jaAcenou = false
+    try { jaAcenou = sessionStorage.getItem(ACENO_KEY) === '1' } catch (e) {}
+    if (!jaAcenou && history.length === 0) setTimeout(mostrarAceno, 3000)
+
     // ESC fecha
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && panel.classList.contains('__lelia-panel--open')) {
@@ -273,6 +325,7 @@
       var open = panel.classList.toggle('__lelia-panel--open')
       fab.style.display = open ? 'none' : 'inline-flex'
       if (open) {
+        fecharAceno(true)
         // O cumprimento ja foi renderizado por render() no init — nao
         // re-renderizar aqui (causava balao duplicado a cada abertura).
         setTimeout(function () {
