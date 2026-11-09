@@ -50,7 +50,7 @@ export default function EntenderQuestionarUsarConstruir() {
           <SlideNavigator
             src="apresentacoes/entender-questionar-usar-construir.html"
             title={T.deckTitle}
-            slideCount={25}
+            slideCount={22}
           />
         </div>
       </div>
