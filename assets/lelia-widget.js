@@ -281,7 +281,7 @@
         {
           class: '__lelia-aceno__txt',
           type: 'button',
-          onclick: function () { fecharAceno(true); toggle() },
+          onclick: function () { fecharAceno(false); toggle() },
         },
         [T.welcome],
       )
@@ -298,9 +298,13 @@
       aceno = el('div', { class: '__lelia-aceno' }, [texto, x])
       document.body.appendChild(aceno)
     }
-    var jaAcenou = false
-    try { jaAcenou = sessionStorage.getItem(ACENO_KEY) === '1' } catch (e) {}
-    if (!jaAcenou && history.length === 0) setTimeout(mostrarAceno, 3000)
+    // Acena a cada carregamento, a pedido da Carla. Duas excecoes: quem
+    // dispensou no x (ai fica dispensado pelo resto da sessao) e quem esta no
+    // meio de uma conversa — cumprimentar quem ja esta falando com ela e
+    // estranho, e o historico aparece aberto do mesmo jeito.
+    var dispensou = false
+    try { dispensou = sessionStorage.getItem(ACENO_KEY) === '1' } catch (e) {}
+    if (!dispensou && history.length === 0) setTimeout(mostrarAceno, 3000)
 
     // ESC fecha
     document.addEventListener('keydown', function (e) {
@@ -325,7 +329,7 @@
       var open = panel.classList.toggle('__lelia-panel--open')
       fab.style.display = open ? 'none' : 'inline-flex'
       if (open) {
-        fecharAceno(true)
+        fecharAceno(false)
         // O cumprimento ja foi renderizado por render() no init — nao
         // re-renderizar aqui (causava balao duplicado a cada abertura).
         setTimeout(function () {
