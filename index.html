@@ -152,13 +152,14 @@
           'trilhas': { href: '/jornada/modulos/trilhas' },
           'oficinas': { href: '/jornada/modulos/oficina' },
           'certificacao': { href: '/jornada/certificado.html' },
-          'contato': { href: 'https://wa.me/5561998755013', external: true },
+          'contato': { href: 'https://wa.me/5561998755013', external: true, label: 'WhatsApp' },
           'linkedin': { href: 'https://www.linkedin.com/in/carlacristinefigueiredo', external: true },
+          'instagram': { href: 'https://www.instagram.com/carlacristine85/', external: true },
           'newsletter': { href: 'https://www.whatsapp.com/channel/0029Vb6DD2AAu3aXBFT6So0R', external: true, label: 'ClicEdu' },
         };
 
         // Links do footer pra remover (item nao existe).
-        var FOOTER_REMOVE = ['calendario', 'instagram'];
+        var FOOTER_REMOVE = ['calendario'];
 
         function normalize(s) {
           return s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
