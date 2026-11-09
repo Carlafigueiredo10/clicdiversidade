@@ -149,6 +149,8 @@
       (function () {
         // { href, external? } por chave normalizada (sem acento, lowercase).
         var FOOTER_MAP = {
+          'manifesto': { href: '/jornada/manifesto' },
+          'equipe': { href: '/jornada/equipe' },
           'trilhas': { href: '/jornada/modulos/trilhas' },
           'oficinas': { href: '/jornada/modulos/oficina' },
           'certificacao': { href: '/jornada/certificado.html' },
@@ -159,7 +161,7 @@
         };
 
         // Links do footer pra remover (item nao existe).
-        var FOOTER_REMOVE = ['calendario'];
+        var FOOTER_REMOVE = ['calendario', 'parcerias', 'imprensa'];
 
         function normalize(s) {
           return s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
