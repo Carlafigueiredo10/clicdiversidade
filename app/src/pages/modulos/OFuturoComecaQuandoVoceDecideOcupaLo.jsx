@@ -7,20 +7,21 @@ const T = tr({
     voltar: '← Voltar ao material da oficina',
     eyebrow: 'Inteligência artificial',
     titulo: ['O futuro começa quando você ', 'decide ocupá-lo.'],
-    sub: 'Quem constrói a IA, o teto que ainda existe e as rachaduras. Setas ou Page Up/Page Down para avançar, N para as notas, F para tela cheia.',
+    sub: 'Quem constrói a IA, o teto que ainda existe e as rachaduras. Setas ou Page Up/Page Down para avançar, F para tela cheia.',
     deckTitle: 'O futuro começa quando você decide ocupá-lo — Carla Figueiredo',
   },
   es: {
     voltar: '← Volver al material del taller',
     eyebrow: 'Inteligencia artificial',
     titulo: ['El futuro empieza cuando ', 'decides ocuparlo.'],
-    sub: 'Quién construye la IA, el techo que todavía existe y las grietas. Flechas o Re Pág/Av Pág para avanzar, N para las notas, F para pantalla completa.',
+    sub: 'Quién construye la IA, el techo que todavía existe y las grietas. Flechas o Re Pág/Av Pág para avanzar, F para pantalla completa.',
     deckTitle: 'El futuro empieza cuando decides ocuparlo — Carla Figueiredo',
   },
 })
 
-// Deck de palestra. Tem notas de orador (tecla N) e passos internos por slide:
-// a contagem do proprio deck conta slides, nao passos. Sem versao em espanhol
+// Deck de palestra, publicado SEM as notas de orador (a Carla apresenta pela
+// copia local, que tem as notas). Tem passos internos por slide: a contagem do
+// proprio deck conta slides, nao passos. Sem versao em espanhol
 // por enquanto — o SlideNavigator cai no arquivo em portugues.
 export default function OFuturoComecaQuandoVoceDecideOcupaLo() {
   return (

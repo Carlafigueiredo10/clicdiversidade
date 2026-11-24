@@ -42,7 +42,6 @@ p,h1,h2,ul{margin:0}
 .slide.top{justify-content:flex-start}
 .col{max-width:45cqw}
 .col.slim{max-width:32cqw}
-.n{display:none}
 
 .eyebrow{font-size:1.2cqw;letter-spacing:.22em;text-transform:uppercase;color:var(--mute);font-weight:500;margin-bottom:2.4cqh}
 h1,h2{font-family:var(--display);font-weight:300;letter-spacing:-.015em;text-wrap:balance;line-height:1.04;font-variation-settings:"opsz" 144}
@@ -188,17 +187,6 @@ blockquote cite{display:block;font-family:var(--sans);font-style:normal;font-siz
 button.nav{position:absolute;top:0;bottom:0;background:none;border:0;padding:0;cursor:pointer;z-index:2}
 button.nav.l{left:0;width:22%} button.nav.r{right:0;width:78%}
 button.nav:focus-visible{outline:2px solid var(--lav);outline-offset:-4px}
-#nbtn{position:absolute;right:8.5cqw;bottom:1.5cqh;z-index:3;appearance:none;background:none;border:1px solid var(--line);border-radius:99px;
-  color:var(--mute);font:500 .92cqw/1 var(--sans);letter-spacing:.1em;padding:.55cqh .9cqw;cursor:pointer;opacity:.55}
-#nbtn:hover,#nbtn[aria-expanded="true"]{opacity:1;color:var(--ink)}
-#nbtn:focus-visible{outline:2px solid var(--lav);outline-offset:2px}
-#notes{position:fixed;left:max(16px, env(safe-area-inset-left, 0px));right:max(16px, env(safe-area-inset-right, 0px));bottom:calc(12px + env(safe-area-inset-bottom, 0px));
-  max-height:44vh;overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:10px;
-  padding:14px 18px;font-size:15px;line-height:1.5;color:var(--ink);z-index:5}
-#notes h3{margin:0 0 6px;font:600 11px/1.4 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
-#notes ul{padding-left:18px}
-#notes li{margin:3px 0;max-width:95ch}
-#notes .c{color:var(--gold)}
 @media (prefers-reduced-motion: reduce){
   .slide,[data-s],.tl::before,.ppl i{transition-duration:.01s !important;transition-delay:0s !important}
   .slide.on .rise,.slide.on .late{animation:none}
@@ -213,35 +201,23 @@ button.nav:focus-visible{outline:2px solid var(--lav);outline-offset:-4px}
 <canvas id="fx" aria-hidden="true"></canvas>
 
 <!-- 1 · capa -->
-<section class="slide cover" data-scene="capa" data-min="1 min" aria-label="Capa">
+<section class="slide cover" data-scene="capa" aria-label="Capa">
   <h1 class="rise">O futuro começa quando você decide <em class="gold">ocupá-lo</em></h1>
   <div class="meta rise d2"><span>Carla Figueiredo</span><span>CLIC Diversidade</span></div>
-  <div class="n"><ul>
-    <li>Respire. Deixe o campo de luz correr alguns segundos antes de falar.</li>
-    <li>Apresente-se em uma frase. O título foi escolhido pela organização e volta no último slide.</li>
-    <li>O fio da fala: os pontos de luz sobem, batem num teto de concreto, acham a rachadura e, no fim, ocupam o espaço de cima.</li>
-    <li>As notas trazem o tempo sugerido de cada slide. O total fica perto de 75 minutos.</li>
-  </ul></div>
 </section>
 
 <!-- pergunta de abertura -->
-<section class="slide center" data-scene="hoje" data-min="2 min" aria-label="Quem usou IA hoje">
+<section class="slide center" data-scene="hoje" aria-label="Quem usou IA hoje">
   <h2 class="xl rise">Quem aqui usou inteligência artificial <em>hoje?</em></h2>
   <p class="punch" data-s="1">Mas hoje, provavelmente, ela usou todas vocês.</p>
   <div class="exw" data-s="2">
     <p class="eyebrow">e já orientou decisões</p>
     <div class="ex"><span>o caminho no Waze</span><span>a próxima música</span><span>as horas de sono</span><span>quanto você correu</span></div>
   </div>
-  <div class="n"><ul>
-    <li>Interação: peça para levantarem a mão. Espere. Não importa quantas mãos subirem.</li>
-    <li>Toque 1: "mas hoje, provavelmente, ela usou todas vocês".</li>
-    <li>Toque 2: muito provavelmente todo mundo aqui já tomou uma decisão orientada por ela. Qual caminho pegar no Waze, a próxima música que tocou, quantas horas dormiu, quanto correu.</li>
-    <li>Gancho: a IA não chegou com o chat. Ela já estava dentro da nossa vida, decidindo junto com a gente. E quem construiu isso? Próximo slide.</li>
-  </ul></div>
 </section>
 
 <!-- 2 · mesa -->
-<section class="slide top" data-scene="mesa" data-min="5 min" aria-label="Quem construiu">
+<section class="slide top" data-scene="mesa" aria-label="Quem construiu">
   <div>
     <p class="eyebrow rise">De 1955 ao app aberto no seu celular</p>
     <h2 class="rise d1">Quem construiu <em>o que você usa?</em></h2>
@@ -261,18 +237,10 @@ button.nav:focus-visible{outline:2px solid var(--lav);outline-offset:-4px}
   </div>
   <p class="punch pin" data-s="3">Quem constrói decide o que é normal.</p>
   <p class="key" data-s="1"><i></i> cada ponto, uma pessoa fundadora <i class="w"></i> em dourado, as mulheres</p>
-  <div class="n"><ul>
-    <li>Antes do primeiro toque, pergunte: qual app vocês abriram hoje antes de chegar aqui? Deixe responderem. E quem construiu esses apps? Vamos olhar quem estava na mesa.</li>
-    <li>Toque 1, a origem: em 1955, quatro homens assinam a proposta de Dartmouth, onde aparece a expressão "inteligência artificial". Em 1957, oito engenheiros fundam a Fairchild, semente do Vale do Silício. Em 1969 nasce a ARPANET, a rede que virou internet, paga pelo Departamento de Defesa dos Estados Unidos. Em 1998, dois estudantes criam o Google.</li>
-    <li>Toque 2, os apps de vocês: Facebook, cinco estudantes. YouTube, três. Instagram, dois, e um deles é brasileiro: Mike Krieger, de São Paulo. O TikTok nasce na China em 2016, com o nome Douyin, numa empresa fundada por dois homens. ChatGPT: no time fundador da OpenAI eram 11 pessoas, duas mulheres.</li>
-    <li>Toque 3: quem constrói decide o que é normal. Não é sobre culpar quem estava lá. É sobre perceber quem não estava. A frase puxa o próximo slide.</li>
-    <li>Se quiser dizer o total: são 37 pontos na tela e 2 são dourados.</li>
-    <li class="c">Cuidado: diga "quase sempre homens", não "só homens". As duas mulheres do time fundador da OpenAI são Vicki Cheung e Pamela Vagata, e quem dirigia a tecnologia da empresa no lançamento do ChatGPT era uma mulher, Mira Murati. A ARPANET foi projeto de governo, por isso não tem pontos. A versão internacional do TikTok é de 2017.</li>
-  </ul></div>
 </section>
 
 <!-- 3 · video -->
-<section class="slide" data-scene="video" data-min="4 min" aria-label="O próximo vídeo">
+<section class="slide" data-scene="video" aria-label="O próximo vídeo">
   <div class="col">
     <p class="eyebrow rise">YouTube · 2018</p>
     <h2 class="rise d1">Você não escolheu <em class="ember">o próximo vídeo.</em></h2>
@@ -283,16 +251,10 @@ button.nav:focus-visible{outline:2px solid var(--lav);outline-offset:-4px}
     <p class="punch" data-s="2">A IA já escolhe por você. Todo dia.</p>
   </div>
   <p class="src" data-s="1">Neal Mohan, diretor de produto do YouTube, CES, janeiro de 2018</p>
-  <div class="n"><ul>
-    <li>Antes do toque, faça a ponte: e o que essas pessoas decidiram que é normal? Por exemplo, que quem escolhe o próximo vídeo é a máquina.</li>
-    <li>Toque 1: em 2018, o hoje CEO do YouTube disse que mais de 70% do tempo assistido vem de recomendações feitas por aprendizado de máquina. No TikTok, a aba Para Você é toda recomendação.</li>
-    <li>Toque 2: a IA já escolhe por você, todo dia. Atrás de você, um quadro acende de cada vez: é o feed escolhendo.</li>
-    <li class="c">Cuidado: é um dado de 2018, que o YouTube não atualizou. Diga "mais de 70%".</li>
-  </ul></div>
 </section>
 
 <!-- toca do coelho -->
-<section class="slide" data-scene="toca" data-min="3 min" aria-label="A toca do coelho">
+<section class="slide" data-scene="toca" aria-label="A toca do coelho">
   <div class="col">
     <p class="eyebrow rise">A toca do coelho</p>
     <h2 class="rise d1">A máquina aprendeu a <em class="ember">nos manter.</em></h2>
@@ -300,16 +262,10 @@ button.nav:focus-visible{outline:2px solid var(--lav);outline-offset:-4px}
       <cite>Sean Parker, primeiro presidente do Facebook, 2017, sobre como as plataformas foram pensadas</cite></blockquote>
     <p class="punch" data-s="2">A métrica era o nosso tempo.</p>
   </div>
-  <div class="n"><ul>
-    <li>Antes do toque: a espiral atrás de você é a toca do coelho. Cada vídeo puxa o próximo, um pouco mais fundo.</li>
-    <li>Toque 1: Sean Parker, em 2017, ao site Axios, disse que os criadores entenderam que exploravam uma vulnerabilidade da psicologia humana, e fizeram mesmo assim.</li>
-    <li>Toque 2: a métrica era o nosso tempo. Ninguém programou "prenda as meninas no celular". Programaram "mantenha as pessoas aqui". O resto veio junto.</li>
-    <li class="c">Cuidado: estudos encontraram caminhos de radicalização no YouTube; outros dão mais peso às escolhas de quem assiste. Diga "estudos encontraram", não "está provado".</li>
-  </ul></div>
 </section>
 
 <!-- caixa de texto -->
-<section class="slide center" data-scene="caixa" data-min="2 min" aria-label="A IA ganhou uma caixa de texto">
+<section class="slide center" data-scene="caixa" aria-label="A IA ganhou uma caixa de texto">
   <p class="eyebrow rise">30 de novembro de 2022</p>
   <h2 class="rise d1">A IA ganhou <em>uma caixa de texto.</em></h2>
   <div class="chatbox rise d2"><div class="typer" data-text="Olá. Como posso ajudar?"></div><div class="send"></div></div>
@@ -318,16 +274,10 @@ button.nav:focus-visible{outline:2px solid var(--lav);outline-offset:-4px}
     <p class="lbl">de pessoas em dois meses</p>
   </div>
   <p class="src" data-s="1">Estimativa do UBS com dados da Similarweb, divulgada pela Reuters em fevereiro de 2023</p>
-  <div class="n"><ul>
-    <li>Antes do toque: até aqui, a IA escolhia por nós em silêncio. A partir daqui, ela conversa. A frase se escreve sozinha na caixa.</li>
-    <li>Toque 1: o ChatGPT foi lançado em 30 de novembro de 2022. Chegou a 1 milhão de pessoas em cinco dias e a cerca de 100 milhões em dois meses.</li>
-    <li>Pela primeira vez, qualquer pessoa podia pedir algo à IA, em vez de só receber o que ela escolhia.</li>
-    <li class="c">Cuidado: os 100 milhões são uma estimativa do banco UBS, não um número oficial da OpenAI.</li>
-  </ul></div>
 </section>
 
 <!-- a linha que sobe -->
-<section class="slide top" data-scene="linha" data-min="2 min" aria-label="E não parou de subir">
+<section class="slide top" data-scene="linha" aria-label="E não parou de subir">
   <div>
     <p class="eyebrow rise">ChatGPT · pessoas usando por semana</p>
     <h2 class="rise d1">E não parou <em>de subir.</em></h2>
@@ -340,40 +290,22 @@ button.nav:focus-visible{outline:2px solid var(--lav);outline-offset:-4px}
     <div class="pt last" data-k="5"><span>set 2026 · por semana</span><b>1,2 bi</b></div>
   </div>
   <p class="src" data-s="1">OpenAI, usuários semanais, fevereiro de 2025 a setembro de 2026 · ponto inicial: UBS, janeiro de 2023</p>
-  <div class="n"><ul>
-    <li>Antes do toque: os 100 milhões eram só o começo.</li>
-    <li>Toque 1: a linha sobe sozinha por uns 7 segundos e acende cada ponto: 400 milhões por semana em fevereiro de 2025, 800 milhões em outubro, 900 milhões em fevereiro de 2026 e 1,2 bilhão em setembro. Olhe para a plateia enquanto ela sobe.</li>
-    <li>Mais de 1 bilhão de pessoas pedem algo à IA toda semana. Ponte para o próximo slide: e quem construiu isso quase nunca se parece com a gente.</li>
-    <li class="c">Cuidado: o primeiro ponto é uma estimativa mensal do UBS; os demais são usuários semanais informados pela OpenAI. O 1,2 bilhão de setembro pode incluir todo o ecossistema da OpenAI, por isso diga "mais de 1 bilhão". Entre 2023 e fevereiro de 2025 a linha só liga os pontos.</li>
-  </ul></div>
 </section>
 
 <!-- 4 · cheguei -->
-<section class="slide center" data-scene="cheguei" data-min="1 min" aria-label="Não vim contar como cheguei">
+<section class="slide center" data-scene="cheguei" aria-label="Não vim contar como cheguei">
   <h2 class="xl rise">Eu não vim contar <em>como cheguei.</em></h2>
   <p class="punch xl" data-s="1">Vim contar como ainda bato no teto.</p>
-  <div class="n"><ul>
-    <li>Ponte: a IA já escolhe por vocês, e quem construiu quase nunca se parece com a gente. Então diga a primeira frase olhando para a plateia, sem pressa.</li>
-    <li>Toque 1: o teto desce. "Vim contar como ainda bato no teto." Os pontos de luz sobem e param nele.</li>
-    <li>Esta é a virada da fala: não é história de chegada, é retrospectiva do presente.</li>
-  </ul></div>
 </section>
 
 <!-- 5 · teto -->
-<section class="slide center halo" data-scene="teto" data-min="7 min" aria-label="O teto de concreto">
+<section class="slide center halo" data-scene="teto" aria-label="O teto de concreto">
   <h2 class="xl rise">O teto é de <em class="plain">concreto.</em></h2>
   <p class="punch xl" data-s="1">Mas tem rachaduras.</p>
-  <div class="n"><ul>
-    <li>Antes do toque, conte o seu caso de hoje, só na fala e sem nomes.</li>
-    <li>Toque 1, quando chegar em "e foi assim que eu dei a volta": a rachadura abre e a luz entra.</li>
-    <li>A virada: hoje as ferramentas estão mais perto, mas ferramenta sozinha não derruba teto. Por isso a gente abre as rachaduras juntas.</li>
-    <li>O slide aguenta ficar parado. A luz continua passando enquanto você fala.</li>
-    <li class="c">Cuidado: é um evento público. Conte como um padrão que todo mundo reconhece, sem nomear órgão nem pessoas.</li>
-  </ul></div>
 </section>
 
 <!-- 6 · antonia -->
-<section class="slide" data-scene="antonia" data-min="4 min" aria-label="Antônia">
+<section class="slide" data-scene="antonia" aria-label="Antônia">
   <div class="col tight">
     <p class="eyebrow rise">Uma história real · Brasil</p>
     <h2 class="rise d1">Antônia fotografou <em>cocô de cachorro.</em></h2>
@@ -385,18 +317,10 @@ button.nav:focus-visible{outline:2px solid var(--lav);outline-offset:-4px}
     <p class="punch" data-s="2">Antônia trabalha com inteligência artificial.</p>
   </div>
   <p class="src rise d3">Intercept Brasil, junho de 2023 · pesquisa DiPLab e LATRAPS, 2023</p>
-  <div class="n"><ul>
-    <li>Ponte: o teto não é só seu. Agora vocês vão ver onde as mulheres estão dentro da IA, começando por uma história.</li>
-    <li>Conte como história: uma brasileira recebia alguns centavos de dólar por foto enviada a uma plataforma de microtarefas. Ela conta ter tirado mais de 250. Cada quadro atrás de você é uma foto.</li>
-    <li>As risadas vêm. Deixe vir e espere.</li>
-    <li>Toque 1: as fotos serviam para ensinar um robô aspirador a desviar. As fotos viram dado, e o dado vira o robô.</li>
-    <li>Toque 2: ela diz, com orgulho, que trabalha com inteligência artificial. E é verdade. A pergunta não é sobre ela. É sobre em que lugar da IA a gente está.</li>
-    <li class="c">Cuidado: Antônia é o nome usado na reportagem do Intercept Brasil. No relatório da pesquisa, a mesma história aparece com o nome Helena, 54 anos, e fala em fezes de cães e gatos. A pesquisa troca os nomes para proteger as pessoas.</li>
-  </ul></div>
 </section>
 
 <!-- 7 · predio -->
-<section class="slide" data-scene="predio" data-min="6 min" aria-label="O prédio da IA">
+<section class="slide" data-scene="predio" aria-label="O prédio da IA">
   <div class="col slim">
     <p class="eyebrow rise">Brasil · quem está em cada andar</p>
     <h2 class="rise d1">O prédio <em>da IA</em></h2>
@@ -408,37 +332,20 @@ button.nav:focus-visible{outline:2px solid var(--lav);outline-offset:-4px}
     <div class="fl f1"><div data-s="1"><p class="ft">Porão · quem rotula os dados</p><p class="fv"><span class="nw"><b>64</b> em cada 100</span> são mulheres</p><p class="fx">menos de R$ 10 por hora</p></div></div>
   </div>
   <p class="src" data-s="1">Microtrabalho: DiPLab e LATRAPS, 2023 · Cargos de IA: LinkedIn, 27 países, 2026</p>
-  <div class="n"><ul>
-    <li>Antes do toque: imagine a IA como um prédio. Antônia trabalha nele. Cada janela é uma pessoa, e as douradas são mulheres.</li>
-    <li>Toque 1, o porão: rotular imagem, transcrever áudio, classificar anúncio. No Brasil, 64 em cada 100 pessoas nesse trabalho são mulheres. A média é de R$ 9,36 por hora.</li>
-    <li>Toque 2, os andares: nos cargos de IA abaixo da cúpula, as mulheres são 22 em cada 100. Um degrau acima do porão, quem treina e corrige IA com conhecimento especializado ganha em média US$ 15 por hora no Brasil, e funções muito especializadas chegam a US$ 100.</li>
-    <li>Toque 3, a cobertura: nos cargos executivos de IA no Brasil, as mulheres são 4,7%. No mundo, 13%.</li>
-    <li>Toque 4: em qual andar você quer estar? Volte à frase do começo: quem constrói decide o que é normal. O que separa os andares é o que você sabe sobre como a IA funciona. Aqui entra a sua fala sobre ocupar a fronteira da inovação para não virar mão de obra barata.</li>
-    <li class="c">Cuidado: o estudo do microtrabalho é de 2023, com 477 pessoas de uma plataforma. Diga "uma pesquisa mostrou". Em entrevista de novembro de 2025, o pesquisador fala em cerca de R$ 6 por hora, por isso o slide diz "menos de R$ 10".</li>
-    <li class="c">Cuidado: o recorte do Brasil no levantamento do LinkedIn (4,7% e 22,1%, agosto de 2026) saiu em NSC Total, Gazeta SP e Correio. A Bloomberg Línea noticiou o mesmo levantamento só com a média global de 13%. Se quiser a versão mais segura, diga "13 em cada 100 no mundo, e no Brasil menos ainda".</li>
-    <li class="c">Cuidado: os valores de quem treina IA são de um relatório de 2025 da Deel, plataforma de contratação. E a crítica é à estrutura do prédio, nunca a quem trabalha no porão.</li>
-  </ul></div>
 </section>
 
 <!-- 8 · mapa -->
-<section class="slide" data-scene="mapa" data-min="3 min" aria-label="O mapa dos muros">
+<section class="slide" data-scene="mapa" aria-label="O mapa dos muros">
   <div class="col">
     <p class="eyebrow rise">Espelho estatístico</p>
     <h2 class="rise d1">A IA aprendeu <em>com a gente.</em></h2>
     <p class="lead" data-s="1">Por isso ela conhece os muros.</p>
     <p class="punch" data-s="2">Quem lê o mapa encontra as rachaduras.</p>
   </div>
-  <div class="n"><ul>
-    <li>Antes do toque: a IA aprendeu lendo o que a gente escreveu. Ela é um espelho estatístico da sociedade e repete os nossos padrões, inclusive os vieses. O mapa atrás de você vai se formando enquanto você fala.</li>
-    <li>Toque 1: por isso ela conhece os muros. Ela leu como a sociedade costuma tratar cada pessoa, e repete.</li>
-    <li>Toque 2: quem lê o mapa encontra as rachaduras. A luz atravessa o labirinto pelas passagens.</li>
-    <li>Exemplo de pergunta, já pensando no desafio de saúde: "o que eu ainda não sei sobre este problema, e quem eu deveria ouvir?".</li>
-    <li>Você não está suavizando a crítica aos vieses. Está virando ela a favor de quem ficou do lado de fora.</li>
-  </ul></div>
 </section>
 
 <!-- 9 · briga -->
-<section class="slide" data-scene="briga" data-min="4 min" aria-label="A IA numa briga de estacionamento">
+<section class="slide" data-scene="briga" aria-label="A IA numa briga de estacionamento">
   <div class="col">
     <p class="eyebrow rise">Universidade de Lancaster · 2026</p>
     <h2 class="rise d1">Colocaram a IA numa <em class="coral">briga de estacionamento.</em></h2>
@@ -447,35 +354,19 @@ button.nav:focus-visible{outline:2px solid var(--lav);outline-offset:-4px}
     <p class="punch" data-s="3">Ela aprendeu com a gente. Até a brigar.</p>
   </div>
   <p class="src" data-s="1">Tantucci e Culpeper, Journal of Pragmatics, abril de 2026 · ChatGPT 4.0</p>
-  <div class="n"><ul>
-    <li>Cena: dois carros disputam a mesma vaga. Toque 1: o balão da IA vai do sarcasmo ao xingamento. Toque 2: aparece o risco no carro. Toque 3: um espelho entre os dois, e os dois lados ficam iguais.</li>
-    <li>Antes do toque: pesquisadores pegaram cinco brigas reais por vaga de estacionamento, filmadas, e pediram ao ChatGPT para responder no lugar de uma das pessoas, fala por fala.</li>
-    <li>Toque 1: ela começou no sarcasmo, que é um jeito de ofender sem quebrar as próprias regras. Depois vieram os xingamentos.</li>
-    <li>Toque 2: e as ameaças. Em vários momentos a IA foi mais grosseira do que os humanos da briga. Deixe a plateia rir.</li>
-    <li>Toque 3: ela aprendeu com a gente, até a brigar. Os autores chamam isso de dilema moral da IA: ela é treinada para ser educada e, ao mesmo tempo, para nos imitar.</li>
-    <li class="c">Cuidado: não foi alguém xingando o chatbot. As falas agressivas vieram das brigas reais. A frase do carro aparece na cobertura de imprensa do estudo ("I'll key your car").</li>
-    <li class="c">Cuidado: as falas dos balões são ilustração, não citações do estudo.</li>
-  </ul></div>
 </section>
 
 <!-- 10 · mente -->
-<section class="slide" data-scene="mente" data-min="3 min" aria-label="O mapa também mente">
+<section class="slide" data-scene="mente" aria-label="O mapa também mente">
   <div class="col">
     <h2 class="rise">Mas o mapa <em class="coral">também mente.</em></h2>
     <p class="lead" data-s="1">Às vezes a IA devolve você ao lugar de sempre.</p>
     <p class="punch" data-s="2">Se ela mandar você mirar mais baixo, desconfie.</p>
   </div>
-  <div class="n"><ul>
-    <li>Antes do toque: o mesmo espelho que mostra os muros também repete o passado.</li>
-    <li>Toque 1: a luz coral entra, erra o caminho e volta para o começo. A IA aprendeu com dados em que meninas como vocês quase não aparecem nos andares de cima. Então ela pode sugerir o caminho de sempre.</li>
-    <li>Toque 2: se ela mandar você mirar mais baixo, desconfie. Peça outra resposta, mude a pergunta, compare. A luz dourada volta a correr até a saída.</li>
-    <li>Convite, sem prometer resultado: façam a mesma pergunta mudando só quem pergunta e comparem as respostas.</li>
-    <li>Este é o "questionar" do seu método. Os dois próximos slides mostram isso acontecendo na saúde e na escola.</li>
-  </ul></div>
 </section>
 
 <!-- 11 · mit -->
-<section class="slide" data-scene="mit" data-min="4 min" aria-label="O jeito de escrever muda a resposta">
+<section class="slide" data-scene="mit" aria-label="O jeito de escrever muda a resposta">
   <div class="col tight">
     <p class="eyebrow rise">MIT · 2025 · IA e saúde</p>
     <h2 class="rise d1">O jeito de escrever <em>muda a resposta.</em></h2>
@@ -501,20 +392,10 @@ button.nav:focus-visible{outline:2px solid var(--lav);outline-offset:-4px}
     <div class="msg ghost" data-s="4"><div class="bub"><span class="caret"></span>e do seu jeito?</div></div>
   </div>
   <p class="src" data-s="1">Gourabathina e colegas, MIT, junho de 2025 · quatro modelos de IA</p>
-  <div class="n"><ul>
-    <li>Cena: a mesma queixa escrita de dois jeitos. A primeira se digita sozinha e recebe "Procure um médico". Toque 1: a segunda aparece com gíria, erro e um espaço a mais. Toque 2: a resposta muda. Toque 3: os pontos dourados, que nesta fala são as mulheres, cercam a resposta errada. Toque 4: a caixa vazia é a delas.</li>
-    <li>Antes do toque: pesquisadoras do MIT pegaram mensagens de pacientes e mudaram só a forma, sem mexer no conteúdo médico.</li>
-    <li>Toque 1: erro de digitação, gíria, linguagem mais dramática, um espaço a mais.</li>
-    <li>Toque 2: as IAs passaram a recomendar de 7% a 9% mais vezes que a pessoa se cuidasse em casa, em vez de procurar atendimento.</li>
-    <li>Toque 3: com as mulheres, a IA errou mais, cerca de 7% a mais, mesmo quando as pistas de gênero foram retiradas do texto.</li>
-    <li>Toque 4: quem testou com o jeito que vocês escrevem? Ponte para o desafio: uma solução de saúde precisa funcionar para quem escreve com pressa, com gíria e com erro.</li>
-    <li class="c">Cuidado: o estudo testou quatro modelos, entre eles o GPT-4, com mensagens de pacientes alteradas pelos pesquisadores. Não é o ChatGPT de hoje. Diga "um estudo do MIT mostrou".</li>
-    <li class="c">Cuidado: as duas mensagens da tela são um exemplo criado para o slide, não saíram do estudo.</li>
-  </ul></div>
 </section>
 
 <!-- 12 · alana -->
-<section class="slide" data-scene="alana" data-min="3 min" aria-label="O espelho também reflete ausência">
+<section class="slide" data-scene="alana" aria-label="O espelho também reflete ausência">
   <div class="col tight">
     <p class="eyebrow rise">Brasil · 2025 · IA e escola</p>
     <h2 class="rise d1">O espelho também <em>reflete ausência.</em></h2>
@@ -526,19 +407,10 @@ button.nav:focus-visible{outline:2px solid var(--lav);outline-offset:-4px}
     <p class="punch" data-s="3">Quem não está no dado não aparece na resposta.</p>
   </div>
   <p class="src" data-s="1">Tarcízio Silva para o Instituto Alana, setembro de 2025 · versões gratuitas de sete serviços</p>
-  <div class="n"><ul>
-    <li>Cena: cada quadrinho é uma das 35 respostas, uma coluna por IA. Toque 1: as sete IAs acendem. Toque 2: as respostas são conferidas uma a uma e nenhuma fica dourada. Toque 3: os pontos dourados ficam do lado de fora, sem conseguir entrar.</li>
-    <li>Antes do toque: agora um estudo brasileiro, do pesquisador Tarcízio Silva para o Instituto Alana.</li>
-    <li>Toque 1: ele pediu a sete IAs cinco objetos, instrumentos ou construções para usar numa aula de matemática do 6º ano. Cada IA respondeu cinco vezes.</li>
-    <li>Toque 2: em 35 respostas, nenhuma lembrou sozinha de um objeto de cultura africana, afro-brasileira ou indígena. Quando ele pediu de propósito, vieram generalizações e objetos inventados.</li>
-    <li>Toque 3: quem não está no dado não aparece na resposta. E nenhuma das IAs avisou que podia estar errada.</li>
-    <li class="c">Cuidado: é um experimento exploratório, com as versões gratuitas de Amazônia IA, ChatGPT, DeepSeek, Gemini, Grok, Maritaca e Meta AI. Diga "num teste".</li>
-    <li class="c">Cuidado: a grade supõe cinco respostas por IA (7 × 5 = 35). Se o desenho do teste foi outro, diga só "as 35 respostas".</li>
-  </ul></div>
 </section>
 
 <!-- 13 · clic -->
-<section class="slide" data-scene="clic" data-min="10 min" aria-label="Como eu construí o CLIC">
+<section class="slide" data-scene="clic" aria-label="Como eu construí o CLIC">
   <div class="col">
     <p class="eyebrow rise">Um caso meu · CLIC Diversidade</p>
     <h2 class="rise d1">Ninguém nasce <em class="gold">sabendo construir.</em></h2>
@@ -549,18 +421,10 @@ button.nav:focus-visible{outline:2px solid var(--lav);outline-offset:-4px}
     </div>
     <p class="punch" data-s="4">Vocês não precisam pedir licença para construir.</p>
   </div>
-  <div class="n"><ul>
-    <li>Este slide é só o roteiro. A história é sua, contada na fala, pelas decisões e não pelo resultado.</li>
-    <li>Cena: uma janela de navegador vazia. Toque 1: aparece o ponto de interrogação, o problema. Toque 2: os blocos do site caem no lugar, e um deles é riscado e fica de fora. Toque 3: cinco pessoas testam, os cartões ganham um visto e um deles muda de cor: foi o que elas mudaram. Toque 4: a janela fica dourada e o endereço do CLIC se escreve na barra.</li>
-    <li>Toque 1, o problema: qual problema você queria resolver e quem sentia esse problema.</li>
-    <li>Toque 2, as escolhas: o que você não sabia fazer quando começou, o que decidiu deixar de fora, onde errou e refez.</li>
-    <li>Toque 3, quem testou: quem usou primeiro e o que essas pessoas mudaram no que você tinha feito.</li>
-    <li>Toque 4: vocês não precisam pedir licença para construir. Mas construir bem pede ouvir, testar e responder pelo que se fez.</li>
-  </ul></div>
 </section>
 
 <!-- 14 · ouvir -->
-<section class="slide" data-scene="ouvir" data-min="10 min" aria-label="Quem vocês precisam ouvir">
+<section class="slide" data-scene="ouvir" aria-label="Quem vocês precisam ouvir">
   <div class="col">
     <p class="eyebrow rise">Agora é com vocês</p>
     <h2 class="rise d1">Uma IA para ajudar adolescentes a <em>cuidar da saúde.</em></h2>
@@ -568,19 +432,10 @@ button.nav:focus-visible{outline:2px solid var(--lav);outline-offset:-4px}
     <p class="lead" data-s="2">Dois minutos com a colega do lado.</p>
     <p class="punch" data-s="3">Quem vive o problema também decide.</p>
   </div>
-  <div class="n"><ul>
-    <li>Cena: a IA no centro e uma roda de pessoas. Toque 1: as pessoas aparecem e as vozes correm até o centro. Toque 2: começa um cronômetro de dois minutos de verdade e as pessoas se juntam em duplas. Toque 3: a roda fica dourada.</li>
-    <li>Antes do toque: imaginem que a equipe de vocês vai criar uma IA para ajudar adolescentes a cuidar da saúde.</li>
-    <li>Toque 1: quem vocês precisam ouvir antes de construir?</li>
-    <li>Toque 2: dois minutos com a colega do lado. Depois peça três ou quatro respostas em voz alta. Não precisa de celular.</li>
-    <li>Ajude a sala a chegar em: adolescentes, famílias, profissionais de saúde, pessoas com deficiência, quem mora longe do posto.</li>
-    <li>Toque 3: quem vive o problema também decide. Não é só quem programa ou quem paga. E uma boa solução também tem limite: o que essa IA não deve responder sozinha?</li>
-    <li>Ponte: é isso que vocês vão fazer às 15h30, quando escolherem o desafio.</li>
-  </ul></div>
 </section>
 
 <!-- 15 · brechas -->
-<section class="slide top halo" data-scene="brechas" data-min="6 min" aria-label="Três brechas">
+<section class="slide top halo" data-scene="brechas" aria-label="Três brechas">
   <div class="brh">
     <p class="eyebrow rise">Para usar nestes três dias</p>
     <h2 class="rise d1">Três <em class="gold">brechas</em></h2>
@@ -590,35 +445,20 @@ button.nav:focus-visible{outline:2px solid var(--lav);outline-offset:-4px}
     <div data-s="2"><span class="bn">2</span><p class="bt">Peça dados.<br>E confira a fonte.</p><p class="bd">“Que dados mostram que esse problema existe? De onde vêm?”</p></div>
     <div data-s="3"><span class="bn">3</span><p class="bt">Chegue com um protótipo.</p><p class="bd">Mostrar vale mais que explicar.</p></div>
   </div>
-  <div class="n"><ul>
-    <li>Antes do toque: três brechas para usar nestes três dias, todas com a IA do seu lado. A cada toque, uma rachadura abre no teto. Embaixo de cada uma está a pergunta para digitar.</li>
-    <li>Toque 1: pergunte o que você não viu. Quem tem sobrenome e rede tem alguém que avisa o que não está escrito. Quem não tem pode perguntar: "o que eu não estou pensando nessa ideia?", "quem pode ser prejudicada por ela?", "o que quem avalia costuma valorizar?". Hoje, às 15h30, vocês escolhem o desafio de saúde: perguntem antes de propor.</li>
-    <li>Toque 2: peça dados e confira a fonte. Proposta com número convence mais. Mas a IA inventa número com confiança: peçam o link, abram e leiam. Se a fonte não existir, o dado não entra. É o "mapa também mente" na prática.</li>
-    <li>Toque 3: chegue com um protótipo. Amanhã tem mentoria. Ideia todo mundo tem, e uma tela que funciona muda a conversa. Se quiser, conte aqui que esta apresentação foi construída com IA.</li>
-    <li>A IA ajuda a preparar a escuta, mas não substitui: ouvir quem vive o problema continua valendo, como no exercício anterior.</li>
-    <li class="c">Cuidado: achar a brecha não é obrigação individual. Se não der certo, a culpa não é de quem tentou.</li>
-  </ul></div>
 </section>
 
 <!-- 16 · portas -->
-<section class="slide" data-scene="portas" data-min="2 min" aria-label="Não existe linha de chegada">
+<section class="slide" data-scene="portas" aria-label="Não existe linha de chegada">
   <div class="col">
     <h2 class="rise">Não existe <em>linha de chegada.</em></h2>
     <p class="lead" data-s="1">É todo dia. Mas não é sozinha.</p>
     <p class="punch" data-s="2">Cada porta que você atravessar, deixe aberta.</p>
     <p class="lead" data-s="3">E construa pensando em quem ainda não passou.</p>
   </div>
-  <div class="n"><ul>
-    <li>Antes do toque: não existe o "cheguei, venci". Para quem não tem sobrenome nem rede pronta, hackear é todo dia.</li>
-    <li>Toque 1: as portas se abrem uma depois da outra, e sempre tem mais uma. É todo dia, mas não é sozinha.</li>
-    <li>Toque 2: cada porta que você atravessar, deixe aberta. A luz volta pelas portas abertas para quem vem depois.</li>
-    <li>Toque 3: e construa pensando em quem ainda não passou. A solução de vocês também precisa servir a quem não está nesta sala.</li>
-    <li class="c">Cuidado: evite "vocês nunca vão estar lá". A verdade é a mesma, mas a plateia pode ouvir "vocês não vão conseguir". Prefira "eu ainda estou chegando, todo dia".</li>
-  </ul></div>
 </section>
 
 <!-- 17 · rede -->
-<section class="slide" data-scene="rede" data-min="2 min" aria-label="45 viram 500">
+<section class="slide" data-scene="rede" aria-label="45 viram 500">
   <div class="col">
     <p class="eyebrow rise">CLIC Diversidade · uma turma</p>
     <div class="rise d1">
@@ -631,15 +471,10 @@ button.nav:focus-visible{outline:2px solid var(--lav);outline-offset:-4px}
     </div>
     <p class="punch" data-s="2">Compartilhar multiplica.</p>
   </div>
-  <div class="n"><ul>
-    <li>Antes do toque: uma turma de 45 pessoas, na Ouvidoria Nacional de Direitos Humanos. Os 45 pontos dourados são elas.</li>
-    <li>Toque 1: viraram 500, porque quem aprendeu ensinou. Ninguém precisou pedir autorização. Os círculos se abrem como onda.</li>
-    <li>Toque 2: compartilhar multiplica. Dividir o que você sabe não é perder: é construir o seu próprio capital.</li>
-  </ul></div>
 </section>
 
 <!-- 18 · material -->
-<section class="slide" data-scene="material" data-min="1 min" aria-label="O material é de vocês">
+<section class="slide" data-scene="material" aria-label="O material é de vocês">
   <div class="col">
     <p class="eyebrow rise">CLIC Diversidade</p>
     <h2 class="rise d1">O material <em class="gold">é de vocês.</em></h2>
@@ -647,35 +482,22 @@ button.nav:focus-visible{outline:2px solid var(--lav);outline-offset:-4px}
     <p class="url rise d3">clicdiversidade.netlify.app</p>
   </div>
   <div class="qrw"><div class="qr rise d2"><svg viewBox="-3 -3 35 35" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" role="img" aria-label="QR code para clicdiversidade.netlify.app"><rect x="-3" y="-3" width="35" height="35" fill="#fff"/><path fill="#0b0d12" d="M0 0h7v1h-7zM8 0h1v1h-1zM11 0h3v1h-3zM15 0h1v1h-1zM18 0h3v1h-3zM22 0h7v1h-7zM0 1h1v1h-1zM6 1h1v1h-1zM8 1h1v1h-1zM10 1h1v1h-1zM12 1h2v1h-2zM17 1h2v1h-2zM20 1h1v1h-1zM22 1h1v1h-1zM28 1h1v1h-1zM0 2h1v1h-1zM2 2h3v1h-3zM6 2h1v1h-1zM9 2h1v1h-1zM12 2h1v1h-1zM16 2h1v1h-1zM18 2h3v1h-3zM22 2h1v1h-1zM24 2h3v1h-3zM28 2h1v1h-1zM0 3h1v1h-1zM2 3h3v1h-3zM6 3h1v1h-1zM8 3h1v1h-1zM10 3h1v1h-1zM12 3h1v1h-1zM14 3h2v1h-2zM17 3h2v1h-2zM22 3h1v1h-1zM24 3h3v1h-3zM28 3h1v1h-1zM0 4h1v1h-1zM2 4h3v1h-3zM6 4h1v1h-1zM10 4h1v1h-1zM12 4h1v1h-1zM14 4h1v1h-1zM19 4h1v1h-1zM22 4h1v1h-1zM24 4h3v1h-3zM28 4h1v1h-1zM0 5h1v1h-1zM6 5h1v1h-1zM9 5h3v1h-3zM13 5h1v1h-1zM16 5h5v1h-5zM22 5h1v1h-1zM28 5h1v1h-1zM0 6h7v1h-7zM8 6h1v1h-1zM10 6h1v1h-1zM12 6h1v1h-1zM14 6h1v1h-1zM16 6h1v1h-1zM18 6h1v1h-1zM20 6h1v1h-1zM22 6h7v1h-7zM8 7h3v1h-3zM17 7h1v1h-1zM20 7h1v1h-1zM0 8h1v1h-1zM2 8h2v1h-2zM5 8h3v1h-3zM9 8h2v1h-2zM12 8h2v1h-2zM17 8h3v1h-3zM22 8h1v1h-1zM25 8h1v1h-1zM27 8h2v1h-2zM0 9h1v1h-1zM2 9h1v1h-1zM4 9h2v1h-2zM7 9h1v1h-1zM13 9h2v1h-2zM16 9h9v1h-9zM28 9h1v1h-1zM0 10h1v1h-1zM2 10h1v1h-1zM5 10h2v1h-2zM8 10h1v1h-1zM10 10h1v1h-1zM12 10h2v1h-2zM18 10h1v1h-1zM20 10h2v1h-2zM24 10h1v1h-1zM26 10h2v1h-2zM0 11h6v1h-6zM8 11h3v1h-3zM16 11h1v1h-1zM19 11h2v1h-2zM22 11h1v1h-1zM28 11h1v1h-1zM0 12h1v1h-1zM4 12h1v1h-1zM6 12h3v1h-3zM11 12h1v1h-1zM14 12h4v1h-4zM25 12h2v1h-2zM3 13h2v1h-2zM7 13h6v1h-6zM14 13h4v1h-4zM19 13h1v1h-1zM22 13h1v1h-1zM26 13h3v1h-3zM0 14h7v1h-7zM8 14h2v1h-2zM11 14h3v1h-3zM18 14h3v1h-3zM23 14h1v1h-1zM26 14h3v1h-3zM1 15h2v1h-2zM4 15h1v1h-1zM9 15h2v1h-2zM12 15h1v1h-1zM14 15h2v1h-2zM27 15h1v1h-1zM1 16h1v1h-1zM4 16h1v1h-1zM6 16h2v1h-2zM9 16h1v1h-1zM11 16h2v1h-2zM14 16h1v1h-1zM18 16h4v1h-4zM23 16h3v1h-3zM27 16h1v1h-1zM1 17h2v1h-2zM4 17h2v1h-2zM7 17h1v1h-1zM10 17h2v1h-2zM14 17h2v1h-2zM18 17h1v1h-1zM20 17h2v1h-2zM23 17h1v1h-1zM25 17h3v1h-3zM0 18h1v1h-1zM3 18h2v1h-2zM6 18h1v1h-1zM8 18h3v1h-3zM13 18h3v1h-3zM20 18h1v1h-1zM24 18h1v1h-1zM26 18h1v1h-1zM2 19h1v1h-1zM5 19h1v1h-1zM8 19h3v1h-3zM13 19h5v1h-5zM19 19h2v1h-2zM22 19h1v1h-1zM24 19h1v1h-1zM26 19h1v1h-1zM1 20h2v1h-2zM4 20h1v1h-1zM6 20h1v1h-1zM10 20h2v1h-2zM13 20h14v1h-14zM8 21h1v1h-1zM11 21h2v1h-2zM17 21h4v1h-4zM24 21h5v1h-5zM0 22h7v1h-7zM8 22h1v1h-1zM10 22h1v1h-1zM14 22h1v1h-1zM16 22h5v1h-5zM22 22h1v1h-1zM24 22h2v1h-2zM27 22h1v1h-1zM0 23h1v1h-1zM6 23h1v1h-1zM8 23h7v1h-7zM16 23h1v1h-1zM20 23h1v1h-1zM24 23h2v1h-2zM27 23h1v1h-1zM0 24h1v1h-1zM2 24h3v1h-3zM6 24h1v1h-1zM11 24h1v1h-1zM16 24h2v1h-2zM20 24h5v1h-5zM26 24h2v1h-2zM0 25h1v1h-1zM2 25h3v1h-3zM6 25h1v1h-1zM8 25h6v1h-6zM15 25h2v1h-2zM21 25h1v1h-1zM23 25h3v1h-3zM28 25h1v1h-1zM0 26h1v1h-1zM2 26h3v1h-3zM6 26h1v1h-1zM8 26h3v1h-3zM12 26h1v1h-1zM14 26h1v1h-1zM16 26h1v1h-1zM19 26h1v1h-1zM23 26h1v1h-1zM26 26h1v1h-1zM28 26h1v1h-1zM0 27h1v1h-1zM6 27h1v1h-1zM10 27h1v1h-1zM12 27h3v1h-3zM16 27h1v1h-1zM19 27h2v1h-2zM23 27h1v1h-1zM25 27h1v1h-1zM27 27h1v1h-1zM0 28h7v1h-7zM8 28h1v1h-1zM10 28h1v1h-1zM18 28h4v1h-4zM23 28h1v1h-1zM27 28h1v1h-1z"/></svg></div></div>
-  <div class="n"><ul>
-    <li>Deixe o QR na tela tempo suficiente para todo mundo apontar o celular.</li>
-    <li>O material do CLIC Diversidade é aberto: usem, compartilhem, ensinem com ele e construam o seu próprio capital.</li>
-    <li>É a porta que você está deixando aberta, ao vivo.</li>
-  </ul></div>
 </section>
 
 <!-- 19 · fecho -->
-<section class="slide center end halo" data-scene="fecho" data-min="1 min" aria-label="Encerramento">
+<section class="slide center end halo" data-scene="fecho" aria-label="Encerramento">
   <h2 class="xl late l1">O futuro começa quando você decide <em class="gold">ocupá-lo</em></h2>
-  <p class="punch xl late l2">Vocês já decidiram. Quando vieram.</p>
+  <p class="punch xl late l2">Vocês já decidiram. Quando vieram.<br>Não parem.</p>
   <div class="sig a"><p class="late l3"><b>Carla Figueiredo</b><br>@carlacristine85</p></div>
   <div class="sig b"><p class="late l3">clicdiversidade.netlify.app<br>linkedin.com/in/carlacristinefigueiredo</p></div>
-  <div class="n"><ul>
-    <li>Não precisa de toque: o teto desce e vira chão, e as frases aparecem sozinhas em uns cinco segundos. Agora a luz está do lado de cima. Seus contatos ficam gravados no concreto.</li>
-    <li>"Eu ainda estou chegando, todo dia. E vocês já decidiram: quando vieram."</li>
-    <li>Se ainda não contou, revele de viva voz: esta apresentação foi construída com inteligência artificial. O conhecimento e a crítica são seus, e a IA foi parceira.</li>
-    <li>Agradeça à organização.</li>
-  </ul></div>
 </section>
 
 <button class="nav l" type="button" aria-label="Voltar"></button>
 <button class="nav r" type="button" aria-label="Avançar"></button>
-<button id="nbtn" type="button" aria-expanded="false" aria-controls="notes">notas</button>
 <div class="prog" id="prog"></div>
 <div class="count" id="count"></div>
-<div class="hint" id="hint">→ avançar · ← voltar · N notas · F tela cheia</div>
+<div class="hint" id="hint">→ avançar · ← voltar · F tela cheia</div>
 </div>
-<aside id="notes" hidden aria-live="polite"></aside>
 </div>
 
 <script>
@@ -684,7 +506,7 @@ button.nav:focus-visible{outline:2px solid var(--lav);outline-offset:-4px}
 const $ = (q, r = document) => r.querySelector(q);
 const $$ = (q, r = document) => Array.from(r.querySelectorAll(q));
 const stage = $('#stage'), cv = $('#fx'), ctx = cv.getContext('2d');
-const slides = $$('.slide'), notes = $('#notes'), fotoEl = $('#fotos');
+const slides = $$('.slide'), fotoEl = $('#fotos');
 const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /* ---------- paleta e utilitários ---------- */
@@ -1376,8 +1198,6 @@ function applyStep(){
     if (!want) e.classList.remove('in'); });
   $('#prog').style.width = ((cur + (step + 1) / (ms + 1)) / slides.length * 100) + '%';
   $('#count').textContent = String(cur + 1).padStart(2, '0') + ' / ' + slides.length;
-  const n = $('.n', sl);
-  notes.innerHTML = '<h3>' + (cur + 1) + ' · ' + (sl.getAttribute('aria-label') || '') + (sl.dataset.min ? ' · cerca de ' + sl.dataset.min : '') + (ms ? ' · toque ' + step + ' de ' + ms : '') + '</h3>' + (n ? n.innerHTML : '');
   try { history.replaceState(null, '', '#s' + (cur + 1) + (step ? '-' + step : '')); } catch (e) {}
 }
 function show(i, st){
@@ -1402,7 +1222,6 @@ function prev(){ if (step > 0){ step--; applyStep(); } else if (cur > 0) show(cu
 let hintGone = false;
 function hideHint(){ if (!hintGone){ hintGone = true; $('#hint').classList.add('gone'); } }
 setTimeout(hideHint, 7000);
-function toggleNotes(){ notes.hidden = !notes.hidden; $('#nbtn').setAttribute('aria-expanded', notes.hidden ? 'false' : 'true'); }
 function toggleFull(){ try { const d = document; if (!d.fullscreenElement){ const p = d.documentElement.requestFullscreen && d.documentElement.requestFullscreen(); if (p && p.catch) p.catch(() => {}); } else { const p = d.exitFullscreen(); if (p && p.catch) p.catch(() => {}); } } catch (e) {} }
 
 addEventListener('keydown', e => {
@@ -1413,12 +1232,10 @@ addEventListener('keydown', e => {
   else if (['ArrowLeft', 'ArrowUp', 'PageUp', 'Backspace'].includes(k)){ e.preventDefault(); prev(); }
   else if (k === 'Home') show(0, 0);
   else if (k === 'End') show(slides.length - 1, 0);
-  else if (k === 'n' || k === 'N') toggleNotes();
   else if (k === 'f' || k === 'F') toggleFull();
 });
 $('.nav.r').addEventListener('click', next);
 $('.nav.l').addEventListener('click', prev);
-$('#nbtn').addEventListener('click', toggleNotes);
 let tx0 = null;
 stage.addEventListener('touchstart', e => { tx0 = e.touches[0].clientX; }, { passive: true });
 stage.addEventListener('touchend', e => { if (tx0 === null) return; const d = e.changedTouches[0].clientX - tx0; if (Math.abs(d) > 50){ if (d < 0) next(); else prev(); } tx0 = null; }, { passive: true });
