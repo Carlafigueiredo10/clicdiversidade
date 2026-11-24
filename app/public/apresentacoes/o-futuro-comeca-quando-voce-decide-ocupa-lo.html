@@ -429,7 +429,7 @@ button.nav:focus-visible{outline:2px solid var(--lav);outline-offset:-4px}
     <p class="eyebrow rise">Agora é com vocês</p>
     <h2 class="rise d1">Uma IA para ajudar adolescentes a <em>cuidar da saúde.</em></h2>
     <p class="punch xl" data-s="1">Quem vocês precisam ouvir antes de construir?</p>
-    <p class="lead" data-s="2">Dois minutos com a colega do lado.</p>
+    <p class="lead" data-s="2">Um minuto com a colega do lado.</p>
     <p class="punch" data-s="3">Quem vive o problema também decide.</p>
   </div>
 </section>
@@ -978,9 +978,9 @@ function drawRoda(k){
   if (tA < 1){ bead([cx, cy], core, (1 - tA) * 1.2); ctx.fillStyle = rgba(core, 1 - tA); ctx.beginPath(); ctx.arc(cx, cy, (9 + 1.5 * Math.sin(now * 2)) * u, 0, 6.2832); ctx.fill();
     ctx.strokeStyle = rgba(core, .45 * (1 - tA)); ctx.lineWidth = 1.3 * u; ctx.beginPath(); ctx.arc(cx, cy, 30 * u, 0, 6.2832); ctx.stroke();
     ctx.font = '500 ' + (13 * u) + 'px Inter, system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = rgba(C.mute, 1 - tA); ctx.fillText('IA', cx, cy + 52 * u); }
-  if (tA > 0){ const rem = Math.max(0, 120 - s2), sec = Math.ceil(rem), over = rem <= 0, col = over ? C.gold : C.ink;
+  if (tA > 0){ const rem = Math.max(0, 60 - s2), sec = Math.ceil(rem), over = rem <= 0, col = over ? C.gold : C.ink;
     ctx.strokeStyle = rgba(C.lav, .2 * tA); ctx.lineWidth = 3 * u; ctx.beginPath(); ctx.arc(cx, cy, 84 * u, 0, 6.2832); ctx.stroke();
-    if (!over){ ctx.strokeStyle = rgba(C.gold, .95 * tA); ctx.beginPath(); ctx.arc(cx, cy, 84 * u, -Math.PI / 2, -Math.PI / 2 + 6.2832 * rem / 120); ctx.stroke(); }
+    if (!over){ ctx.strokeStyle = rgba(C.gold, .95 * tA); ctx.beginPath(); ctx.arc(cx, cy, 84 * u, -Math.PI / 2, -Math.PI / 2 + 6.2832 * rem / 60); ctx.stroke(); }
     ctx.font = '300 ' + (58 * u) + 'px Fraunces, Georgia, serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = rgba(col, tA * (over ? .65 + .35 * Math.sin(now * 3) : 1));
     ctx.fillText(Math.floor(sec / 60) + ':' + String(sec % 60).padStart(2, '0'), cx, cy + 3 * u); }
   ctx.restore();
