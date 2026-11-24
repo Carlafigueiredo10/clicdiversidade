@@ -62,4 +62,18 @@ export const BLOCOS = [
     external: false,
     tipo: 'apresentacao',
   },
+  {
+    numero: '04',
+    rotulo: tr({ pt: 'PALESTRA', es: 'CONFERENCIA' }),
+    titulo: tr({ pt: 'O futuro começa quando você decide ocupá-lo', es: 'El futuro empieza cuando decides ocuparlo' }),
+    descricao: tr({
+      pt: 'Quem construiu a IA que a gente usa, o teto que ainda existe para as mulheres e como abrir as rachaduras: entender, questionar e construir.',
+      es: 'Quién construyó la IA que usamos, el techo que todavía existe para las mujeres y cómo abrir las grietas: entender, cuestionar y construir.',
+    }),
+    duracao: tr({ pt: '23 slides', es: '23 diapositivas' }),
+    cta: tr({ pt: 'Abrir apresentação', es: 'Abrir presentación' }),
+    href: '/modulos/oficina/o-futuro-comeca-quando-voce-decide-ocupa-lo',
+    external: false,
+    tipo: 'apresentacao',
+  },
 ]

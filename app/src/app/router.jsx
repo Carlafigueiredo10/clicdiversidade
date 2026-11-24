@@ -19,6 +19,7 @@ import Manifesto from '../pages/Manifesto'
 import Visao from '../pages/Visao'
 import PonteOuPrecipicio from '../pages/modulos/PonteOuPrecipicio'
 import EntenderQuestionarUsarConstruir from '../pages/modulos/EntenderQuestionarUsarConstruir'
+import OFuturoComecaQuandoVoceDecideOcupaLo from '../pages/modulos/OFuturoComecaQuandoVoceDecideOcupaLo'
 import Avaliacao from '../pages/Avaliacao'
 import LeliaTest from '../pages/LeliaTest'
 import Admin from '../pages/Admin'
@@ -55,6 +56,10 @@ export const router = createBrowserRouter(
         {
           path: '/modulos/oficina/entender-questionar-usar-construir',
           element: <EntenderQuestionarUsarConstruir />,
+        },
+        {
+          path: '/modulos/oficina/o-futuro-comeca-quando-voce-decide-ocupa-lo',
+          element: <OFuturoComecaQuandoVoceDecideOcupaLo />,
         },
         { path: '/glossario', element: <Glossario /> },
         { path: '/base-teorica', element: <BaseTeorica /> },
