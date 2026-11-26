@@ -35,278 +35,109 @@ Considere sempre uma solução simples, com foco em celular, linguagem clara e i
 
 No final, pergunte se eu quero que você transforme essa definição em um prompt pronto para usar na Lovable.`
 
+// Prompt enxuto de proposito: a Lovable cobra o modo de construcao pelo
+// tamanho do trabalho, e o plano gratuito da 5 creditos por dia. O nucleo
+// (Dashboard, Tarefas, Equipe) vai aqui; Kanban, calendario e os paineis
+// extras ficam em MEU_APP_PROXIMOS, um pedido por mensagem.
 export const MEU_APP_PROMPT = `PERSONA
-Você é um Product Designer sênior, UX Strategist e Arquiteto de Aplicações no-code, especializado em criar sistemas web de alta clareza, alto valor percebido e experiência visual profissional para equipes do setor público.
-Sua especialidade é transformar necessidades administrativas em aplicativos modernos, intuitivos e visualmente impressionantes, com aparência de produto real pronto para uso.
-Seu tom deve ser objetivo, elegante, confiável e profissional. Você projeta interfaces que geram efeito "UAU" sem exagero visual, priorizando:
-clareza
-credibilidade
-facilidade de uso
-excelente organização da informação
+Você é um Product Designer sênior especializado em aplicativos web simples, claros e com aparência profissional para equipes do setor público.
 
-MISSÃO PRINCIPAL
-Crie um aplicativo web completo de gerenciamento de tarefas para servidores e servidoras públicas, suas equipes e suas unidades.
-O sistema deve permitir:
-cadastrar tarefas
-acompanhar demandas
-priorizar atividades
-visualizar produtividade
-gerenciar equipe
-distribuir responsabilidades
-O aplicativo precisa parecer um produto real, moderno e pronto para uso, mesmo sem integração com banco de dados nesta primeira versão.
+MISSÃO
+Crie um aplicativo web de gerenciamento de tarefas para servidoras e servidores públicos e suas equipes.
+Esta é a primeira versão: construa apenas o que está descrito abaixo, sem funcionalidades extras. O aplicativo será ampliado depois, em etapas.
+Não use banco de dados, login nem serviços externos. Os dados ficam apenas na memória do aplicativo.
 
-PRINCÍPIOS DO PRODUTO
-O sistema deve ser construído com foco em:
-simplicidade de uso
-organização visual impecável
-sensação de ferramenta profissional
-navegação intuitiva
-valor percebido já na primeira tela
-forte impacto visual para demonstração em oficina
-
-ESTRUTURA DO APLICATIVO
-O aplicativo deve possuir as seguintes áreas principais:
+ESTRUTURA
+Barra lateral simples com três páginas:
 Dashboard
 Tarefas
 Equipe
-Kanban
-Calendário ou Timeline
-Cadastro / edição de tarefa
 
-1) DASHBOARD PRINCIPAL
-Criar uma tela inicial com visão executiva da operação da unidade.
-Ela deve incluir:
-Indicadores principais
+1) DASHBOARD
+Quatro cards de indicadores:
 total de tarefas
-tarefas concluídas
-tarefas em andamento
-tarefas atrasadas
-tarefas próximas do prazo
-tarefas por criticidade
-tarefas por responsável
-total de integrantes da equipe
-integrantes ativos
-Painéis visuais
-Adicionar visualizações claras e elegantes:
-gráfico de distribuição de tarefas por status
-gráfico de tarefas por criticidade
-gráfico de tarefas por responsável
-painel de produtividade da equipe
-painel de carga de tarefas por responsável
-Blocos estratégicos
-Prioridades do dia
-Tarefas mais urgentes
-Risco de atraso
-Atividades recentes
-Tudo deve ser apresentado em cards bem desenhados, com excelente hierarquia visual.
+em andamento
+concluídas
+atrasadas
+Um gráfico de tarefas por status.
+Uma lista "Prioridades da semana" com as 5 tarefas de maior criticidade e prazo mais próximo.
 
-2) GESTÃO DE TAREFAS
-Criar uma página de tarefas com visual profissional, organizada em tabela moderna ou lista inteligente.
-Cada tarefa deve possuir:
+2) TAREFAS
+Lista de tarefas em tabela (no celular, em cards).
+Cada tarefa possui:
 título
 descrição
-responsável (selecionado da aba Equipe)
-unidade ou equipe
-data de criação
-prazo de entrega
-status
-criticidade
-observações opcionais
-
-3) STATUS OPERACIONAL
-Cada tarefa deve possuir um status operacional:
-Em andamento
-Concluída
-Atrasada
-Esses status devem ser exibidos com etiquetas visuais claras.
-
-4) TAG AUTOMÁTICA DE PRAZO
-O sistema deve calcular automaticamente o estado do prazo com base na data atual.
-Mostrar as seguintes etiquetas:
+responsável (selecionado entre os integrantes da página Equipe)
+prazo
+status: Em andamento, Concluída ou Atrasada
+criticidade: Baixa, Média ou Alta
+Mostrar status e criticidade como etiquetas coloridas.
+Mostrar também uma etiqueta de prazo calculada automaticamente pela data atual:
 🟢 No prazo
 🟡 Prazo próximo
 🔴 Vencida
-Essa lógica deve ser visual e automática.
+Um botão "Nova tarefa" abre um formulário único, usado para criar e para editar.
+Permitir excluir tarefa.
+Filtros: busca por palavra-chave, status e responsável.
 
-5) CRITICIDADE
-Cada tarefa pode possuir nível de criticidade:
-Baixa
-Média
-Alta
-Apresentar isso com cores elegantes e etiquetas visuais claras.
-Exemplo:
-Baixa → cinza ou azul suave
-Média → amarelo ou laranja
-Alta → vermelho
-
-6) FORMULÁRIO DE CRIAÇÃO E EDIÇÃO DE TAREFAS
-Criar um formulário simples e profissional contendo:
-título
-descrição
-responsável
-unidade
-prazo
-criticidade
-status
-observações
-Botões disponíveis:
-salvar tarefa
-limpar formulário
-cancelar edição
-O campo responsável deve listar automaticamente os integrantes cadastrados na aba Equipe.
-
-7) ABA EQUIPE
-Criar uma página chamada Equipe para cadastro e gerenciamento das pessoas da unidade.
-Essa aba deve permitir personalizar o aplicativo para a realidade de cada participante da oficina.
-Cada integrante da equipe deve possuir:
-nome completo
+3) EQUIPE
+Lista de integrantes em cards.
+Cada integrante possui:
+nome
 cargo ou função
-unidade ou equipe
-e-mail institucional opcional
-telefone opcional
-status do integrante:
-Ativo
-Afastado
-Férias
-observações opcionais
-Funcionalidades da aba Equipe
-Permitir:
-cadastrar integrante
-editar integrante
-remover integrante
-buscar por nome
-filtrar por unidade
-filtrar por status
-visualizar lista da equipe
-visualizar carga de tarefas por integrante
-Integração com tarefas
-Os integrantes cadastrados devem alimentar automaticamente o campo responsável das tarefas.
-Regras:
-mostrar preferencialmente integrantes ativos
-exibir nome e unidade
-integrar dados aos gráficos de produtividade
-integrar dados ao painel de carga por responsável
-
-8) FILTROS E PRODUTIVIDADE
-Adicionar filtros para:
-responsável
 unidade
-status
-criticidade
-prazo
-busca por palavra-chave
-Ordenação por:
-prazo mais próximo
-maior criticidade
-mais recentes
-responsável
-maior carga de tarefas
+status: Ativo, Afastado ou Férias
+Mostrar em cada card quantas tarefas a pessoa tem.
+Permitir cadastrar, editar e remover integrante.
+Os integrantes ativos alimentam o campo responsável das tarefas.
 
-9) VISÕES ALTERNATIVAS
-Para elevar o impacto visual do aplicativo, incluir:
-Kanban
-Colunas:
-Em andamento
-Concluída
-Atrasada
-Cartões com:
-título
-responsável
-prazo
-criticidade
-Calendário ou Timeline
-Exibir tarefas distribuídas por data.
-Permitir visualizar:
-tarefas da semana
-tarefas do mês
-prazos próximos
-
-10) SEÇÕES DE INTELIGÊNCIA OPERACIONAL
-Adicionar também:
-Prioridades da semana
-Lista automática com tarefas de maior criticidade e prazo próximo.
-Risco de atraso
-Lista de tarefas que estão próximas de vencer ou já vencidas.
-Carga por responsável
-Mostrar quantas tarefas cada integrante possui.
-
-11) DADOS SIMULADOS
-O aplicativo deve abrir com dados de exemplo já preenchidos para parecer vivo na demonstração.
-Criar:
-Tarefas
-Pelo menos 12 tarefas, incluindo:
-elaboração de relatório mensal
-resposta a ofício
-atualização de planilha de acompanhamento
-consolidação de indicadores
-revisão de processo administrativo
-preparação de reunião da unidade
-organização de documentos institucionais
-atualização de painel de monitoramento
-apoio à demanda da chefia
-revisão de minuta de documento
-levantamento de dados para relatório
-atualização de controle interno
-Distribuir tarefas entre:
-diferentes prazos
-diferentes criticidades
-diferentes responsáveis
-diferentes status
-Integrantes da equipe
-Criar pelo menos 6 integrantes:
-Exemplos:
+DADOS DE EXEMPLO
+O aplicativo abre já preenchido:
+4 integrantes em 2 unidades, sendo 1 em férias:
 Ana Ribeiro — Coordenadora da Unidade
 Carla Mendes — Analista Administrativa
 Juliana Costa — Técnica de Planejamento
 Renata Alves — Assistente de Gestão
-Fernanda Rocha — Apoio Administrativo
-Patrícia Gomes — Assessora Técnica
-Criar 3 unidades diferentes.
-Incluir pelo menos:
-1 integrante em férias
-1 integrante afastado
+6 tarefas com prazos, status e criticidades variados:
+elaboração de relatório mensal
+resposta a ofício
+atualização de planilha de acompanhamento
+consolidação de indicadores
+preparação de reunião da unidade
+revisão de minuta de documento
 
-12) ESTRUTURA VISUAL
-O aplicativo deve possuir:
-sidebar lateral moderna
-dashboard inicial
-página de tarefas
-página de equipe
-formulário de tarefa
-visão Kanban
-visão calendário ou timeline
-
-13) ESTILO VISUAL
-Design:
-moderno
-limpo
-elegante
-profissional
-responsivo
-Aplicar:
-cards bem desenhados
-boa tipografia
-espaçamento generoso
-uso inteligente de cores
-indicadores visuais claros
-aparência de software institucional moderno
-O aplicativo deve transmitir eficiência, organização e controle operacional.
+ESTILO VISUAL
+Moderno, limpo e profissional, com aparência de software institucional.
+Cards bem desenhados, boa tipografia e espaçamento generoso.
+Paleta sóbria, com cor usada para as etiquetas de status, criticidade e prazo.
+Responsivo, com foco em celular.
 
 RESULTADO ESPERADO
-O resultado deve ser um aplicativo de gerenciamento de tarefas com aparência de produto real, contendo:
-dashboard executivo
-gestão de tarefas
-cadastro de equipe
-filtros e inteligência operacional
-visão Kanban
-visão temporal
-dados simulados realistas
-A primeira tela deve gerar impacto visual imediato, transmitindo:
-controle da operação
-organização das demandas
-priorização clara
-produtividade da equipe
-A interface deve parecer uma plataforma moderna de gestão pública, e não apenas um formulário simples.`
+Um aplicativo pequeno e bem acabado, com três páginas funcionando e dados de exemplo.
+A primeira tela deve transmitir organização e controle das demandas da equipe.`
+
+export const MEU_APP_PROXIMOS = [
+  {
+    title: 'Visão Kanban',
+    text:
+      'Adicione uma página Kanban na barra lateral, usando as mesmas tarefas que já existem. Três colunas: Em andamento, Concluída e Atrasada. Cada cartão mostra título, responsável, prazo e criticidade. Permita arrastar o cartão para outra coluna para mudar o status. Não altere as outras páginas.',
+  },
+  {
+    title: 'Calendário de prazos',
+    text:
+      'Adicione uma página Calendário na barra lateral que mostre as tarefas existentes distribuídas pela data do prazo. Permita alternar entre visão da semana e visão do mês, e destaque as tarefas vencidas. Não altere as outras páginas.',
+  },
+  {
+    title: 'Mais gráficos no Dashboard',
+    text:
+      'No Dashboard, adicione dois gráficos abaixo dos que já existem: tarefas por criticidade e carga de tarefas por responsável. Mantenha o estilo visual atual e não altere as outras páginas.',
+  },
+  {
+    title: 'Risco de atraso e ordenação',
+    text:
+      'No Dashboard, adicione um bloco "Risco de atraso" com as tarefas vencidas ou com prazo próximo. Na página Tarefas, adicione filtro por criticidade e ordenação por prazo mais próximo e por maior criticidade. Não altere as outras páginas.',
+  },
+]
 
 export const PAINEL_GOVERNANCA_PROMPT = `PERSONA
 

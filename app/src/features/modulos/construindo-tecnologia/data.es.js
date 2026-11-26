@@ -39,281 +39,112 @@ Considera siempre una solución simple, pensada para el celular, con lenguaje cl
 
 Al final, pregúntame si quiero que conviertas esta definición en un prompt listo para usar en Lovable.`
 
+// Prompt acotado a proposito: Lovable cobra el modo de construccion segun
+// el tamano del trabajo, y el plan gratuito da 5 creditos por dia. El nucleo
+// (Panel, Tareas, Equipo) va aqui; Kanban, calendario y los paneles extra
+// quedan en MEU_APP_PROXIMOS, un pedido por mensaje.
 export const MEU_APP_PROMPT = `PERSONA
-Eres Product Designer sénior, UX Strategist y Arquitecto de Aplicaciones no-code, especializado en crear sistemas web de gran claridad, alto valor percibido y experiencia visual profesional para equipos del sector público.
-Tu especialidad es transformar necesidades administrativas en aplicaciones modernas, intuitivas y visualmente impactantes, con apariencia de producto real listo para usar.
-Tu tono debe ser objetivo, elegante, confiable y profesional. Diseñas interfaces que generan un efecto "WOW" sin exceso visual, priorizando:
-claridad
-credibilidad
-facilidad de uso
-excelente organización de la información
+Eres Product Designer sénior, especialista en aplicaciones web simples, claras y de aspecto profesional para equipos del sector público.
 
 IDIOMA
 Toda la interfaz, los textos, las etiquetas y los datos de ejemplo deben estar en español.
 
-MISIÓN PRINCIPAL
-Crea una aplicación web completa de gestión de tareas para funcionarias y funcionarios públicos, sus equipos y sus unidades.
-El sistema debe permitir:
-registrar tareas
-dar seguimiento a las demandas
-priorizar actividades
-visualizar la productividad
-gestionar el equipo
-distribuir responsabilidades
-La aplicación debe parecer un producto real, moderno y listo para usar, aunque no tenga integración con base de datos en esta primera versión.
+MISIÓN
+Crea una aplicación web de gestión de tareas para funcionarias y funcionarios públicos y sus equipos.
+Esta es la primera versión: construye solo lo que se describe abajo, sin funcionalidades extra. La aplicación se ampliará después, por etapas.
+No uses base de datos, inicio de sesión ni servicios externos. Los datos quedan solo en la memoria de la aplicación.
 
-PRINCIPIOS DEL PRODUCTO
-El sistema debe construirse con foco en:
-simplicidad de uso
-organización visual impecable
-sensación de herramienta profesional
-navegación intuitiva
-valor percibido desde la primera pantalla
-fuerte impacto visual para la demostración en el taller
-
-ESTRUCTURA DE LA APLICACIÓN
-La aplicación debe tener las siguientes áreas principales:
+ESTRUCTURA
+Barra lateral simple con tres páginas:
 Panel
 Tareas
 Equipo
-Kanban
-Calendario o Línea de tiempo
-Alta / edición de tarea
 
-1) PANEL PRINCIPAL
-Crear una pantalla inicial con visión ejecutiva de la operación de la unidad.
-Debe incluir:
-Indicadores principales
+1) PANEL
+Cuatro tarjetas de indicadores:
 total de tareas
-tareas completadas
-tareas en curso
-tareas atrasadas
-tareas próximas al plazo
-tareas por criticidad
-tareas por responsable
-total de integrantes del equipo
-integrantes activos
-Paneles visuales
-Agregar visualizaciones claras y elegantes:
-gráfico de distribución de tareas por estado
-gráfico de tareas por criticidad
-gráfico de tareas por responsable
-panel de productividad del equipo
-panel de carga de tareas por responsable
-Bloques estratégicos
-Prioridades del día
-Tareas más urgentes
-Riesgo de atraso
-Actividades recientes
-Todo debe presentarse en tarjetas bien diseñadas, con excelente jerarquía visual.
+en curso
+completadas
+atrasadas
+Un gráfico de tareas por estado.
+Una lista "Prioridades de la semana" con las 5 tareas de mayor criticidad y plazo más próximo.
 
-2) GESTIÓN DE TAREAS
-Crear una página de tareas con aspecto profesional, organizada en una tabla moderna o lista inteligente.
-Cada tarea debe tener:
+2) TAREAS
+Lista de tareas en tabla (en el celular, en tarjetas).
+Cada tarea tiene:
 título
 descripción
-responsable (seleccionado de la pestaña Equipo)
-unidad o equipo
-fecha de creación
-plazo de entrega
-estado
-criticidad
-observaciones opcionales
-
-3) ESTADO OPERATIVO
-Cada tarea debe tener un estado operativo:
-En curso
-Completada
-Atrasada
-Estos estados deben mostrarse con etiquetas visuales claras.
-
-4) ETIQUETA AUTOMÁTICA DE PLAZO
-El sistema debe calcular automáticamente el estado del plazo según la fecha actual.
-Mostrar las siguientes etiquetas:
+responsable (seleccionado entre las personas de la página Equipo)
+plazo
+estado: En curso, Completada o Atrasada
+criticidad: Baja, Media o Alta
+Mostrar estado y criticidad como etiquetas de color.
+Mostrar también una etiqueta de plazo calculada automáticamente según la fecha actual:
 🟢 En plazo
 🟡 Plazo próximo
 🔴 Vencida
-Esta lógica debe ser visual y automática.
+Un botón "Nueva tarea" abre un único formulario, usado para crear y para editar.
+Permitir eliminar la tarea.
+Filtros: búsqueda por palabra clave, estado y responsable.
 
-5) CRITICIDAD
-Cada tarea puede tener un nivel de criticidad:
-Baja
-Media
-Alta
-Presentarlo con colores elegantes y etiquetas visuales claras.
-Ejemplo:
-Baja → gris o azul suave
-Media → amarillo o naranja
-Alta → rojo
-
-6) FORMULARIO DE CREACIÓN Y EDICIÓN DE TAREAS
-Crear un formulario simple y profesional que contenga:
-título
-descripción
-responsable
-unidad
-plazo
-criticidad
-estado
-observaciones
-Botones disponibles:
-guardar tarea
-limpiar formulario
-cancelar edición
-El campo responsable debe listar automáticamente a las personas registradas en la pestaña Equipo.
-
-7) PESTAÑA EQUIPO
-Crear una página llamada Equipo para registrar y gestionar a las personas de la unidad.
-Esta pestaña debe permitir adaptar la aplicación a la realidad de cada participante del taller.
-Cada integrante del equipo debe tener:
-nombre completo
+3) EQUIPO
+Lista de integrantes en tarjetas.
+Cada integrante tiene:
+nombre
 cargo o función
-unidad o equipo
-correo institucional opcional
-teléfono opcional
-estado del integrante:
-Activo
-Con licencia
-De vacaciones
-observaciones opcionales
-Funcionalidades de la pestaña Equipo
-Permitir:
-registrar integrante
-editar integrante
-eliminar integrante
-buscar por nombre
-filtrar por unidad
-filtrar por estado
-ver la lista del equipo
-ver la carga de tareas por integrante
-Integración con tareas
-Las personas registradas deben alimentar automáticamente el campo responsable de las tareas.
-Reglas:
-mostrar preferentemente a integrantes activos
-mostrar nombre y unidad
-integrar los datos a los gráficos de productividad
-integrar los datos al panel de carga por responsable
-
-8) FILTROS Y PRODUCTIVIDAD
-Agregar filtros por:
-responsable
 unidad
-estado
-criticidad
-plazo
-búsqueda por palabra clave
-Ordenar por:
-plazo más próximo
-mayor criticidad
-más recientes
-responsable
-mayor carga de tareas
+estado: Activo, Con licencia o De vacaciones
+Mostrar en cada tarjeta cuántas tareas tiene la persona.
+Permitir registrar, editar y eliminar integrante.
+Las personas activas alimentan el campo responsable de las tareas.
 
-9) VISTAS ALTERNATIVAS
-Para elevar el impacto visual de la aplicación, incluir:
-Kanban
-Columnas:
-En curso
-Completada
-Atrasada
-Tarjetas con:
-título
-responsable
-plazo
-criticidad
-Calendario o Línea de tiempo
-Mostrar las tareas distribuidas por fecha.
-Permitir ver:
-tareas de la semana
-tareas del mes
-plazos próximos
-
-10) SECCIONES DE INTELIGENCIA OPERATIVA
-Agregar también:
-Prioridades de la semana
-Lista automática con las tareas de mayor criticidad y plazo próximo.
-Riesgo de atraso
-Lista de tareas que están por vencer o ya vencieron.
-Carga por responsable
-Mostrar cuántas tareas tiene cada integrante.
-
-11) DATOS SIMULADOS
-La aplicación debe abrir con datos de ejemplo ya cargados para que se vea viva en la demostración.
-Crear:
-Tareas
-Al menos 12 tareas, incluyendo:
-elaboración del informe mensual
-respuesta a un oficio
-actualización de la planilla de seguimiento
-consolidación de indicadores
-revisión de un expediente administrativo
-preparación de la reunión de la unidad
-organización de documentos institucionales
-actualización del tablero de monitoreo
-apoyo a una solicitud de la jefatura
-revisión del borrador de un documento
-relevamiento de datos para un informe
-actualización del control interno
-Distribuir las tareas entre:
-distintos plazos
-distintas criticidades
-distintos responsables
-distintos estados
-Integrantes del equipo
-Crear al menos 6 integrantes:
-Ejemplos:
+DATOS DE EJEMPLO
+La aplicación abre con datos ya cargados:
+4 integrantes en 2 unidades, 1 de vacaciones:
 Ana Rodríguez — Coordinadora de la Unidad
 Carla Méndez — Analista Administrativa
 Julia Fernández — Técnica de Planificación
 Laura Silva — Asistente de Gestión
-Fernanda Pereira — Apoyo Administrativo
-Patricia Gómez — Asesora Técnica
-Crear 3 unidades diferentes.
-Incluir al menos:
-1 integrante de vacaciones
-1 integrante con licencia
+6 tareas con plazos, estados y criticidades variados:
+elaboración del informe mensual
+respuesta a un oficio
+actualización de la planilla de seguimiento
+consolidación de indicadores
+preparación de la reunión de la unidad
+revisión del borrador de un documento
 
-12) ESTRUCTURA VISUAL
-La aplicación debe tener:
-barra lateral moderna
-panel inicial
-página de tareas
-página de equipo
-formulario de tarea
-vista Kanban
-vista de calendario o línea de tiempo
-
-13) ESTILO VISUAL
-Diseño:
-moderno
-limpio
-elegante
-profesional
-responsivo
-Aplicar:
-tarjetas bien diseñadas
-buena tipografía
-espaciado generoso
-uso inteligente del color
-indicadores visuales claros
-apariencia de software institucional moderno
-La aplicación debe transmitir eficiencia, organización y control operativo.
+ESTILO VISUAL
+Moderno, limpio y profesional, con apariencia de software institucional.
+Tarjetas bien diseñadas, buena tipografía y espaciado generoso.
+Paleta sobria, con color usado para las etiquetas de estado, criticidad y plazo.
+Responsivo, pensado para el celular.
 
 RESULTADO ESPERADO
-El resultado debe ser una aplicación de gestión de tareas con apariencia de producto real, que contenga:
-panel ejecutivo
-gestión de tareas
-registro del equipo
-filtros e inteligencia operativa
-vista Kanban
-vista temporal
-datos simulados realistas
-La primera pantalla debe generar impacto visual inmediato, transmitiendo:
-control de la operación
-organización de las demandas
-priorización clara
-productividad del equipo
-La interfaz debe parecer una plataforma moderna de gestión pública, y no un simple formulario.`
+Una aplicación pequeña y bien terminada, con tres páginas funcionando y datos de ejemplo.
+La primera pantalla debe transmitir organización y control de las demandas del equipo.`
+
+export const MEU_APP_PROXIMOS = [
+  {
+    title: 'Vista Kanban',
+    text:
+      'Agrega una página Kanban en la barra lateral, usando las mismas tareas que ya existen. Tres columnas: En curso, Completada y Atrasada. Cada tarjeta muestra título, responsable, plazo y criticidad. Permite arrastrar la tarjeta a otra columna para cambiar el estado. No modifiques las otras páginas. Toda la interfaz en español.',
+  },
+  {
+    title: 'Calendario de plazos',
+    text:
+      'Agrega una página Calendario en la barra lateral que muestre las tareas existentes distribuidas por la fecha del plazo. Permite alternar entre vista de la semana y vista del mes, y destaca las tareas vencidas. No modifiques las otras páginas. Toda la interfaz en español.',
+  },
+  {
+    title: 'Más gráficos en el Panel',
+    text:
+      'En el Panel, agrega dos gráficos debajo de los que ya existen: tareas por criticidad y carga de tareas por responsable. Mantén el estilo visual actual y no modifiques las otras páginas.',
+  },
+  {
+    title: 'Riesgo de atraso y orden',
+    text:
+      'En el Panel, agrega un bloque "Riesgo de atraso" con las tareas vencidas o con plazo próximo. En la página Tareas, agrega filtro por criticidad y orden por plazo más próximo y por mayor criticidad. No modifiques las otras páginas.',
+  },
+]
 
 export const PAINEL_GOVERNANCA_PROMPT = `PERSONA
 
